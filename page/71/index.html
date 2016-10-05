@@ -227,7 +227,7 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-integrating-microsoft-excel-with-powershell-build-a-basic-report" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-verbose-output-for-powershell-functions" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/office/2013/09/19/integrating-microsoft-excel-with-powershell-build-a-basic-report/">在PowerShell中操作Excel - 创建一个简单的报表</a>
+            <a class="article-title" href="/powershell/tip/2013/09/19/verbose-output-for-powershell-functions/">PowerShell 技能连载 - PowerShell函数的详细输出</a>
         </h1>
     
 
@@ -245,7 +245,7 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/office/2013/09/19/integrating-microsoft-excel-with-powershell-build-a-basic-report/">
+        <a href="/powershell/tip/2013/09/19/verbose-output-for-powershell-functions/">
             <time datetime="2013-09-18T16:00:00.000Z" itemprop="datePublished">2013-09-19</time>
         </a>
     </div>
@@ -254,13 +254,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/office/">office</a>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/script/">script</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
     </div>
 
                     </div>
@@ -269,10 +269,35 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>除了文本文件之外，Windows系统管理员最常用的工具是Microsoft Excel。我观察论坛中人们的讨论发现，有一大堆关于Excel电子表格讨论。许多人想要读写Excel的方法。通常，我告诉人们如果他们使用PowerShell，那么可以简单地将结果导出到CSV文件，然后用Excel打开，但是您很有可能需要一个真正的Excel文件。</p>
-<p>我着手准备写几个关于如何在PowerShell中操作Excel的专题。今天我们将要通过Microsoft Excel和Windows PowerShell创建一个简单的报表。在第二部分中，我将演示如何创建一个更复杂的Excel文档。然后在第三部分中，我将向您演示如何从Excel文件中读取数据。<br></p>
+            <p><p>若要为您的PowerShell函数增加指定的详细输出信息（verbose output），请增加 <code>CmdletBinding</code> 属性到您的函数，使它支持公共参数。<br>（译者注：公共参数例如 <code>-Verbose</code>、<code>-Debug</code> 等）</p>
+<pre><code>function test
+{
+    [CmdletBinding()]
+    param()
+} 
+</code></pre><p>下一步，添加 <code>Write-Verbose</code> 来输出文本信息。它们仅当用户指定了 <code>-Verbose</code> 参数时才有效：</p>
+<pre><code>function test
+{
+    [CmdletBinding()]
+    param()
+
+    Write-Verbose &quot;Starting&quot;
+    &quot;Doing Something&quot;
+    Write-Verbose &quot;Shutting Down&quot;
+} 
+</code></pre><p>所以当您按以下方式运行它时，您会见到正常的输出信息：</p>
+<pre><code>PS &gt; test
+
+Doing Something
+</code></pre><p>然而，如果您增加了 <code>-Verbose</code> 参数，您将会看到您输出的详细信息：</p>
+<pre><code>PS &gt; test -Verbose
+
+Starting
+Doing Something
+Shutting Down
+</code></pre></p>
             <p class="article-more-link">
-                <a href="/powershell/office/2013/09/19/integrating-microsoft-excel-with-powershell-build-a-basic-report/#more">查看更多</a>
+                <a href="/powershell/tip/2013/09/19/verbose-output-for-powershell-functions/#more">查看更多</a>
             </p>
         
         </div>
@@ -336,7 +361,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/powershell/office/2013/09/19/integrating-microsoft-excel-with-powershell-build-a-basic-report/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/office/2013/09/19/integrating-microsoft-excel-with-powershell-build-a-basic-report/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2013/09/19/verbose-output-for-powershell-functions/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/09/19/verbose-output-for-powershell-functions/">评论</a>
     
 
         </footer>

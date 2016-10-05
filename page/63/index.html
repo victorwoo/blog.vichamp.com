@@ -174,7 +174,7 @@ var _hmt = _hmt || [];
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                698
+                722
                 <span>文章</span>
             </div>
             <div class="article-info-block">
@@ -227,7 +227,7 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-using-csharp-c-code-in-powershell-scripts" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-getting-folders-by-prefix" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/2013/11/08/using-csharp-c-code-in-powershell-scripts/">在 PowerShell 脚本中使用 C# 代码</a>
+            <a class="article-title" href="/powershell/tip/2013/12/06/getting-folders-by-prefix/">PowerShell 技能连载 - 通过前缀对文件夹分组</a>
         </h1>
     
 
@@ -245,8 +245,1056 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/2013/11/08/using-csharp-c-code-in-powershell-scripts/">
-            <time datetime="2013-11-07T16:00:00.000Z" itemprop="datePublished">2013-11-08</time>
+        <a href="/powershell/tip/2013/12/06/getting-folders-by-prefix/">
+            <time datetime="2013-12-05T16:00:00.000Z" itemprop="datePublished">2013-12-06</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>您知道吗？<code>Group-Object</code> 可以方便地以自定义的规则来对元素分组。以下通过简单的一行代码实现根据前三个字母对文件夹分组：</p>
+<pre><code>Get-ChildItem -Path C:\Windows -Directory |
+   Group-Object -Property { $_.Name.PadRight(3).Substring(0,3)}
+</code></pre><p>稍微做一些额外的改动，您可以以这三个首字母做为键，创建一个哈希表：</p>
+<pre><code>$lookup = Get-ChildItem -Path $env:windir -Directory  |
+   Group-Object -Property { $_.Name.PadRight(3).Substring(0,3).ToUpper()} -AsHashTable -AsString
+
+$lookup.Keys
+</code></pre><p>现在我们可以很容易地取得其中的文件夹，比如说我们要取以“SYS”开头的文件夹：</p>
+<pre><code>PS C:\Windows\System32&gt; $lookup.SYS
+
+
+    目录: C:\Windows
+
+
+Mode                LastWriteTime     Length Name                                                                                
+----                -------------     ------ ----                                                                                
+d----         2013/9/24     21:50            System                                                                              
+d-r--         2013/12/8     13:40            System32                                                                            
+d----         2013/8/22     23:36            SystemResources                                                                     
+d----         2013/12/5     11:29            SysWOW64  
+</code></pre><p>这有什么实用价值呢？有些公司使用文件夹前缀作为业务单元。用上这个技术之后，我们可以很容易地把所有的业务单元文件夹“收拢”起来——您可以秒杀地计算它们的存储容量并且创建一个自动化的报表。</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/12/06/getting-folders-by-prefix/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/12/06/getting-folders-by-prefix/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/12/06/getting-folders-by-prefix/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-finding-known-usb-drives" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2013/12/05/finding-known-usb-drives/">PowerShell 技能连载 - 查找已知的 USB 驱动器</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2013/12/05/finding-known-usb-drives/">
+            <time datetime="2013-12-04T16:00:00.000Z" itemprop="datePublished">2013-12-05</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>您知道吗？Windows 维护着一个关于所有插入过您机器中的 USB 存储设备列表。要导出这个列表十分简单：</p>
+<pre><code>$Path = &apos;HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR\*\*&apos;
+Get-ItemProperty -Path $Path |
+  Select-Object -Property FriendlyName, CompatibleIDs, Mfg
+</code></pre><p>结果看起来如下：</p>
+<pre><code>FriendlyName                                CompatibleIDs                              Mfg                                       
+------------                                -------------                              ---                                       
+SCANNER USB Device                          {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Android UMS Composite USB Device            {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Android UMS Composite USB Device            {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Generic Flash Disk USB Device               {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Hitachi HTS545050B9A300 USB Device          {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Landi A015 USB Device                       {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Landi A015 USB Device                       {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Landi A015 USB Device                       {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Linux File-CD Gadget USB Device             {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Linux File-CD Gadget USB Device             {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Linux File-CD Gadget USB Device             {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Linux File-CD Gadget USB Device             {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Multiple Card  Reader USB Device            {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+SAMSUNG GT-I9000 USB Device                 {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+SAMSUNG GT-I9000 Card USB Device            {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+SAMSUNG GT-I9000 Card USB Device            {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+Ut165 USB Flash Disk USB Device             {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+WD Elements 1042 USB Device                 {USBSTOR\Disk, USBSTOR\RAW, GenDisk}       @disk.inf,%genmanufacturer%;(Standard d...
+</code></pre><p>列表越长，说明您的计算机插入过越多种不同的 USB 存储设备。</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/12/05/finding-known-usb-drives/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/12/05/finding-known-usb-drives/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/12/05/finding-known-usb-drives/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-getting-dll-file-version-info" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2013/12/04/getting-dll-file-version-info/">PowerShell 技能连载 - 获取 DLL 文件版本信息</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2013/12/04/getting-dll-file-version-info/">
+            <time datetime="2013-12-03T16:00:00.000Z" itemprop="datePublished">2013-12-04</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>是否需要获取一个 DLL 文件列表以及它们的版本信息？<code>Get-ChildItem</code> 可以为您获取这些信息。您只需要解开其中的一些属性，例如：</p>
+<pre><code>Get-ChildItem c:\windows\system32\*.dll |
+  Select-Object -ExpandProperty VersionInfo |
+  Select-Object -Property FileName, Productversion, ProductName
+</code></pre><p>以上实际上将原始的 <code>FileInfo</code> 对象替换（<code>-ExpandProperty</code>）成了 <code>VersionInfo</code> 对象。您所做的大概是将一个对象转换成另一个对象，并且丢掉前者的一部分信息。例如，您无法再存取某些属性，如 <code>LastWriteTime</code> 等。</p>
+<p>如果您希望保持原有的 <code>FileInfo</code> 对象，但是为它加入某些额外的信息，那么请像这样使用 <code>Add-Member</code>：</p>
+<pre><code>Get-ChildItem c:\windows\system32\*.dll |
+  Add-Member -MemberType ScriptProperty -Name Version -Value {
+  $this.VersionInfo.ProductVersion
+  } -PassThru |
+  Select-Object -Property LastWriteTime, Length, Name, Version |
+  Out-GridView
+</code></pre><p>“$this”是您需要扩展的对象。</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/12/04/getting-dll-file-version-info/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/12/04/getting-dll-file-version-info/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/12/04/getting-dll-file-version-info/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-executing-code-remotely" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2013/12/03/executing-code-remotely/">PowerShell 技能连载 - 远程执行代码</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2013/12/03/executing-code-remotely/">
+            <time datetime="2013-12-02T16:00:00.000Z" itemprop="datePublished">2013-12-03</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>在一个域环境中，PowerShell 远程操作功能几乎是开箱即用的。您所需要做的知识在目标机器上启用远程功能（从 Server 2012 开始，PowerShell 远程操作功能对于 Administrators 组用户缺省是启用的）。</p>
+<p>在 PowerShell 3.0 中，需要人为地启用远程功能，这就是一切要做的事了（需要管理员权限）：</p>
+<pre><code>PS&gt; Enable-PSRemoting -SkipNetworkProfileCheck -Force
+</code></pre><p>你不需要在客户端（准备发送命令的机器）上配置任何东西。</p>
+<p>下一步，任何管理员可以将命令发送到启用了远程操作功能的机器上去执行它。以下例子将列出目标机器上所有和 PowerShell 相关的进程：</p>
+<pre><code>$code =
+{
+      Get-Process -Name powershell*, wsmprovhost -ErrorAction SilentlyContinue
+}
+
+$list = &apos;server1&apos;, &apos;w2k12-niki&apos;, &apos;pc11box&apos;
+Invoke-Command -ScriptBlock $code #-ComputerName $list
+</code></pre><p>当您原样执行这段代码的时候，<code>Invoke-Command</code> 在您自己的机器上运行存储在 <code>$code</code> 中的代码块。</p>
+<p><img src="/img/2013-12-03-executing-code-remotely-001.png" alt=""></p>
+<p>它列出所有运行中的 PowerShell 控制台的实例、ISE PowerShell 编辑器，以及所有由您机器上别人初始化的 PowerShell 隐藏远程会话。</p>
+<p>而当您去掉 <code>-ComputerName</code> 参数的注释，代码将会在 <code>$list</code> 变量存储的所有计算机上执行。请确保它们存在并且已启用了远程操作功能。当您从远程计算机收到数据时，PowerShell 自动在返回的信息上附加一个 <code>&quot;PSComputerName&quot;</code> 属性，用来存储返回信息的计算机名。</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/12/03/executing-code-remotely/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/12/03/executing-code-remotely/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/12/03/executing-code-remotely/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-accessing-all-users-desktop" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2013/12/02/accessing-all-users-desktop/">PowerShell 技能连载 - 访问所有用户的桌面</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2013/12/02/accessing-all-users-desktop/">
+            <time datetime="2013-12-01T16:00:00.000Z" itemprop="datePublished">2013-12-02</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p><code>Resolve-Path</code> 是一个相当棒的查找相同深度路径用的 Cmdlet。例如，以下是一段很短小的代码，它在您机器的每个用户桌面上创建一个文本文件：</p>
+<pre><code>$root = Split-Path $env:USERPROFILE
+
+Resolve-Path $root\*\Desktop |
+  ForEach-Object {
+    $Path = Join-Path -Path $_ -ChildPath &apos;hello there.txt&apos;
+    &apos;Here is some content...&apos; | Out-File -FilePath $Path
+    Write-Warning &quot;Creating $Path&quot;
+  }
+</code></pre><p>以管理员权限运行您的脚本，它将在您机器中所有用户的桌面上创建一个文件：</p>
+<pre><code>WARNING: Creating C:\Users\Administrator\Desktop\hello there.txt
+WARNING: Creating C:\Users\CustomerService\Desktop\hello there.txt
+WARNING: Creating C:\Users\Guest\Desktop\hello there.txt
+WARNING: Creating C:\Users\PSTestGer\Desktop\hello there.txt
+WARNING: Creating C:\Users\Tester\Desktop\hello there.txt
+WARNING: Creating C:\Users\Tobias\Desktop\hello there.txt
+</code></pre></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/12/02/accessing-all-users-desktop/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/12/02/accessing-all-users-desktop/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/12/02/accessing-all-users-desktop/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-quickly-selecting-results-in-ise" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2013/11/29/quickly-selecting-results-in-ise/">PowerShell 技能连载 - 在 ISE 中快速选中结果</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2013/11/29/quickly-selecting-results-in-ise/">
+            <time datetime="2013-11-28T16:00:00.000Z" itemprop="datePublished">2013-11-29</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>如果您想快速地选中并复制 PowerShell 3.0 ISE 编辑器中控制台窗格的结果到您的博客或您喜欢的文字处理器中，例如将结果保存为文档或者贴到文章中。以下是实现的方法：</p>
+<p>当您运行一个命令后，光标位于 ISE 控制台窗格中并且等待输入新的命令。只需要按住 <code>CTRL</code> 并按下 <code>左</code> 键。光标将向左移动一位。然后按下 <code>CTRL+A</code> 选取所有的结果，然后按下 <code>CTRL+C</code> 将它们复制到剪贴板。完成！</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/11/29/quickly-selecting-results-in-ise/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/11/29/quickly-selecting-results-in-ise/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/29/quickly-selecting-results-in-ise/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-speeding-up-multiple-wmi-queries" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2013/11/28/speeding-up-multiple-wmi-queries/">PowerShell 技能连载 - 加速多个 WMI 查询</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2013/11/28/speeding-up-multiple-wmi-queries/">
+            <time datetime="2013-11-27T16:00:00.000Z" itemprop="datePublished">2013-11-28</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>当您远程执行 <code>Get-WmiObject</code> 命令时，它将会创建一个新的连接。所以如果您查询不同的 WMI 类时，每个查询会使用一个不同的连接，这样将会影响总体性能。 </p>
+<p>从 PowerShell 3.0 开始，有一些列新的 Cmdlet。使用这些 Cmdlet 可以容易地使用现有的连接高效地运行多个查询：</p>
+<pre><code>$session = New-CimSession –ComputerName localhost
+$os = Get-CimInstance –ClassName Win32_OperatingSystem –CimSession $session
+$bios = Get-CimInstance -ClassName Win32_BIOS -CimSession $session
+</code></pre><p>会话缺省使用 WSMAN 协议：</p>
+<pre><code>PS&gt; $session
+
+Id           : 1
+Name         : CimSession1
+InstanceId   : 0bb38128-3633-4eb8-8b55-6d2910b89bcd
+ComputerName : localhost
+Protocol     : WSMAN
+</code></pre><p>当您创建会话是，您可以显式地指定一个不同的远程传输协议，例如 DCOM。</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/11/28/speeding-up-multiple-wmi-queries/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/11/28/speeding-up-multiple-wmi-queries/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/28/speeding-up-multiple-wmi-queries/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-visit-the-ultimate-powershell-survival-guide" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2013/11/27/visit-the-ultimate-powershell-survival-guide/">PowerShell 技能连载 - 访问终极 PowerShell 生存指南</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2013/11/27/visit-the-ultimate-powershell-survival-guide/">
+            <time datetime="2013-11-26T16:00:00.000Z" itemprop="datePublished">2013-11-27</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>您熟悉 PowerShell 生存指南吗？它是终极的 PowerShell 维基页面，包括视频、Module，和您很可能需要的关于 PowerShell 的一切资源。最棒的部分：它是一个开放式维基，所以如果您自己创建了一个 PowerShell 资源，希望让其他人知道它，那么您完全可以编辑 PowerShell 生存指南来让别人知道它。</p>
+<p><a href="http://social.technet.microsoft.com/wiki/contents/articles/183.windows-powershell-survival-guide.aspx">http://social.technet.microsoft.com/wiki/contents/articles/183.windows-powershell-survival-guide.aspx</a></p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2013/11/27/visit-the-ultimate-powershell-survival-guide/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2013/11/27/visit-the-ultimate-powershell-survival-guide/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/27/visit-the-ultimate-powershell-survival-guide/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-fix-a-bug-of-submanager" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/2013/11/26/fix-a-bug-of-submanager/">修正 SubManager 的一个 bug</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/2013/11/26/fix-a-bug-of-submanager/">
+            <time datetime="2013-11-25T16:00:00.000Z" itemprop="datePublished">2013-11-26</time>
         </a>
     </div>
 
@@ -260,7 +1308,7 @@ var _hmt = _hmt || [];
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/c/">c#</a>, <a class="tag-link" href="/tags/csharp/">csharp</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>
+        <a class="tag-link" href="/tags/net/">.net</a>
     </div>
 
                     </div>
@@ -269,84 +1317,48 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>PowerShell 使我们拥有了一门非常强大的脚本语言。许多产品，例如 SharePoint 以 Cmdlet 的形式提供了它们自己的管理扩展。</p>
-<p>客户们喜欢脚本语言，是因为它使他们能够编写自己的代码而不需要运行某个编译器，也不需要将可执行程序拷贝到它们的目标计算机中。相对于部署一个脚本，在那些目标计算机中运行一个可执行程序或者在命令行 Shell 中执行一些命令通常需要更复杂的审批过程。</p>
-<p>但是从另一方面来说，编写 PowerShell 脚本需要学习一门新的脚本语言并且需要使用他们所熟悉范围之外的工具。作为一个开发者，我喜欢 C# 和 Visual Studio 的智能提示等强大功能。并且，在过去几年内，我用 C# 开发了许多工具——并且我不希望在移植到 PowerShell 的过程中丢弃这些设计好的轮子。</p>
-<p>所以如果能在 PowerShell 中复用现有的 C# 代码，而不需要将它以 Cmdlet的形式实现的话，那就十分理想了。</p>
-<p>实际上 PowerShell 2.0 提供了一种方式来实现它：使用 <code>Add-Type</code> Cmdlet，它能够通过您提供的 C# 源代码在内存中生成一个新的 .NET 程序集，并且可以将该程序集直接用于同一个会话中的 PowerShell 脚本中。</p>
-<p>出于演示的目的，我们假设已有以下简单的 C# 代码，作用是获取和设置 SharePoint 中的 Content Deployment 的 <code>RemoteTimeout</code> 值：</p>
-<pre><code>using Microsoft.SharePoint.Publishing.Administration; 
-using System; 
+            
+            <p>目前最好的字幕下载工具是<a href="http://www.ayeah.net/" target="_blank" rel="external">爱页工作室</a>的 <a href="http://www.ayeah.net/submanager" target="_blank" rel="external">SubManager 字幕管理器</a>。程序通过射手网开放的API自批量动下载电影对应的字幕，省去逐个找字幕的麻烦。其工作原理与射手播放器一致，但有十余项增强。</p>
+<p><img src="/img/2013-11-26-fix-a-bug-of-submanager-001.png" alt="SubManager 字幕管理器"></p>
+<p>目前它的最新版是 <a href="http://www.ayeah.net/submanager/submanager-20130702-1" target="_blank" rel="external">v2013.7.2</a>，我在使用过程中发现一个问题：</p>
+<p>当搜索目录中含有扩展名为空的文件时，程序出现异常：</p>
+<pre><code>有关调用实时(JIT)调试而不是此对话框的详细信息，
+请参见此消息的结尾。
 
-namespace StefanG.Tools 
-{ 
-    public static class CDRemoteTimeout  
-    { 
-        public static void Get() 
-        { 
-            ContentDeploymentConfiguration cdconfig = ContentDeploymentConfiguration.GetInstance();
-            Console.WriteLine(&quot;Remote Timeout: &quot;+cdconfig.RemoteTimeout); 
-        } 
+************** 异常文本 **************
+System.ArgumentException: 字符串的长度不能为零。
+参数名: oldValue
+   在 System.String.Replace(String oldValue, String newValue)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir, String[] fileList)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir, String[] fileList)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir, String[] fileList)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir, String[] fileList)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir, String[] fileList)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir, String[] fileList)
+   在 ShooterDownloader.DownloadForm.PopulateFileList(String dir)
+   在 ShooterDownloader.DownloadForm.txtDir_KeyUp(Object sender, KeyEventArgs e)
+   在 System.Windows.Forms.Control.OnKeyUp(KeyEventArgs e)
+   在 System.Windows.Forms.Control.ProcessKeyEventArgs(Message&amp; m)
+   在 System.Windows.Forms.Control.ProcessKeyMessage(Message&amp; m)
+   在 System.Windows.Forms.Control.WmKeyChar(Message&amp; m)
+   在 System.Windows.Forms.Control.WndProc(Message&amp; m)
+   在 System.Windows.Forms.TextBoxBase.WndProc(Message&amp; m)
+   在 System.Windows.Forms.TextBox.WndProc(Message&amp; m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message&amp; m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message&amp; m)
+   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+</code></pre><p>用 <a href="http://www.red-gate.com/products/dotnet-development/reflector/" title="RedGate Reflector" target="_blank" rel="external">Reflector</a> 将 SubManager.exe 反编译，得到它的源代码，定位到 <code>DownloadForm</code> 的 <code>PopulateFileList(String, String[]) : Void</code> 方法。其中只有一行用到 <code>String.Replace()</code> 方法：</p>
+<pre><code>if ((File.Exists(info.FullName.Replace(info.Extension, &quot;.srt&quot;)) || File.Exists(info.FullName.Replace(info.Extension, &quot;.ass&quot;))) || (File.Exists(info.FullName.Replace(info.Extension, &quot;.ssa&quot;)) || File.Exists(info.FullName.Replace(info.Extension, &quot;.smi&quot;))))
+</code></pre><p>把它改为：</p>
+<pre><code>if (string.IsNullOrEmpty(info.Extension) || (File.Exists(info.FullName.Replace(info.Extension, &quot;.srt&quot;)) || File.Exists(info.FullName.Replace(info.Extension, &quot;.ass&quot;))) || (File.Exists(info.FullName.Replace(info.Extension, &quot;.ssa&quot;)) || File.Exists(info.FullName.Replace(info.Extension, &quot;.smi&quot;))))
+</code></pre><p>并重新编译，该错误提示消失了。</p>
+<p>我联系了作者 ayeah，他表示将在下一个版本修复。</p>
 
-        public static void Set(int seconds) 
-        { 
-            ContentDeploymentConfiguration cdconfig = ContentDeploymentConfiguration.GetInstance(); 
-            cdconfig.RemoteTimeout = seconds;
-            cdconfig.Update();
-        } 
-    } 
-}
-</code></pre><p>除了引用 .NET 框架之外，这个工具还引用了两个 SharePoint DLL（<em>Microsoft.SharePoint.dll</em> 和 <em>Microsoft.SharePoint.Publishing.dll</em>），它们用来存取 SharePoint 的对象模型。为了确保 PowerShell 能正确地生成程序集，我们需要为 <code>Add-Type</code> Cmdlet 用 <code>-ReferencedAssemblies</code> 参数提供引用信息。</p>
-<p>为了指定源代码的语言（可以使用 <code>CSharp</code>、<code>CSharpVersion3</code>、<code>Visual Basic</code> 和 <code>JScript</code>），您需要使用 <code>-Language</code> 参数。缺省值是 <code>CSharp</code>。</p>
-<p>在我的系统中我有一个 csharptemplate.ps1<a href="/assets/download/csharptemplate.ps1">csharptemplate.ps1</a> 文件，我可以快速地复制和修改成我需要的样子来运行我的 C# 代码：</p>
-<pre><code>$Assem = (
-...add referenced assemblies here...
-    ) 
-
-$Source = @&quot; 
-...add C# source code here...
-&quot;@ 
-
-Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp
-</code></pre><p>对于上述的 C# 例子，对应的最终 PowerShell 脚本如下：</p>
-<pre><code>$Assem = ( 
-    &quot;Microsoft.SharePoint, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c&quot; , 
-    &quot;Microsoft.SharePoint.Publishing, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c&quot;
-    ) 
-
-$Source = @&quot; 
-using Microsoft.SharePoint.Publishing.Administration; 
-using System; 
-
-namespace StefanG.Tools 
-{ 
-    public static class CDRemoteTimeout  
-    { 
-        public static void Get() 
-        { 
-            ContentDeploymentConfiguration cdconfig = ContentDeploymentConfiguration.GetInstance();
-            Console.WriteLine(&quot;Remote Timeout: &quot;+cdconfig.RemoteTimeout); 
-        } 
-
-        public static void Set(int seconds) 
-        { 
-            ContentDeploymentConfiguration cdconfig = ContentDeploymentConfiguration.GetInstance(); 
-            cdconfig.RemoteTimeout = seconds;
-            cdconfig.Update();
-        } 
-    } 
-} 
-&quot;@ 
-
-Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp  
-
-[StefanG.Tools.CDRemoteTimeout]::Get()
-[StefanG.Tools.CDRemoteTimeout]::Set(600)
-</code></pre><p>上述例子的最后几行演示了如何在 PowerShell 中调用 C# 方法。</p>
-<p>注：文中涉及到的 csharptemplate.ps1 可以在这里<a href="/assets/download/csharptemplate.ps1">下载</a>。</p></p>
-            <p class="article-more-link">
-                <a href="/powershell/2013/11/08/using-csharp-c-code-in-powershell-scripts/#more">查看更多</a>
-            </p>
         
         </div>
         <footer class="article-footer">
@@ -409,7 +1421,7 @@ Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp
 
             
     
-        <a href="http://blog.vichamp.com/powershell/2013/11/08/using-csharp-c-code-in-powershell-scripts/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/2013/11/08/using-csharp-c-code-in-powershell-scripts/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/2013/11/26/fix-a-bug-of-submanager/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/2013/11/26/fix-a-bug-of-submanager/">评论</a>
     
 
         </footer>
@@ -419,7 +1431,7 @@ Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp
 
 
 
-    <article id="post-capitalizing-words" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-getting-wmi-intellisense" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -428,7 +1440,7 @@ Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2013/11/07/capitalizing-words/">PowerShell 技能连载 - 将单词首字母转换为大写</a>
+            <a class="article-title" href="/powershell/tip/2013/11/26/getting-wmi-intellisense/">PowerShell 技能连载 - 获取 WMI 智能感知信息</a>
         </h1>
     
 
@@ -437,8 +1449,8 @@ Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2013/11/07/capitalizing-words/">
-            <time datetime="2013-11-06T16:00:00.000Z" itemprop="datePublished">2013-11-07</time>
+        <a href="/powershell/tip/2013/11/26/getting-wmi-intellisense/">
+            <time datetime="2013-11-25T16:00:00.000Z" itemprop="datePublished">2013-11-26</time>
         </a>
     </div>
 
@@ -461,21 +1473,15 @@ Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>要正确地将单词首字母转换为大写，您可以用正则表达式或者一点系统函数：</p>
-<p>用正则表达式的话，您可以这样做：</p>
-<pre><code>$sentence = &apos;here is some text where i would like the first letter to be capitalized.&apos;
-$pattern = &apos;\b(\w)&apos;
-[RegEx]::Replace($sentence, $pattern, { param($x) $x.Value.ToUpper() }) 
-</code></pre><p>用系统函数的话，这样做可以达到相同的效果：</p>
-<pre><code>$sentence = &apos;here is some text where i would like the first letter to be capitalized.&apos;
-(Get-Culture).TextInfo.ToTitleCase($sentence) 
-</code></pre><p>正则表达式稍微复杂一点，但是功能更多。例如如果出于某种古怪的原因，您需要将每个单词的首字母替换为它的 ASCII 码，那么正则表达式可以轻松地实现：</p>
-<pre><code>$sentence = &apos;here is some text where i would like the first letter to be capitalized.&apos;
-$pattern = &apos;\b(\w)&apos;
-[RegEx]::Replace($sentence, $pattern, { param($x) [Byte][Char]$x.Value })
-</code></pre></p>
+            <p><p><code>Get-WmiObject</code> 并未对 WMI 类提供智能感知信息，所以您要么事先知道 WMI 类的名字，要么使用 <code>-List</code> 参数来搜索它。</p>
+<p>不过有一个聪明的技巧：<code>Get-CimInstance</code> 命令几乎完成相同的事情，并且它的参数 <code>-ClassName</code> 也接受一个 WMI 类名。而这个参数提供了智能感知支持。</p>
+<p>在 PowerShell 3.0 ISE 中进行以下操作：</p>
+<pre><code>PS&gt; Get-CimInstance -ClassName Win32_ 
+</code></pre><p>然后按下 <code>CTRL+SPACE</code> 键来调用智能感知。请观察状态栏提示。由于有几百个 WMI 类名，所以首次尝试的时候，智能感知在获取所有类信息的时候可能会超时。过一段时间，或者您稍微限定以下类名，它就可以正常工作了。</p>
+<p>所以只要用 <code>Get-CimInstance</code> 来代替 <code>Get-WmiObject</code>，然后在智能感知的支持下选择类名，然后将 Cmdlet 和参数改回 <code>Get-WmiObject -Class</code> 即可。</p>
+<p>或者，从头到尾都使用 <code>Get-CimInstance</code>。它返回基本相同价值的信息。但在缺省情况下，它使用 WSMan 协议来进行远程操作，而不是 DCOM。</p></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2013/11/07/capitalizing-words/#more">查看更多</a>
+                <a href="/powershell/tip/2013/11/26/getting-wmi-intellisense/#more">查看更多</a>
             </p>
         
         </div>
@@ -539,1277 +1545,7 @@ $pattern = &apos;\b(\w)&apos;
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2013/11/07/capitalizing-words/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/07/capitalizing-words/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-finding-default-outlook-profile" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2013/11/06/finding-default-outlook-profile/">PowerShell 技能连载 - 查找缺省的 Outlook 配置文件</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2013/11/06/finding-default-outlook-profile/">
-            <time datetime="2013-11-05T16:00:00.000Z" itemprop="datePublished">2013-11-06</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>PowerShell 可以操作 COM 对象，例如 Outlook 应用程序。以下简单的两行代码能返回当前的 Outlook 配置文件名：</p>
-<pre><code>$outlookApplication = New-Object -ComObject Outlook.Application
-$outlookApplication.Application.DefaultProfileName 
-</code></pre></p>
-            <p class="article-more-link">
-                <a href="/powershell/tip/2013/11/06/finding-default-outlook-profile/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/tip/2013/11/06/finding-default-outlook-profile/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/06/finding-default-outlook-profile/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-dynamic-methods-in-powershell-4" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2013/11/05/dynamic-methods-in-powershell-4/">PowerShell 技能连载 - PowerShell 4.0 中的动态方法</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2013/11/05/dynamic-methods-in-powershell-4/">
-            <time datetime="2013-11-04T16:00:00.000Z" itemprop="datePublished">2013-11-05</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>从 PowerShell 4.0 开始，方法名可以是一个变量。以下是一个简单的例子：</p>
-<pre><code>$method = &apos;ToUpper&apos;
-&apos;Hello&apos;.$method() 
-</code></pre><p>当您需要调用的方法须通过一段脚本计算得到的时候，这个特性十分有用。</p>
-<pre><code>function Convert-Text
-{
-  param
-  (
-    [Parameter(Mandatory)]
-    $Text,
-    [Switch]$ToUpper
-  )
-
-  if ($ToUpper)
-  {
-    $method = &apos;ToUpper&apos;
-  }
-  else
-  {
-    $method = &apos;ToLower&apos;
-  }
-  $text.$method()
-} 
-</code></pre><p>以下是用户调用该函数的方法：</p>
-<pre><code>PS&gt; Convert-Text &apos;Hello&apos;
-hello
-PS&gt; Convert-Text &apos;Hello&apos; -ToUpper
-HELLO
-</code></pre><p>缺省情况下，该函数将文本转换为小写。当指定了开关参数 <code>-ToUpper</code> 时，函数将文本转换为大写。由于动态方法特性的支持，该函数不需要为此写两遍代码。</p>
-<p>译者注：在旧版本的 PowerShell 中，您可以通过 .NET 方法（而不是脚本方法）中的反射来实现相同的目的。虽然它不那么整洁，但它能运行在 PowerShell 4.0 以下的环境：</p>
-<pre><code>function Convert-Text
-{
-  param
-  (
-    [Parameter(Mandatory)]
-    $Text,
-    [Switch]$ToUpper
-  )
-
-  if ($ToUpper)
-  {
-    $method = &apos;ToUpper&apos;
-  }
-  else
-  {
-    $method = &apos;ToLower&apos;
-  }
-  $methodInfo = $Text.GetType().GetMethod($method, [type[]]@())
-  $methodInfo.Invoke($Text, $null)
-} 
-</code></pre></p>
-            <p class="article-more-link">
-                <a href="/powershell/tip/2013/11/05/dynamic-methods-in-powershell-4/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/tip/2013/11/05/dynamic-methods-in-powershell-4/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/05/dynamic-methods-in-powershell-4/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-processing-plain-text-with-powershell-4" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/text/2013/11/05/processing-plain-text-with-powershell-4/">用 PowerShell 处理纯文本 - 4</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/text/2013/11/05/processing-plain-text-with-powershell-4/">
-            <time datetime="2013-11-04T16:00:00.000Z" itemprop="datePublished">2013-11-05</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/text/">text</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/learning/">learning</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/script/">script</a>, <a class="tag-link" href="/tags/skill/">skill</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            
-            <h2 id="命题"><a href="#命题" class="headerlink" title="命题"></a>命题</h2><p>QQ 群里的史瑞克朋友提出的一个命题：</p>
-<pre><code>$txt=&quot;192.168.1
-192.168.2
-192.168.3
-172.19.3
-192.16.1
-192.16.2
-192.16.11
-192.16.3
-10.0.4
-192.16.29
-192.16.9
-192.16.99
-192.16.100&quot;
-</code></pre><p>要求输出：</p>
-<pre><code>10.0.4
-172.19.3
-192.16.1-192.16.3
-192.16.9
-192.16.11
-192.16.29
-192.16.99-192.16.100
-192.168.1-192.168.3
-</code></pre><h2 id="问题解析"><a href="#问题解析" class="headerlink" title="问题解析"></a>问题解析</h2><pre><code>* 将各个 IP 段补充为三位的格式
-* 按字符串排序
-* 遍历每一行，按照以下规则处理：
-    * 如果和上一行连续，则上一段可能没有结束，更新 `$endIP`
-    * 如果和上一行不连续
-        * 若 `$startIP` 和 `$endIP` 相同，说明是单个 IP，将单个 IP 加入 $result
-        * 若 `$startIP` 和 `$endIP` 不同，说明是一段 IP，将一段 IP 加入 $result
-        * 更新 `$startIP` 和 `$endIP`
-* 最后一行需要特殊处理
-</code></pre><h2 id="PowerShell-实现"><a href="#PowerShell-实现" class="headerlink" title="PowerShell 实现"></a>PowerShell 实现</h2><pre><code>$DebugPreference = &quot;Continue&quot;
-
-$txt=&quot;192.168.1
-192.168.2
-192.168.3
-172.19.3
-192.16.1
-192.16.2
-192.16.11
-192.16.3
-10.0.4
-192.16.29
-192.16.9
-192.16.99
-192.16.100&quot;
-$txt += &quot;`n999.999.999&quot;
-
-$startIP = @(0, 0, 0)
-$endIP = @(0, 0, 0)
-$result = @()
-
--split $txt | % {
-    $fullSegments = ($_ -split &quot;\.&quot; | % {
-        &quot;{0:D3}&quot; -f [int]$_
-    })
-    $fullSegments -join &quot;.&quot;
-} | sort | % {
-    Write-Debug &quot;Processing $_&quot;
-    $segments = @($_ -split &quot;\.&quot; | % {
-        [int]$_
-    })
-
-    if ($endIP[0] -eq $segments[0] -and
-        $endIP[1] -eq $segments[1] -and
-        $endIP[2] + 1 -eq $segments[2]) {
-        Write-Debug &apos;和上一个IP连续&apos;
-        $endIP = $segments
-    } else {
-        Write-Debug &apos;和上一个IP不连续&apos;
-        if (($startIP -join &quot;.&quot;) -eq ($endIP -join &quot;.&quot;)) {
-            Write-Debug &apos;单个IP&apos;
-            $result += $startIP -join &quot;.&quot;
-        } else {
-            Write-Debug &apos;一段IP&apos;
-            $result += ($startIP -join &quot;.&quot;) + &quot;-&quot; + ($endIP -join &quot;.&quot;)
-        }
-
-        $startIP = $segments
-        $endIP = $segments
-    }
-}
-
-$result | select -Skip 1
-</code></pre><p>源代码请在<a href="/assets/download/Sort-IP.ps1">这里下载</a>。</p>
-
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/text/2013/11/05/processing-plain-text-with-powershell-4/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/text/2013/11/05/processing-plain-text-with-powershell-4/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-dynamic-parameters-in-powershell-4-0" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2013/11/04/dynamic-parameters-in-powershell-4-0/">PowerShell 技能连载 - PowerShell 4.0 中的动态参数</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2013/11/04/dynamic-parameters-in-powershell-4-0/">
-            <time datetime="2013-11-03T16:00:00.000Z" itemprop="datePublished">2013-11-04</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>在 PowerShell 中，您可以使用变量来指代属性名。这段示例脚本定义了四个 profile 的属性名，然后在一个循环中分别查询这些属性值：</p>
-<pre><code>$list = &apos;AllUsersAllHosts&apos;,&apos;AllUsersCurrentHost&apos;,&apos;CurrentUserAllHosts&apos;,&apos;CurrentUserCurrentHost&apos;
-foreach ($property in $list)
-{
-    $profile.$property
-}
-</code></pre><p>您也可以在一个管道中使用它：</p>
-<pre><code>&apos;AllUsersAllHosts&apos;,&apos;AllUsersCurrentHost&apos;,&apos;CurrentUserAllHosts&apos;,&apos;CurrentUserCurrentHost&apos; |
-ForEach-Object { $profile.$_ } 
-</code></pre><p>通过这种方式，您可以检查和返回 PowerShell 当前使用的所有 profile：</p>
-<pre><code>&apos;AllUsersAllHosts&apos;,&apos;AllUsersCurrentHost&apos;,&apos;CurrentUserAllHosts&apos;,&apos;CurrentUserCurrentHost&apos; |
-ForEach-Object { $profile.$_ } |
-Where-Object { Test-Path $_ } 
-</code></pre><p>类似地，您可以首先使用 <code>Get-Member</code> 来获取一个指定对象包含的所有属性。以下代码可以返回 PowerShell 的“PrivateData”对象中所有名字包含“color”的属性：</p>
-<pre><code>$host.PrivateData | Get-Member -Name *color* | Select-Object -ExpandProperty Name 
-</code></pre><p>接下来，您可以用一行代码获取所有的颜色设置：</p>
-<pre><code>$object = $host.PrivateData
-$object | Get-Member -Name *color* -MemberType *property | ForEach-Object {
-    $PropertyName = $_.Name
-    $PropertyValue = $object.$PropertyName
-    &quot;$PropertyName = $PropertyValue&quot;
-} |
-Out-GridView
-</code></pre></p>
-            <p class="article-more-link">
-                <a href="/powershell/tip/2013/11/04/dynamic-parameters-in-powershell-4-0/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/tip/2013/11/04/dynamic-parameters-in-powershell-4-0/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/04/dynamic-parameters-in-powershell-4-0/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-use-powershell-to-clear-all-bookmarks-in-your-delicious-account" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/2013/11/01/use-powershell-to-clear-all-bookmarks-in-your-delicious-account/">用 PowerShell 脚本来清除您 Delicious 账户下的所有书签</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/2013/11/01/use-powershell-to-clear-all-bookmarks-in-your-delicious-account/">
-            <time datetime="2013-10-31T16:00:00.000Z" itemprop="datePublished">2013-11-01</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/delicious/">delicious</a>, <a class="tag-link" href="/tags/geek/">geek</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/script/">script</a>, <a class="tag-link" href="/tags/web/">web</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><a href="http://meiweisq.com" title="Delicious的中国版">美味书签</a>是 <a href="http://delicious.com" title="Delicious官方网站">Delicious</a> 在线书签服务的中国本地化版本。由于各方面原因，美味书签实现的功能有限，远远达不到 Delicious 的功能。所以我希望将美味书签中的使用记录迁移回 Delicious。</p>
-<p>经过一年使用，我在美味书签中已经积累了 5000+ 条书签记录。由于<a href="http://meiweisq.com" title="Delicious的中国版">美味书签</a>不支持书签导出功能，所以将美味书签中的书签导出至 Delicious 是一件需要动手动脑的事。幸好我们有 PowerShell 脚本，可以助我们完成这项单调枯燥的事。</p>
-<p>这是一个系列文章，一共分为 3 部分：</p>
-<ol>
-<li><a href="/powershell/2013/11/01/use-powershell-to-export-bookmarks-in-meiweisq">用 PowerShell 脚本来导出美味书签</a></li>
-<li>[用 PowerShell 脚本来清除 Delicious 账户下的所有书签][用 PowerShell 脚本来批量删除 Delicious 账户下的所有书签]</li>
-<li><a href="/powershell/2013/11/01/use-powershell-to-batch-import-bookmarks-into-delicious">用 PowerShell 脚本将书签批量导入 Delicious</a></li>
-</ol>
-<h1 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h1><h2 id="Delicious-API"><a href="#Delicious-API" class="headerlink" title="Delicious API"></a>Delicious API</h2><p>通过阅读 <a href="https://github.com/avos/delicious-api" title="在 github 上的Delicious API说明">Delicious API</a>，我们找出需要的 API 来：</p>
-<table>
-<thead>
-<tr>
-<th>API</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>/v1/posts/all?</td>
-<td>列出所有书签</td>
-</tr>
-<tr>
-<td>/v1/posts/all?hashes</td>
-<td>以哈希的形式列出所有书签</td>
-</tr>
-<tr>
-<td>/v1/posts/delete?</td>
-<td>删除一条书签</td>
-</tr>
-</tbody>
-</table>
-<p>其中 <code>/v1/posts/all?hashes</code> 这条 API 暂时用不到。</p>
-<h2 id="身份验证"><a href="#身份验证" class="headerlink" title="身份验证"></a>身份验证</h2><p>在 Delicious API 文档中提到了在 URL 中包含用户和密码的方式来验证身份：</p>
-<pre><code>$ curl https://user:passwd@api.delicious.com/v1/posts/get?tag=webdev&amp;meta=yes
-</code></pre><p>但在实际中这个方法行不通。我们还是通过 PowerShell 的 <code>Get-Credential</code> 命令来实现：</p>
-<pre><code>$credential = Get-Credential -UserName $userName -Message &apos;请输入密码&apos;
-</code></pre><p>这段代码的执行效果是弹出一个身份验证框</p>
-<p><img src="/img/2013-11-01-use-powershell-to-clear-all-bookmarks-in-your-delicious-account-001.png" alt=""></p>
-<p>当然，您也可以把身份信息硬编码的方式写在脚本中，在调试期可以提高效率。但在脚本发布时，可以采用 <code>Get-Credential</code> 这种优雅的方式来提示用户输入。</p>
-<h2 id="调用-API"><a href="#调用-API" class="headerlink" title="调用 API"></a>调用 API</h2><p>调用 Delicious API 的方法十分简单，由于返回的是一个 XML 文档，我们可以显式地将 $listResponse 返回值的数据类型声明为 <code>[xml]</code>。</p>
-<pre><code>[xml]$listResponse = Invoke-WebRequest -Uri &apos;https://api.del.icio.us/v1/posts/all?red=api&apos; -Credential $credential
-</code></pre><h2 id="解析执行结果"><a href="#解析执行结果" class="headerlink" title="解析执行结果"></a>解析执行结果</h2><p>我们可以在浏览器中试着敲入 <code>https://api.delicious.com/v1/posts/all?red=api</code> 来观察执行结果，浏览器将会要求您输入 Delicious 的用户名与密码：</p>
-<p><img src="/img/2013-11-01-use-powershell-to-clear-all-bookmarks-in-your-delicious-account-002.png" alt=""></p>
-<p>通过观察 XML 的结构，我们可以从 API 响应中取得所有书签的链接，用 XPATH 表达为 <code>posts/post/@href</code>。用 PowerShell 来表达，代码如下：</p>
-<pre><code>$links = $listResponse.posts.post | select -exp href -Unique
-</code></pre><p>考虑到有些链接可能重复，我们加了个 <code>-Unique</code> 参数，取得不重复的唯一结果。</p>
-<h2 id="删除链接"><a href="#删除链接" class="headerlink" title="删除链接"></a>删除链接</h2><p>通过上述方法得到所有的书签链接之后，我们可以循环调用 <code>/v1/posts/delete?</code> API 来删除它们。根据文档，若删除成功，将返回：</p>
-<pre><code>&lt;result code=&quot;done&quot; /&gt;
-</code></pre><p>所以我们可以这样设计脚本：</p>
-<pre><code>if ($response.result.code -eq &apos;done&apos;) {
-    #
-}
-</code></pre><h2 id="吝啬地休眠"><a href="#吝啬地休眠" class="headerlink" title="吝啬地休眠"></a>吝啬地休眠</h2><p>API 文档中有一句严厉的警告，原文如下：</p>
-<blockquote>
-<p>Please wait <strong>at least one second</strong> between HTTP queries, or you are likely to get automatically throttled. If you are releasing a library to access the API, you <strong>must</strong> do this.</p>
-</blockquote>
-<p>意思是说 HTTP 请求不能太频繁，<strong>至少</strong>要间隔 1 秒。但我觉得时间是珍贵的，如果每次 <code>Start-Sleep -Seconds 1</code> 的话，每一次加上网络传输时间，就不止 1 秒了。时间浪费在 sleep 上十分可惜，特别是在大量的循环中更是如此。我希望 sleep 的时间恰好是 1 秒。所以我设计了一个函数，计算当前时间与上一次 sleep 时的时间差。然后<strong>精确地</strong> sleep 这个时间差值，一点也不多睡 ;-)</p>
-<pre><code>function Invoke-StingySleep ($seconds) {
-    if (!$lastSleepTime) {
-        $lastSleepTime = Get-Date
-    }
-
-    $span = $lastSleepTime + (New-TimeSpan -Seconds 1) - (Get-Date)
-    Start-Sleep -Milliseconds $span.TotalMilliseconds
-}
-</code></pre><p>不过实际使用中，似乎 Delicious 的开发者比较仁慈。如果我把 <code>Start-Sleep</code> 这行去掉，服务器并没有因为我们连续不断地请求而把我们的程序给屏蔽掉。当然也有可能是我所在的地方网络延迟太大了。</p>
-<h1 id="容错技巧"><a href="#容错技巧" class="headerlink" title="容错技巧"></a>容错技巧</h1><p>其实这个程序还有很多地方可以改进，例如每次调用删除 API 后判断服务器的 HTTP 响应是否正确，但可以不去改进它。理由是：既然我们的目的是删除所有的书签，那么如果有某一些漏网之鱼没有删掉，那么在下一轮循环中会被查询出来，重新删除。只要脚本工作得不离谱的话，一定能删到完为止。</p>
-<h1 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h1></p>
-            <p class="article-more-link">
-                <a href="/powershell/2013/11/01/use-powershell-to-clear-all-bookmarks-in-your-delicious-account/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/2013/11/01/use-powershell-to-clear-all-bookmarks-in-your-delicious-account/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/2013/11/01/use-powershell-to-clear-all-bookmarks-in-your-delicious-account/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-use-powershell-to-batch-import-bookmarks-into-delicious" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/2013/11/01/use-powershell-to-batch-import-bookmarks-into-delicious/">用 PowerShell 脚本将书签批量导入 Delicious</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/2013/11/01/use-powershell-to-batch-import-bookmarks-into-delicious/">
-            <time datetime="2013-10-31T16:00:00.000Z" itemprop="datePublished">2013-11-01</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/delicious/">delicious</a>, <a class="tag-link" href="/tags/geek/">geek</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/script/">script</a>, <a class="tag-link" href="/tags/web/">web</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><a href="http://meiweisq.com" title="Delicious的中国版">美味书签</a>是 <a href="http://delicious.com" title="Delicious官方网站">Delicious</a> 在线书签服务的中国本地化版本。由于各方面原因，美味书签实现的功能有限，远远达不到 Delicious 的功能。所以我希望将美味书签中的使用记录迁移回 Delicious。</p>
-<p>经过一年使用，我在美味书签中已经积累了 5000+ 条书签记录。由于<a href="http://meiweisq.com" title="Delicious的中国版">美味书签</a>不支持书签导出功能，所以将美味书签中的书签导出至 Delicious 是一件需要动手动脑的事。幸好我们有 PowerShell 脚本，可以助我们完成这项单调枯燥的事。</p>
-<p>这是一个系列文章，一共分为 3 部分：</p>
-<ol>
-<li><a href="/powershell/2013/11/01/use-powershell-to-export-bookmarks-in-meiweisq">用 PowerShell 脚本来导出美味书签</a></li>
-<li>[用 PowerShell 脚本来清除 Delicious 账户下的所有书签][用 PowerShell 脚本来批量删除 Delicious 账户下的所有书签]</li>
-<li><a href="/powershell/2013/11/01/use-powershell-to-batch-import-bookmarks-into-delicious">用 PowerShell 脚本将书签批量导入 Delicious</a></li>
-</ol>
-<h1 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h1><h2 id="Delicious-API"><a href="#Delicious-API" class="headerlink" title="Delicious API"></a>Delicious API</h2><p>通过阅读 <a href="https://github.com/avos/delicious-api" title="在 github 上的Delicious API说明">Delicious API</a>，可以知道我们只需要这样一条 API <code>/v1/posts/add?</code>，它的参数为：</p>
-<ul>
-<li><code>&amp;url={URL}</code> (required) — The url of the item.</li>
-<li><code>&amp;description={...}</code> (required) — The description of the item.</li>
-<li><code>&amp;extended={...}</code> (optional) — Botes for the item.</li>
-<li><code>&amp;tags={...}</code> (optional) — Tags for the item (comma delimited).</li>
-<li><code>&amp;dt={CCYY-MM-DDThh:mm:ssZ}</code> (optional) — Datestamp of the item (format “CCYY-MM-DDThh:mm:ssZ”). Requires a LITERAL “T” and “Z” like in ISO8601 at <a href="http://www.cl.cam.ac.uk/~mgk25/iso-time.html">http://www.cl.cam.ac.uk/~mgk25/iso-time.html</a> for Example: <code>1984-09-01T14:21:31Z</code></li>
-<li><code>&amp;replace=no</code> (optional) — Don’t replace post if given url has already been posted.</li>
-<li><code>&amp;shared=no</code> (optional) — Make the item private</li>
-</ul>
-<p>关于身份验证，请参考本系列的另一篇文章 <a href="/powershell/2013/11/01/use-powershell-to-clear-all-bookmarks-in-your-delicious-account">用 PowerShell 脚本来清除 Delicious 账户下的所有书签</a> 。</p>
-<h2 id="URL-编码"><a href="#URL-编码" class="headerlink" title="URL 编码"></a>URL 编码</h2><p>我们需要提交的书签中，<code>description</code> 字段和 <code>tags</code> 字段是有可能出现 URL 中不允许的字符的，例如 <code>?</code>、<code>&amp;</code>，以及中文字符等。我们需要将它们进行 URL 编码以后，才可以拼接到 URL 字符串中。在 PowerShell 中进行 URL 编码的方法如下：</p>
-<pre><code>Add-Type -AssemblyName &apos;System.Web&apos;
-[System.Web.HttpUtility]::UrlEncode(&apos;中文&apos;)
-</code></pre><p>其中第一行是为了加载 System.Web 程序集。还可以用以下两种方法来实现：</p>
-<pre><code>[void][system.Reflection.Assembly]::LoadWithPartialName(&quot;System.Web&quot;)
-</code></pre><p>以及：</p>
-<pre><code>[Reflection.Assembly]::LoadFile(&apos;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll&apos;) | Out-Null
-</code></pre><h2 id="生成查询字符串"><a href="#生成查询字符串" class="headerlink" title="生成查询字符串"></a>生成查询字符串</h2><p>我们要在查询字符串中包含 API 文档中提到的那 7 个参数。用 <code>string -f</code> 的方式显得有点笨拙。于是我们编写这样一个函数：</p>
-<pre><code>function Get-QueryString ($params) {
-    $keyValuePairs = ($params.Keys | % {
-        write (&apos;{0}={1}&apos; -f $_, $params[$_])
-    })
-    return $keyValuePairs -join &apos;&amp;&apos;
-}
-</code></pre><p>这个函数接收一个哈希表作为参数，也可以是 <code>[ordered]</code> （即<code>OrderedDictionary</code>）。函数中循环地取出所有键，将它们的值用 <code>&amp;</code> 符号拼接在一起。</p>
-<h1 id="容错设计"><a href="#容错设计" class="headerlink" title="容错设计"></a>容错设计</h1><p>若是 <code>Invoke-WebRequest</code> 命令抛出异常，或是 HTTP 响应码不为 200，或是 XML 中不是 <code>&lt;result code=&quot;done&quot; /&gt;</code> 这样的返回，那么表示添加书签失败。我们可以把这些书签收集起来，输出到 <em>failed_import.csv</em> 文件中。然后下次可以再对这个文件进行导入。直到这个文件中没有记录为止。当然，您也可以将脚本改进一下，全自动地做完上述的事情。那么您一定是懒（勤劳）到家了 ;-)</p>
-<h1 id="源代码"><a href="#源代码" class="headerlink" title="源代码"></a>源代码</h1></p>
-            <p class="article-more-link">
-                <a href="/powershell/2013/11/01/use-powershell-to-batch-import-bookmarks-into-delicious/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/2013/11/01/use-powershell-to-batch-import-bookmarks-into-delicious/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/2013/11/01/use-powershell-to-batch-import-bookmarks-into-delicious/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-replacing-specific-characters-in-a-text" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2013/11/01/replacing-specific-characters-in-a-text/">PowerShell 技能连载 - 替换文本中的指定字符</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2013/11/01/replacing-specific-characters-in-a-text/">
-            <time datetime="2013-10-31T16:00:00.000Z" itemprop="datePublished">2013-11-01</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>如果您只是需要替换文本中字符出现的所有位置，这是很简单的。以下可以将文本中所有的“l”变为大写：</p>
-<pre><code>&quot;Hello World&quot;.Replace(&apos;l&apos;, &apos;L&apos;)
-</code></pre><p>然而有些时候，您需要替换特定位置的某几个字符。我们假设您的文本是一个比特掩码，并且您需要对某些比特置位或清除。以上代码是不能用的，因为它一口气改变了所有的位：</p>
-<pre><code>PS&gt; &quot;110100011110110&quot;.Replace(&apos;1&apos;, &apos;0&apos;)
-
-000000000000000
-</code></pre><p>而且您也不能通过索引来改变字符。您可以读取一个字符（例如检查某一个位是否为“1”），但您无法改变它的值：</p>
-<pre><code>PS&gt; &quot;110100011110110&quot;[-1] -eq &apos;1&apos;
-False
-
-PS&gt; &quot;110100011110110&quot;[-2] -eq &apos;1&apos;
-True
-
-PS&gt; &quot;110100011110110&quot;[-2] = &apos;0&apos;
-无法对 System.String 类型的对象进行索引。
-</code></pre><p>要改变一个字符串中的某些字符，请将它转换为一个 <code>StringBuilder</code>：</p>
-<pre><code>PS&gt; $sb = New-Object System.Text.StringBuilder(&quot;1101100011110110&quot;)
-
-PS&gt; $sb[-1]
-0
-
-PS&gt; $sb[-1] -eq &apos;1&apos;
-False
-
-PS&gt; $sb[-2] -eq &apos;1&apos;
-True
-
-PS&gt; $sb[-2] = &apos;0&apos;
-
-PS&gt; $sb[-2] -eq &apos;1&apos;
-False
-
-PS&gt; $sb.ToString()
-110100011110100
-</code></pre><p>以下是将二进制转换为十进制格式的方法：</p>
-<pre><code>PS&gt; $sb.ToString()
-110100011110100
-
-PS&gt; [System.Convert]::ToInt64($sb.ToString(), 2)
-26868
-</code></pre></p>
-            <p class="article-more-link">
-                <a href="/powershell/tip/2013/11/01/replacing-specific-characters-in-a-text/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/tip/2013/11/01/replacing-specific-characters-in-a-text/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/01/replacing-specific-characters-in-a-text/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-processing-plain-text-with-powershell-3" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/text/2013/11/01/processing-plain-text-with-powershell-3/">用 PowerShell 处理纯文本 - 3</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/text/2013/11/01/processing-plain-text-with-powershell-3/">
-            <time datetime="2013-10-31T16:00:00.000Z" itemprop="datePublished">2013-11-01</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/text/">text</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/learning/">learning</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/script/">script</a>, <a class="tag-link" href="/tags/skill/">skill</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            
-            <p>命题：</p>
-<blockquote>
-<p>怎样把字符 “ABC-EFGH-XYZ” 替换为 “012-3456-789”</p>
-</blockquote>
-<p>为了解决这个 case，先归纳它的规律：</p>
-<ul>
-<li>注意字符集和数字之间的对应关系，我们可以自定义一个字符集来表示。</li>
-<li>保留 - 号。</li>
-<li>不区分大小写，提高适应性。</li>
-</ul>
-<p>根据以上规律编写 PowerShell 代码：</p>
-<pre><code>$charSet = &apos;ABCEFGHXYZ&apos;.ToCharArray()
-
-$text = &apos;ABC-EFGH-XYZ&apos;
-
-$array = ($text.ToUpper().ToCharArray() | % {
-    if ($_ -eq &apos;-&apos;) {
-        &apos;-&apos;
-    } else {
-        [string]([System.Array]::IndexOf($charSet, $_))
-    }
-})
-
-$array -join &apos;&apos;
-</code></pre><p>结果是：</p>
-<pre><code>012-3456-789
-</code></pre>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/text/2013/11/01/processing-plain-text-with-powershell-3/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/text/2013/11/01/processing-plain-text-with-powershell-3/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2013/11/26/getting-wmi-intellisense/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2013/11/26/getting-wmi-intellisense/">评论</a>
     
 
         </footer>
@@ -1820,7 +1556,7 @@ $array -join &apos;&apos;
 
 
     <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/62/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/61/">61</a><a class="page-number" href="/page/62/">62</a><span class="page-number current">63</span><a class="page-number" href="/page/64/">64</a><a class="page-number" href="/page/65/">65</a><span class="space">&hellip;</span><a class="page-number" href="/page/70/">70</a><a class="extend next" rel="next" href="/page/64/">下一页 &raquo;</a>
+        <a class="extend prev" rel="prev" href="/page/62/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/61/">61</a><a class="page-number" href="/page/62/">62</a><span class="page-number current">63</span><a class="page-number" href="/page/64/">64</a><a class="page-number" href="/page/65/">65</a><span class="space">&hellip;</span><a class="page-number" href="/page/73/">73</a><a class="extend next" rel="next" href="/page/64/">下一页 &raquo;</a>
     </nav>
 </section>
             
@@ -1835,7 +1571,7 @@ $array -join &apos;&apos;
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/09/23/working-with-utc-times/" class="thumbnail">
+                            <a href="/powershell/tip/2016/10/03/finding-ip-address-assigned-by-dhcp/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1846,15 +1582,15 @@ $array -join &apos;&apos;
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/09/23/working-with-utc-times/" class="title">PowerShell 技能连载 - 使用 UTC 时间</a></p>
-                            <p class="item-date"><time datetime="2016-09-23T04:00:00.000Z" itemprop="datePublished">2016-09-23</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/10/03/finding-ip-address-assigned-by-dhcp/" class="title">PowerShell 技能连载 - 查找由 DHCP 分配的 IP 地址</a></p>
+                            <p class="item-date"><time datetime="2016-10-02T16:00:00.000Z" itemprop="datePublished">2016-10-03</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/23/using-net-types-directly/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/30/enum-week-enums-in-powershell-5/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1865,15 +1601,15 @@ $array -join &apos;&apos;
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/23/using-net-types-directly/" class="title">PowerShell 技能连载 - 直接使用 .NET 类型</a></p>
-                            <p class="item-date"><time datetime="2016-02-23T04:00:00.000Z" itemprop="datePublished">2016-02-23</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/30/enum-week-enums-in-powershell-5/" class="title">PowerShell 技能连载 - Enum 之周: PowerShell 5 中的枚举</a></p>
+                            <p class="item-date"><time datetime="2016-09-29T16:00:00.000Z" itemprop="datePublished">2016-09-30</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/22/using-workflows-to-parallelize-code/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/29/enum-week-suppressing-cmdlet-errors-fast/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1884,15 +1620,15 @@ $array -join &apos;&apos;
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/22/using-workflows-to-parallelize-code/" class="title">PowerShell 技能连载 - 使用工作流来并发执行代码</a></p>
-                            <p class="item-date"><time datetime="2016-02-22T04:00:00.000Z" itemprop="datePublished">2016-02-22</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/29/enum-week-suppressing-cmdlet-errors-fast/" class="title">PowerShell 技能连载 - Enum 之周: 快速关闭 Cmdlet 错误提示</a></p>
+                            <p class="item-date"><time datetime="2016-09-28T16:00:00.000Z" itemprop="datePublished">2016-09-29</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/19/decorate-scripts-with-requires-statements/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/28/enum-week-understanding-enumeration-values/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1903,15 +1639,15 @@ $array -join &apos;&apos;
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/19/decorate-scripts-with-requires-statements/" class="title">PowerShell 技能连载 - 用 #requires 语句装饰脚本</a></p>
-                            <p class="item-date"><time datetime="2016-02-19T04:00:00.000Z" itemprop="datePublished">2016-02-19</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/28/enum-week-understanding-enumeration-values/" class="title">PowerShell 技能连载 - Enum 之周: 理解枚举值</a></p>
+                            <p class="item-date"><time datetime="2016-09-27T16:00:00.000Z" itemprop="datePublished">2016-09-28</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/18/do-not-mix-different-objects/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/27/enum-week-listing-enumeration-values/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1922,8 +1658,8 @@ $array -join &apos;&apos;
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/18/do-not-mix-different-objects/" class="title">PowerShell 技能连载 - </a></p>
-                            <p class="item-date"><time datetime="2016-02-17T21:00:00.000Z" itemprop="datePublished">2016-02-18</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/27/enum-week-listing-enumeration-values/" class="title">PowerShell 技能连载 - Enum 之周: 列出枚举值</a></p>
+                            <p class="item-date"><time datetime="2016-09-26T16:00:00.000Z" itemprop="datePublished">2016-09-27</time></p>
                         </div>
                     </li>
                 
@@ -1936,7 +1672,7 @@ $array -join &apos;&apos;
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C#</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/angularjs/">angularjs</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/career/">career</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/embedded/">embedded</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ionic/">ionic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/markdown/">markdown</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongoose/">mongoose</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mvp/">mvp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nodejs/">nodejs</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/">powershell</a><span class="category-list-count">664</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/office/">office</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/text/">text</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/tip/">tip</a><span class="category-list-count">603</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/program/">program</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/server/">server</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/software-engineering/">software-engineering</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/text/">text</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vim/">vim</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/visualstudio/">visualstudio</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><span class="category-list-count">2</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C#</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/angularjs/">angularjs</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/career/">career</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/embedded/">embedded</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ionic/">ionic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/markdown/">markdown</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongoose/">mongoose</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mvp/">mvp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nodejs/">nodejs</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/">powershell</a><span class="category-list-count">689</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/office/">office</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/text/">text</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/tip/">tip</a><span class="category-list-count">628</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/program/">program</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/server/">server</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/software-engineering/">software-engineering</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/text/">text</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vim/">vim</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/visualstudio/">visualstudio</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><span class="category-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -1945,7 +1681,7 @@ $array -join &apos;&apos;
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -1954,7 +1690,7 @@ $array -join &apos;&apos;
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">.net</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/0day/">0day</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ad/">ad</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angularjs/">angularjs</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/appz/">appz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/asciiart/">asciiart</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/batch/">batch</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bestpractice/">bestpractice</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/block/">block</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bug/">bug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/career/">career</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cdn/">cdn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cheatsheet/">cheatsheet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmd/">cmd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmdlet/">cmdlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/command/">command</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/csharp/">csharp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ddns/">ddns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/delicious/">delicious</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/">develop</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dos/">dos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/download/">download</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ebook/">ebook</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ed2k/">ed2k</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/embedded/">embedded</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/">encoding</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/excel/">excel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/extension/">extension</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/geek/">geek</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guide/">guide</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guideline/">guideline</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gvim/">gvim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ide/">ide</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ionic/">ionic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iso/">iso</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/language/">language</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/">learning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lesson/">lesson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/link/">link</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microsoft/">microsoft</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/module/">module</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/">mongoose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/monthly/">monthly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvp/">mvp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nosql/">nosql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oray/">oray</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powershell/">powershell</a><span class="tag-list-count">662</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powertip/">powertip</a><span class="tag-list-count">603</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/productivity/">productivity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qq/">qq</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regex/">regex</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/registry/">registry</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/release/">release</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/repack/">repack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resource/">resource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm/">scm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/script/">script</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/series/">series</a><span class="tag-list-count">603</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/skill/">skill</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/software/">software</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sp1/">sp1</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/study/">study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/style/">style</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/text/">text</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip/">tip</a><span class="tag-list-count">602</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip个/">tip个</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/">translation</a><span class="tag-list-count">609</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/uac/">uac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/update/">update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/video/">video</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualstudio/">visualstudio</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vmware/">vmware</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/window/">window</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xampp/">xampp</a><span class="tag-list-count">2</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">.net</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/0day/">0day</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ad/">ad</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angularjs/">angularjs</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/appz/">appz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/asciiart/">asciiart</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/batch/">batch</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bestpractice/">bestpractice</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/block/">block</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bug/">bug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/career/">career</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cdn/">cdn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cheatsheet/">cheatsheet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmd/">cmd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmdlet/">cmdlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/command/">command</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/csharp/">csharp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ddns/">ddns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/delicious/">delicious</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/">develop</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dos/">dos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/download/">download</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ebook/">ebook</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ed2k/">ed2k</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/embedded/">embedded</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/">encoding</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/excel/">excel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/extension/">extension</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/geek/">geek</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guide/">guide</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guideline/">guideline</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gvim/">gvim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ide/">ide</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ionic/">ionic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iso/">iso</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/language/">language</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/">learning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lesson/">lesson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/link/">link</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microsoft/">microsoft</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/module/">module</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/">mongoose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/monthly/">monthly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvp/">mvp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nosql/">nosql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oray/">oray</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powershell/">powershell</a><span class="tag-list-count">687</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powertip/">powertip</a><span class="tag-list-count">628</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/productivity/">productivity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qq/">qq</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regex/">regex</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/registry/">registry</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/release/">release</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/repack/">repack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resource/">resource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm/">scm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/script/">script</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/series/">series</a><span class="tag-list-count">628</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/skill/">skill</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/software/">software</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sp1/">sp1</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/study/">study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/style/">style</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/text/">text</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip/">tip</a><span class="tag-list-count">627</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip个/">tip个</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/">translation</a><span class="tag-list-count">634</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/uac/">uac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/update/">update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/video/">video</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualstudio/">visualstudio</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vmware/">vmware</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/window/">window</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xampp/">xampp</a><span class="tag-list-count">2</span></li></ul>
         </div>
     </div>
 

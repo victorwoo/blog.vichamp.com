@@ -174,7 +174,7 @@ var _hmt = _hmt || [];
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                698
+                722
                 <span>文章</span>
             </div>
             <div class="article-info-block">
@@ -227,7 +227,7 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-catching-non-terminating-errors" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-adding-and-resetting-ntfs-permissions" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/17/catching-non-terminating-errors/">PowerShell 技能连载 - 捕获非终止性错误</a>
+            <a class="article-title" href="/powershell/tip/2014/05/20/adding-and-resetting-ntfs-permissions/">PowerShell 技能连载 - 添加或重置 NTFS 权限</a>
         </h1>
     
 
@@ -245,8 +245,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/17/catching-non-terminating-errors/">
-            <time datetime="2014-04-16T16:00:00.000Z" itemprop="datePublished">2014-04-17</time>
+        <a href="/powershell/tip/2014/05/20/adding-and-resetting-ntfs-permissions/">
+            <time datetime="2014-05-19T16:00:00.000Z" itemprop="datePublished">2014-05-20</time>
         </a>
     </div>
 
@@ -269,28 +269,46 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>非终止性错误是在 cmdlet 内部处理的错误。多数在 cmdlet 中产生的错误都是非终止性错误。</p>
-<p>您无法用异常处理器来捕获这些错误。所以虽然在这个例子中有一个异常处理器，它也无法捕获 cmdlet 错误：</p>
-<pre><code>try
-{
-  Get-WmiObject -Class Win32_BIOS -ComputerName offlineIamafraid 
-}
-catch
-{
-  Write-Warning &quot;Oops, error: $_&quot;
-} 
-</code></pre><p>要捕获非终止性错误，您必须将它们转换为终止性错误。可以通过设置 <code>-ErrorAction</code> 参数为 <code>&quot;Stop&quot;</code> 来实现：</p>
-<pre><code>try
-{
-  Get-WmiObject -Class Win32_BIOS -ComputerName offlineIamafraid -ErrorAction Stop
-}
-catch
-{
-  Write-Warning &quot;Oops, error: $_&quot;
-} 
-</code></pre><p>如果您不想一个一个为异常处理器中所有的 cmdlet 添加 <code>-ErrorAction Stop</code> 参数，您可以临时将 <code>$ErrorActionPreference</code> 变量设置为 <code>&quot;Stop&quot;</code>。该设置用于一个 cmdlet 没有显示地设置 <code>-ErrorAction</code> 的情况。</p></p>
+            <p><p>当您需要为一个文件添加一个新的 NTFS 存取规则，或禁用继承并添加新的规则，以下是一个示例脚本，演示这个技巧并且为您提供一个模板。</p>
+<p>这个脚本创建一个测试文件，然后以当前用户的身份定义一个新的存取规则。这个规则包含读取和写入权限。这个新规则被添加到已存在的安全描述符中。另外，将禁用继承。</p>
+<pre><code># create a sample file to apply security rules to
+$Path = &quot;$env:temp\examplefile.txt&quot;
+$null = New-Item -Path $Path -ItemType File -ErrorAction SilentlyContinue
+
+# use current user or replace with another user name
+$username = &quot;$env:USERDOMAIN\$env:USERNAME&quot;
+
+# define the new access rights
+$colRights = [System.Security.AccessControl.FileSystemRights]&apos;Read, Write&apos; 
+$InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::None 
+$PropagationFlag = [System.Security.AccessControl.PropagationFlags]::None 
+$objType =[System.Security.AccessControl.AccessControlType]::Allow 
+$objUser = New-Object System.Security.Principal.NTAccount($username) 
+
+# create new access control entry
+$objACE = New-Object System.Security.AccessControl.FileSystemAccessRule `
+    ($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType) 
+
+# get existing access control list for a file or folder
+$objACL = Get-Acl -Path $Path 
+
+# add rule
+$objACL.AddAccessRule($objACE) 
+
+# disable inheritance (if needed)
+$objACL.SetAccessRuleProtection($true, $false)
+
+# apply changed access control list to file
+Set-Acl -Path $Path -AclObject $objACL
+
+# show file in the File Explorer
+explorer.exe &quot;/SELECT,$Path&quot;
+</code></pre><p>执行完成之后，该脚本在文件管理器中打开测试文件，并选中它。您可以右键单击该文件并选择 <code>属性</code> &gt; <code>安全</code> 来查看新的设置。</p>
+<p>要查看有哪些存取权限可用，请在 ISE 编辑器中键入以下这行：</p>
+<p><img src="/img/2014-05-20-adding-and-resetting-ntfs-permissions-001.png" alt=""></p>
+<p>这将自动打开上下文菜单并列出所有可用的设置。</p></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/17/catching-non-terminating-errors/#more">查看更多</a>
+                <a href="/powershell/tip/2014/05/20/adding-and-resetting-ntfs-permissions/#more">查看更多</a>
             </p>
         
         </div>
@@ -354,7 +372,7 @@ catch
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/17/catching-non-terminating-errors/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/17/catching-non-terminating-errors/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/20/adding-and-resetting-ntfs-permissions/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/20/adding-and-resetting-ntfs-permissions/">评论</a>
     
 
         </footer>
@@ -364,7 +382,7 @@ catch
 
 
 
-    <article id="post-hiding-terminating-errors" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-converting-text-arrays-to-string" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -373,7 +391,7 @@ catch
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/16/hiding-terminating-errors/">PowerShell 技能连载 - 屏蔽终止性错误</a>
+            <a class="article-title" href="/powershell/tip/2014/05/19/converting-text-arrays-to-string/">PowerShell 技能连载 - 将文本数组转换为字符串</a>
         </h1>
     
 
@@ -382,8 +400,8 @@ catch
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/16/hiding-terminating-errors/">
-            <time datetime="2014-04-15T16:00:00.000Z" itemprop="datePublished">2014-04-16</time>
+        <a href="/powershell/tip/2014/05/19/converting-text-arrays-to-string/">
+            <time datetime="2014-05-18T16:00:00.000Z" itemprop="datePublished">2014-05-19</time>
         </a>
     </div>
 
@@ -406,20 +424,27 @@ catch
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>有时候，您会注意到虽然已经为 <code>-ErrorAction</code> 参数指定了 <code>&quot;SilentlyContinue&quot;</code> 值，cmdlet 还是会抛出错误。</p>
-<p><code>-ErrorAction</code> 参数只能隐藏<strong>非终止性错误</strong>（原本被 cmdlet 处理的错误）。不被 cmdlet 处理的错误称为“<strong>终止性错误</strong>”。这些错误通常是和安全相关的，并且不能被 <code>-ErrorAction</code> 屏蔽。</p>
-<p>所以如果您是一个非管理员用户，虽然用 <code>-ErrorAction</code> 指定了屏蔽错误，以下调用将会抛出一个异常：</p>
-<p><img src="/img/2014-04-16-hiding-terminating-errors-001.png" alt=""></p>
-<p>要屏蔽终止性错误，您必须使用异常处理器：</p>
-<pre><code>try
-{
-  Get-EventLog -LogName Security 
-}
-catch
-{} 
+            <p><p>某些时候，文本文件中的文字内容需要由其它命令来读取和处理。通常，您需要用 <code>Get-Content</code> 命令来读取文本文件内容，然后将结果传递给其它命令。但这有可能会失败。</p>
+<p>以下是注意点：请牢记 <code>Get-Content</code> 总是返回一个文本行的数组，而不是单个文本行。所以当使用一个接收字符串而不是接收一系列文本行（字符串数组）的命令时，您需要将这些文本行转换为文本。 </p>
+<p>从 PowerShell 3.0 开始，<code>Get-Content</code> 拥有一个新的开关变量 <code>-Raw</code>。它不仅提升了读取大量文本的速度，而且一次性返回原始文本文件的整个内容，而不是将其分割成文本行。</p>
+<pre><code>PS&gt; $info = Get-Content $env:windir\windowsupdate.log
+PS&gt; $info -is [Array]
+True
+
+PS&gt; $info = Get-Content $env:windir\windowsupdate.log -Raw
+PS&gt; $info -is [Array] 
+False
+</code></pre><p>如果您已经有文本数组并且希望将它们转换为一个单一的文本，请使用 <code>Out-String</code>：</p>
+<pre><code>PS&gt; $info = &apos;One&apos;, &apos;Two&apos;, &apos;Three&apos;
+PS&gt; $info -is [Array]
+True
+
+PS&gt; $all = $info | Out-String
+PS&gt; $all -is [Array]
+False 
 </code></pre></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/16/hiding-terminating-errors/#more">查看更多</a>
+                <a href="/powershell/tip/2014/05/19/converting-text-arrays-to-string/#more">查看更多</a>
             </p>
         
         </div>
@@ -483,7 +508,7 @@ catch
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/16/hiding-terminating-errors/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/16/hiding-terminating-errors/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/19/converting-text-arrays-to-string/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/19/converting-text-arrays-to-string/">评论</a>
     
 
         </footer>
@@ -493,7 +518,7 @@ catch
 
 
 
-    <article id="post-getting-events-from-all-event-logs" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-repack-0day-appz-by-powershell" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -502,7 +527,7 @@ catch
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/15/getting-events-from-all-event-logs/">PowerShell 技能连载 - 从所有事件日志中获取全部事件</a>
+            <a class="article-title" href="/powershell/2014/05/16/repack-0day-appz-by-powershell/">用 PowerShell 重新打包 0day appz</a>
         </h1>
     
 
@@ -511,8 +536,236 @@ catch
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/15/getting-events-from-all-event-logs/">
-            <time datetime="2014-04-14T16:00:00.000Z" itemprop="datePublished">2014-04-15</time>
+        <a href="/powershell/2014/05/16/repack-0day-appz-by-powershell/">
+            <time datetime="2014-05-15T16:00:00.000Z" itemprop="datePublished">2014-05-16</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/0day/">0day</a>, <a class="tag-link" href="/tags/appz/">appz</a>, <a class="tag-link" href="/tags/batch/">batch</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/repack/">repack</a>, <a class="tag-link" href="/tags/script/">script</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>从 0day 服务器下载下来的 appz 文件夹是这样的形态： </p>
+<p><img src="/img/2014-05-16-repack-0day-appz-by-powershell-001.png" alt=""></p>
+<p>每个文件夹代表一个 appz 软件，打开是这个样子的：</p>
+<p><img src="/img/2014-05-16-repack-0day-appz-by-powershell-002.png" alt=""></p>
+<p>里面是一系列 .zip 文件以及说明文件。这些 .zip 文件却<strong>不是</strong>使用 zip 的分卷压缩出来的，它们的内容如下：</p>
+<p><img src="/img/2014-05-16-repack-0day-appz-by-powershell-003.png" alt=""></p>
+<p><img src="/img/2014-05-16-repack-0day-appz-by-powershell-004.png" alt=""></p>
+<p>要把这些 .zip 文件全部解压到同一个目录下，才可以得到一系列 rar 的分卷压缩文件。我们打开一个 .rar 文件，这才看到真正的内容：</p>
+<p><img src="/img/2014-05-16-repack-0day-appz-by-powershell-005.png" alt=""></p>
+<p>软件数量大的时候，人工重复进行上述操作就不合适了。机械的劳动应该交给程序。我们可以设计一个 PowerShell 脚本，完成一系列功能：</p>
+<ul>
+<li>遍历 0day appz 的下载目录。</li>
+<li>解压所有 .zip 文件。</li>
+<li>解压 .rar 文件。</li>
+<li>将说明文件复制到一起。</li>
+<li>将最终的文件重打包为 .zip 文件。</li>
+<li>如果上述的解压有问题，则不打包，并输出错误日志。</li>
+<li>清理临时文件。</li>
+<li>清理成功的原始文件夹，保留失败的原始文件夹。</li>
+</ul>
+<p>按照这个需求，我们可以编写如下 PowerShell 脚本：</p>
+<pre><code>$DebugPreference = &apos;Continue&apos;
+
+$incoming = &apos;d:\0day\incoming&apos;
+$temp1 = &apos;d:\0day\temp1&apos;
+$temp2 = &apos;d:\0day\temp2&apos;
+$output = &apos;d:\0day\output&apos;
+
+if (Test-Path $temp1) { del $temp1 -r }
+if (Test-Path $temp2) { del $temp2 -r }
+
+$apps = dir $incoming -Directory
+$count = 0
+$hasFailed = $false
+$apps | foreach {
+    $name = $_.Name
+    Write-Progress -Activity &apos;Repacking apps&apos; -PercentComplete ($count / $apps.Length * 100) -CurrentOperation $name
+    echo &quot;Repacking $name&quot;
+
+    md $temp1 | Out-Null
+    md $temp2 | Out-Null
+
+    # d:\0day\util\7z x -o&quot;d:\0day\temp1&quot; &quot;d:\0day\incoming\VanDyke.SecureCRT.v7.2.2.491.Incl.Patch.And.Keymaker-ZWT\*.zip&quot;
+    $arguments = &apos;x&apos;, &quot;-o&quot;&quot;$temp1&quot;&quot;&quot;, &apos;-y&apos;, (Join-Path $_.FullName *.zip)
+    .\7z $arguments | Out-Null
+
+    if (!$?) {
+        Write-Warning &quot;Repacking $name failed.&quot;
+        echo &quot;$name&quot; &gt;&gt; &quot;$output\fail.log&quot;
+
+        del $temp1 -r
+        del $temp2 -r
+
+        $count++
+        $hasFailed = $true
+        return
+    }
+
+    # d:\0day\util\7z x -o&quot;d:\0day\temp2&quot; &quot;d:\0day\temp1\*.rar&quot; -y
+    $arguments = &apos;x&apos;, &quot;-o&quot;&quot;$temp2&quot;&quot;&quot;, &apos;-y&apos;, &quot;$temp1\*.rar&quot;
+    .\7z $arguments | Out-Null
+    if (!$?) {
+        Write-Warning &quot;Repacking $name failed.&quot;
+        echo &quot;$name&quot; &gt;&gt; &quot;$output\fail.log&quot;
+
+        del $temp1 -r
+        del $temp2 -r
+
+        $count++
+        $hasFailed = $true
+        return
+    }
+
+    # copy d:\0day\temp1\*.diz d:\0day\temp2
+    # copy d:\0day\temp1\*.nfo d:\0day\temp2
+
+    dir $temp1 | where {
+        $_.Extension -notmatch &apos;rar|r\d*&apos;
+    } | copy -Destination $temp2
+
+    #d:\0day\util\7z a &quot;d:\0day\output\VanDyke.SecureCRT.v7.2.2.491.Incl.Patch.And.Keymaker-ZWT.zip&quot; &quot;d:\0day\temp2\*.*&quot; -r
+    $arguments = &apos;a&apos;, &quot;$output\$name.zip&quot;, &quot;$temp2\*.*&quot;, &apos;-r&apos;
+    .\7z $arguments | Out-Null
+    if (!$?) {
+        Write-Warning &quot;Repacking $name failed.&quot;
+        echo &quot;$name&quot; &gt;&gt; &quot;$output\fail.log&quot;
+
+        del $temp1 -r
+        del $temp2 -r
+
+        $count++
+        $hasFailed = $true
+        return
+    }
+
+    del $temp1 -r
+    del $temp2 -r
+
+    Remove-Item -LiteralPath $_.FullName -r
+
+    $count++
+}
+
+if ($hasFailed) {
+    echo &apos;&apos; &gt;&gt; &quot;$output\fail.log&quot;
+}
+
+echo &apos;Press any key to continue...&apos;
+[Console]::ReadKey() | Out-Null
+
+# del &apos;d:\0day\output\*.*&apos; -r
+</code></pre><p>您也可以在这里<a href="/assets/download/0day.zip">下载</a>写好的脚本，包括完整的目录结构和 7z 软件包。请解压到 d:\ 中使用，或者自行调整脚本头部的路径。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/2014/05/16/repack-0day-appz-by-powershell/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/2014/05/16/repack-0day-appz-by-powershell/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-ise-bug-locks-debugger" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2014/05/16/ise-bug-locks-debugger/">PowerShell 技能连载 - ISE 的缺陷导致调试器阻塞</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2014/05/16/ise-bug-locks-debugger/">
+            <time datetime="2014-05-15T16:00:00.000Z" itemprop="datePublished">2014-05-16</time>
         </a>
     </div>
 
@@ -535,35 +788,316 @@ catch
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>最近，一个读者咨询如何从所有事件日志中获取全部事件，并且能将它们保存到文件中。</p>
-<p>以下是一个可能的解决方案：</p>
-<pre><code># calculate start time (one hour before now)
-$Start = (Get-Date) - (New-Timespan -Hours 1)
-$Computername = $env:COMPUTERNAME 
+            <p><p>在 Powershell ISE 中，有一个模糊的缺陷，可能会导致调试器死锁。受影响的 PowerShell 版本有 3.0 和 4.0。</p>
+<p>以下是一段测试脚本：</p>
+<pre><code>$test = @&quot;
+    Some lines
+    of text
+&quot;@
 
-# Getting all event logs
-Get-EventLog -AsString -ComputerName $Computername |
+$test 
+</code></pre><p>在 ISE 编辑器中将这段代码保存为脚本，然后在第一行中设置一个断点：单击第一行的任何地方，然后按下 <code>F9</code> 键。该行将会变成红色。</p>
+<p>当您启动脚本时，调试器将会在断点处停下，然后您可以按 <code>F10</code> 键单步跟踪代码。这可以正常工作。</p>
+<p>现在，在变量定义之前加入一些空格：</p>
+<pre><code>   $test = @&quot;
+    Some lines
+    of text
+&quot;@
+
+$test 
+</code></pre><p>当您现在调用调试器的时候，它将会死锁，并且 ISE 不会恢复。您还可以保存未保存的脚本，但您再也无法停止 ISE 的运行空间。</p>
+<p>这个缺陷在对通过 here string 定义的脚本变量缩进的时候暴露出来。</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2014/05/16/ise-bug-locks-debugger/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/16/ise-bug-locks-debugger/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/16/ise-bug-locks-debugger/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-bulk-renaming-object-properties" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2014/05/15/bulk-renaming-object-properties/">PowerShell 技能连载 - 批量重命名对象的属性</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2014/05/15/bulk-renaming-object-properties/">
+            <time datetime="2014-05-14T16:00:00.000Z" itemprop="datePublished">2014-05-15</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>有些时候，我们需要批量重命名对象的属性来更好地创建报表。例如，假设您获取了进程对象，你需要您可能需要以新的的列名来创建报表。</p>
+<p>以下是一个称为 <code>Rename-Property</code> 的过滤器，可以用于重命名任何属性。在例子中，生成了一个进程列表，然后重命名一些属性：</p>
+<pre><code>filter Rename-Property ([Hashtable]$PropertyMapping)
+{
+    Foreach ($key in $PropertyMapping.Keys)
+    {
+        $_ = $_ | Add-Member -MemberType AliasProperty -Name $PropertyMapping.$key -Value $key  -PassThru
+    }
+    $_
+}
+
+$newProps = @{
+  Company = &apos;Manufacturer&apos;
+  Description = &apos;Purpose&apos;
+  MainWindowTitle = &apos;TitlebarText&apos;
+}
+
+# get raw data
+Get-Process | 
+    # add alias properties as specified in $newProps
+    Rename-Property $newProps |
+    # select the properties you want to display
+    # can be original properties and/or newly added alias properties
+    Select-Object -Property Name, Manufacturer, Purpose, TitlebarText 
+</code></pre><p><code>Rename-Property</code> 自动加入了 <code>$newProps</code> 中指定的所有属性。结果对象中含有名为“Manufacturer”、“Purpose”和“TitlebarText”的新属性。您可以接着使用 <code>Select-Object</code> 来选择您想在报表中包含的属性。您可以从原先存在的属性中选择，也可以从新增加的别名属性中选择。</p>
+<p><img src="/img/2014-05-15-bulk-renaming-object-properties-001.png" alt=""></p>
+<p>所以本质上上，属性并没有被改名（技术上不可能实现）。实际上，该过滤器以新的名字添加了别名属性，并指向原先的属性。</p></p>
+            <p class="article-more-link">
+                <a href="/powershell/tip/2014/05/15/bulk-renaming-object-properties/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/15/bulk-renaming-object-properties/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/15/bulk-renaming-object-properties/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-fixing-display-in-excel-reports" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/powershell/tip/2014/05/14/fixing-display-in-excel-reports/">PowerShell 技能连载 - 修正 Excel 报表中的显示</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/powershell/tip/2014/05/14/fixing-display-in-excel-reports/">
+            <time datetime="2014-05-13T16:00:00.000Z" itemprop="datePublished">2014-05-14</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>当您发送信息到 Microsoft Excel 中时，它将被 .NET 内置的 <code>ToString()</code> 方法转化为文本。这个方法通常并不能正确地转化数组或非基本数据类型。</p>
+<p>以下是一个例子演示这个问题。它创建了一个您系统事件日志中 10 个最近错误事件的报表：</p>
+<pre><code>$Path = &quot;$env:temp\$(Get-Random).csv&quot;
+
+Get-EventLog -LogName System -EntryType Error -Newest 10 | 
+  Select-Object EventID, MachineName, Data, Message, Source, ReplacementStrings, InstanceId, TimeGenerated |
+  Export-Csv -Path $Path -Encoding UTF8 -NoTypeInformation -UseCulture
+
+Invoke-Item -Path $Path  
+</code></pre><p>“Data”字段和“ReplacementStrings”无法使用。由于两个属性都包含数组，自动转换的结果只是简单显示数据的类型的名称。这是在从对象数据中创建 Excel 报表的常见现象。</p>
+<p>要改进报表，您可以显式地使用 PowerShell 引擎将对象转化为文本，然后将多行文本转换为单行文本。</p>
+<p>您可以对每个看起来不正确的字段运用这个方法。以下是上一个例子的解决方案，它能够改进 Message、Data 和 ReplacementStrings 字段的显示：</p>
+<pre><code>$Path = &quot;$env:temp\$(Get-Random).csv&quot;
+
+Get-EventLog -LogName System -EntryType Error -Newest 10 | 
+  Select-Object EventID, MachineName, Data, Message, Source, ReplacementStrings, InstanceId, TimeGenerated |
   ForEach-Object {
-    # write status info
-    Write-Progress -Activity &quot;Checking Eventlogs on \\$ComputerName&quot; -Status $_
+    $_.Message = ($_.Message | Out-String -Stream) -join &apos; &apos;
+    $_.Data = ($_.Data | Out-String -Stream) -join &apos;, &apos;
+    $_.ReplacementStrings = ($_.ReplacementStrings | Out-String -Stream) -join &apos;, &apos;
 
-    # get event entries and add the name of the log this came from
-    Get-EventLog -LogName $_ -EntryType Error, Warning -After $Start -ComputerName $ComputerName -ErrorAction SilentlyContinue |
-      Add-Member NoteProperty EventLog $_ -PassThru 
-
+    $_
   } |
-  # sort descending
-  Sort-Object -Property TimeGenerated -Descending |
-  # select the properties for the report
-  Select-Object EventLog, TimeGenerated, EntryType, Source, Message | 
-  # output into grid view window
-  Out-GridView -Title &quot;All Errors &amp; Warnings from \\$Computername&quot; 
-</code></pre><p>在这个脚本的顶部，您可以设置希望查询的远程主机，以及希望获取的最近小时数。</p>
-<p>接下来，这个脚本获取该机器上所有可用的日志文件，然后用一个循环来获取指定时间区间中的错误和警告记录。要想知道哪个事件是来自哪个日志文件，脚本还用 <code>Add-Member</code> 为日志记录添加了一个新的“EventLog”属性。</p>
-<p>脚本的执行结果是在一个网格视图的窗口中显示一小时之内的所有错误和警告事件。如果将 <code>Out-GridView</code> 改为 <code>Out-File</code> 或 <code>Export-Csv</code> 将可以把信息保存到磁盘。</p>
-<p>请注意远程操作需要 Administrator 特权。远程操作可能需要额外的安全设置。另外，请注意如果以非 Administrator 身份运行该代码，将会收到红色的错误提示信息（因为某些日志，比如说“安全”需要特殊的操作权限）。</p></p>
+  Export-Csv -Path $Path -Encoding UTF8 -NoTypeInformation -UseCulture
+
+Invoke-Item -Path $Path 
+</code></pre><p>现在所有字段都显示了正确的结果。请注意有问题的属性首先通过管道发送到 <code>Out-String</code> 命令（用 PowerShell 内部的机制将数据转换为有意义的文本），然后用 <code>-join</code> 将信息连接成单行文本。</p>
+<p>还请注意“Message”属性是如何处理的。虽然这个属性看起来没问题，但是它实际上有可能是多行文本。多行信息在 Excel 中将只显示第一行，并以“…”结尾。我们将这些行通过空格连接之后，Excel 便可以显示完整信息了。</p></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/15/getting-events-from-all-event-logs/#more">查看更多</a>
+                <a href="/powershell/tip/2014/05/14/fixing-display-in-excel-reports/#more">查看更多</a>
             </p>
         
         </div>
@@ -627,7 +1161,7 @@ Get-EventLog -AsString -ComputerName $Computername |
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/15/getting-events-from-all-event-logs/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/15/getting-events-from-all-event-logs/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/14/fixing-display-in-excel-reports/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/14/fixing-display-in-excel-reports/">评论</a>
     
 
         </footer>
@@ -637,7 +1171,7 @@ Get-EventLog -AsString -ComputerName $Computername |
 
 
 
-    <article id="post-running-background-jobs-efficiently" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-creating-excel-reports" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -646,7 +1180,7 @@ Get-EventLog -AsString -ComputerName $Computername |
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/14/running-background-jobs-efficiently/">PowerShell 技能连载 - 高效运行后台任务</a>
+            <a class="article-title" href="/powershell/tip/2014/05/13/creating-excel-reports/">PowerShell 技能连载 - 创建 Excel 报表</a>
         </h1>
     
 
@@ -655,8 +1189,8 @@ Get-EventLog -AsString -ComputerName $Computername |
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/14/running-background-jobs-efficiently/">
-            <time datetime="2014-04-13T16:00:00.000Z" itemprop="datePublished">2014-04-14</time>
+        <a href="/powershell/tip/2014/05/13/creating-excel-reports/">
+            <time datetime="2014-05-12T16:00:00.000Z" itemprop="datePublished">2014-05-13</time>
         </a>
     </div>
 
@@ -679,40 +1213,19 @@ Get-EventLog -AsString -ComputerName $Computername |
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>如前一个技巧所述，用后台任务来同步运行任务往往效率不高。当后台任务返回的数据量增加时，它的执行性能变得更差。</p>
-<p>一个更高效的办法是用进程内任务。它们在同一个 PowerShell 实例内部的不同线程中独立运行，所以不需要将返回值序列化。</p>
-<p>以下是一个用 PowerShell 线程功能，运行两个后台线程和一个前台线程的例子。为了使任务真正长时间运行，我们为每个任务在业务代码之外使用了 <code>Start-Sleep</code> 命令：</p>
-<pre><code>$start = Get-Date
+            <p><p>PowerShell 对象可以很容易地通过 Microsoft Excel 打开。只需要将对象导出成 CSV，然后通过关联的应用程序打开 CSV 文件（如果装了 Excel，那么将用 Excel 打开）。</p>
+<p>以下代码创建一个当前运行的进程报告，并用 Excel 打开：</p>
+<pre><code>$Path = &quot;$env:temp\$(Get-Random).csv&quot;
+$originalProperties = &apos;Name&apos;, &apos;Id&apos;, &apos;Company&apos;, &apos;Description&apos;, &apos;WindowTitle&apos;
 
-$task1 = { Start-Sleep -Seconds 4; Get-Service }
-$task2 = { Start-Sleep -Seconds 5; Get-Service }
-$task3 = { Start-Sleep -Seconds 3; Get-Service }
+Get-Process | 
+  Select-Object -Property $originalProperties |
+  Export-Csv -Path $Path -Encoding UTF8 -NoTypeInformation -UseCulture
 
-# run 2 in separate threads, 1 in the foreground
-$thread1 = [PowerShell]::Create()
-$job1 = $thread1.AddScript($task1).BeginInvoke()
-
-$thread2 = [PowerShell]::Create()
-$job2 = $thread2.AddScript($task2).BeginInvoke()
-
-$result3 = Invoke-Command -ScriptBlock $task3
-
-do { Start-Sleep -Milliseconds 100 } until ($job1.IsCompleted -and $job2.IsCompleted)
-
-$result1 = $thread1.EndInvoke($job1)
-$result2 = $thread2.EndInvoke($job2)
-
-$thread1.Runspace.Close()
-$thread1.Dispose()
-
-$thread2.Runspace.Close()
-$thread2.Dispose()
-
-$end = Get-Date
-Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
-</code></pre><p>如果依次执行这三个任务，分别执行 <code>Start-Sleep</code> 语句将至少消耗 12 秒。事实上该脚本只消耗 5 秒多一点。处理结果分别为 <code>$result1</code>，<code>$result2</code> 和 <code>$result3</code>。相对后台任务而言，返回大量数据基本不会造成时间消耗。</p></p>
+Invoke-Item -Path $Path  
+</code></pre><p>请注意 <code>-UseCulture</code> 如何根据您的区域设置自动选择正确的分隔符。 </p></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/14/running-background-jobs-efficiently/#more">查看更多</a>
+                <a href="/powershell/tip/2014/05/13/creating-excel-reports/#more">查看更多</a>
             </p>
         
         </div>
@@ -776,7 +1289,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/14/running-background-jobs-efficiently/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/14/running-background-jobs-efficiently/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/13/creating-excel-reports/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/13/creating-excel-reports/">评论</a>
     
 
         </footer>
@@ -786,7 +1299,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
 
 
 
-    <article id="post-parallel-processing-in-powershell" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-powershell-does-not-support-json-data-types" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -795,7 +1308,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/11/parallel-processing-in-powershell/">PowerShell 技能连载 - PowerShell 中的并行处理</a>
+            <a class="article-title" href="/powershell/tip/2014/05/12/powershell-does-not-support-json-data-types/">PowerShell 技能连载 - PowerShell 不支持 JSON 数据类型</a>
         </h1>
     
 
@@ -804,8 +1317,8 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/11/parallel-processing-in-powershell/">
-            <time datetime="2014-04-10T16:00:00.000Z" itemprop="datePublished">2014-04-11</time>
+        <a href="/powershell/tip/2014/05/12/powershell-does-not-support-json-data-types/">
+            <time datetime="2014-05-11T16:00:00.000Z" itemprop="datePublished">2014-05-12</time>
         </a>
     </div>
 
@@ -828,60 +1341,33 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>如果想提升一个脚本的执行速度，您也许会发现后台任务十分有用。它们适用于做大量并发处理的脚本。</p>
-<p>PowerShell 是单线程的，一个时间只能处理一件事。使用后台任务时，后台会创建额外的 PowerShell 进程并且共享负荷。这只在任务彼此独立，并且后台任务不产生很多数据的情况下能很好地工作。从后台任务中发回数据是一个开销很大的过程，并且很有可能把节省出来的时间给消耗了，导致脚本执行起来反而更慢。</p>
-<p>以下是三个可以并发执行的任务：</p>
-<pre><code>$start = Get-Date
+            <p><p>缺省情况下，从 JSON 创建的对象使用 String 作为数据的类型：</p>
+<pre><code>$json = @&quot;
+{
+    &quot;Name&quot;: &quot;Weltner&quot;,
+    &quot;ID&quot; : &quot;123&quot;
+ }
+&quot;@
 
-# get all hotfixes
-$task1 = { Get-Hotfix }
+$info = ConvertFrom-Json -InputObject $json
+$info.Name
+$info.ID
+</code></pre><p><img src="/img/2014-05-12-powershell-does-not-support-json-data-types-001.png" alt=""></p>
+<p>但是，JSON 不支持数据类型，虽然 JSON 数据类型并不等价于 .NET 数据类型。请注意在以下代码中，“ID”被定义成“数字”型，并且它被赋予一个数值型的值，而不需要用双引号引起来。</p>
+<pre><code>$json = @&quot;
+{
+    &quot;Name&quot;: &quot;Weltner&quot;,
+    number: &quot;ID&quot; : 123
+ }
+&quot;@
 
-# get all scripts in your profile
-$task2 = { Get-Service | Where-Object Status -eq Running }
-
-# parse log file
-$task3 = { Get-Content -Path $env:windir\windowsupdate.log | Where-Object { $_ -like &apos;*successfully installed*&apos; } }
-
-# run 2 tasks in the background, and 1 in the foreground task
-$job1 =  Start-Job -ScriptBlock $task1 
-$job2 =  Start-Job -ScriptBlock $task2 
-$result3 = Invoke-Command -ScriptBlock $task3
-
-# wait for the remaining tasks to complete (if not done yet)
-$null = Wait-Job -Job $job1, $job2
-
-# now they are done, get the results
-$result1 = Receive-Job -Job $job1
-$result2 = Receive-Job -Job $job2
-
-# discard the jobs
-Remove-Job -Job $job1, $job2
-
-$end = Get-Date
-Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
-</code></pre><p>在一个测试环境中，执行所有三个任务消耗 5.9 秒。三个任务的结果分别保存到 $result1，$result2，$result3。</p>
-<p>我们测试一下三个任务在前台顺序执行所消耗的时间：</p>
-<pre><code>$start = Get-Date
-
-# get all hotfixes
-$task1 = { Get-Hotfix }
-
-# get all scripts in your profile
-$task2 = { Get-Service | Where-Object Status -eq Running }
-
-# parse log file
-$task3 = { Get-Content -Path $env:windir\windowsupdate.log | Where-Object { $_ -like &apos;*successfully installed*&apos; } }
-
-# run them all in the foreground:
-$result1 = Invoke-Command -ScriptBlock $task1 
-$result2 = Invoke-Command -ScriptBlock $task2 
-$result3 = Invoke-Command -ScriptBlock $task3
-
-$end = Get-Date
-Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
-</code></pre><p>这段代码仅仅执行了 5.05 秒。所以后台任务只对于长期运行并且各自占用差不多时间的任务比较有效。由于这三个测试任务返回了大量的数据，所以并发执行带来的好处差不多被将执行结果序列化并传回前台进程的过程给抵消掉了。</p></p>
+$info = ConvertFrom-Json -InputObject $json
+$info.Name
+$info.ID
+</code></pre><p>然而，当使用 <code>ConvertFrom-Json</code> 时，我们发现 PowerShell 并没有关心数据类型定义。它总是将值转换为 String 数据。</p>
+<p><img src="/img/2014-05-12-powershell-does-not-support-json-data-types-002.png" alt=""></p></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/11/parallel-processing-in-powershell/#more">查看更多</a>
+                <a href="/powershell/tip/2014/05/12/powershell-does-not-support-json-data-types/#more">查看更多</a>
             </p>
         
         </div>
@@ -945,7 +1431,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/11/parallel-processing-in-powershell/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/11/parallel-processing-in-powershell/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/12/powershell-does-not-support-json-data-types/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/12/powershell-does-not-support-json-data-types/">评论</a>
     
 
         </footer>
@@ -955,7 +1441,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
 
 
 
-    <article id="post-converting-ticks-into-real-date" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-use-json-to-create-objects" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -964,7 +1450,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/10/converting-ticks-into-real-date/">PowerShell 技能连载 - 将 Tick 转换为真实的日期</a>
+            <a class="article-title" href="/powershell/tip/2014/05/09/use-json-to-create-objects/">PowerShell 技能连载 - 用 JSON 来创建对象</a>
         </h1>
     
 
@@ -973,8 +1459,8 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/10/converting-ticks-into-real-date/">
-            <time datetime="2014-04-09T16:00:00.000Z" itemprop="datePublished">2014-04-10</time>
+        <a href="/powershell/tip/2014/05/09/use-json-to-create-objects/">
+            <time datetime="2014-05-08T16:00:00.000Z" itemprop="datePublished">2014-05-09</time>
         </a>
     </div>
 
@@ -997,12 +1483,31 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>Active Directory 内部使用 tick （从 1601 年起的百纳秒数）来表示日期和时间。在以前，要将这个大数字转换为人类可读的日期和时间是很困难的。以下是一个很简单的办法：</p>
-<pre><code>[DateTime]::FromFileTime(635312826377934727) 
-</code></pre><p>类似地，要将一个日期转换为 tick 数，使用以下方法：</p>
-<p><img src="/img/2014-04-10-converting-ticks-into-real-date-001.png" alt=""></p></p>
+            <p><p>JSON 用来描述对象的，类似 XML，但是 JSON 更简单得多.JSON 支持嵌套的对象属性，所以您可以从各种数据源中获取信息，然后将它们合并成一个自定义对象。</p>
+<p>让我们来看看效果。以下代码创建一个清单条目，包含了电脑的许多详细信息：</p>
+<pre><code>$json = @&quot;
+{
+    &quot;ServerName&quot;: &quot;$env:ComputerName&quot;,
+    &quot;UserName&quot;: &quot;$env:UserName&quot;,
+    &quot;BIOS&quot;: {
+         &quot;Manufacturer&quot; : &quot;$((Get-WmiObject -Class Win32_BIOS).Manufacturer)&quot;,
+         &quot;Version&quot; : &quot;$((Get-WmiObject -Class Win32_BIOS).Version)&quot;,
+         &quot;Serial&quot; : &quot;$((Get-WmiObject -Class Win32_BIOS).SerialNumber)&quot;
+         },
+    &quot;OS&quot; : &quot;$([Environment]::OSVersion.VersionString)&quot;
+ }
+&quot;@
+
+$info = ConvertFrom-Json -InputObject $json
+
+$info.ServerName
+$info.BIOS.Version
+$info.OS 
+</code></pre><p>您接下来可以操作结果对象——获取信息，或增加、更新详细信息。</p>
+<p>如果您对对象做了改动，可以用 <code>ConvertTo-Json</code> 将它序列化为 JSON 对象格式：</p>
+<p><img src="/img/2014-05-09-use-json-to-create-objects-001.png" alt=""></p></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/10/converting-ticks-into-real-date/#more">查看更多</a>
+                <a href="/powershell/tip/2014/05/09/use-json-to-create-objects/#more">查看更多</a>
             </p>
         
         </div>
@@ -1066,7 +1571,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/10/converting-ticks-into-real-date/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/10/converting-ticks-into-real-date/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/09/use-json-to-create-objects/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/09/use-json-to-create-objects/">评论</a>
     
 
         </footer>
@@ -1076,7 +1581,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
 
 
 
-    <article id="post-logging-script-runtime" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-getting-variable-value-in-parent-scope" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -1085,7 +1590,7 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/09/logging-script-runtime/">PowerShell 技能连载 - 记录脚本的运行时间</a>
+            <a class="article-title" href="/powershell/tip/2014/05/08/getting-variable-value-in-parent-scope/">PowerShell 技能连载 - 获取父作用域中的变量值</a>
         </h1>
     
 
@@ -1094,8 +1599,8 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/09/logging-script-runtime/">
-            <time datetime="2014-04-08T16:00:00.000Z" itemprop="datePublished">2014-04-09</time>
+        <a href="/powershell/tip/2014/05/08/getting-variable-value-in-parent-scope/">
+            <time datetime="2014-05-07T16:00:00.000Z" itemprop="datePublished">2014-05-08</time>
         </a>
     </div>
 
@@ -1118,18 +1623,20 @@ Write-Host -ForegroundColor Red ($end - $start).TotalSeconds
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>如果您想记录脚本的运行时间，您可以使用 <code>Measure-Command</code>，但是这个 cmdlet 仅适合诊断目的，并且没有计算输出时间。</p>
-<p>另一种方法是创建两个快照，并且在结束时计算时间差。</p>
-<p>这段代码将告诉您 <code>Get-Hotfix</code> cmdlet 的执行时间，包括输出数据的时间：</p>
-<pre><code>$start = Get-Date
+            <p><p>如果您在一个函数中定义了变量，那么这些变量只在函数作用域内有效。要查看在外层作用域的变量值，请使用带 <code>-Scope</code> 参数的 <code>Get-Variable</code> 命令：</p>
+<pre><code>$a = 1
 
-Get-HotFix
+function test
+{
+    $a = 2
+    $parentVariable = Get-Variable -Name a -Scope 1
+    $parentVariable.Value
+}
 
-$end = Get-Date
-Write-Host -ForegroundColor Red (&apos;Total Runtime: &apos; + ($end - $start).TotalSeconds)
-</code></pre></p>
+test 
+</code></pre><p>当脚本调用“test”函数时，函数定义了一个 <code>$a</code> 并且将它的值设为 2。在调用者作用域中，变量 <code>$a</code> 的值是 1。通过 <code>Get-Variable</code>，函数内可以得到外层作用域中的变量值。</p></p>
             <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/09/logging-script-runtime/#more">查看更多</a>
+                <a href="/powershell/tip/2014/05/08/getting-variable-value-in-parent-scope/#more">查看更多</a>
             </p>
         
         </div>
@@ -1193,396 +1700,7 @@ Write-Host -ForegroundColor Red (&apos;Total Runtime: &apos; + ($end - $start).T
 
             
     
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/09/logging-script-runtime/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/09/logging-script-runtime/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-fixing-encoding-for-excel-csv" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/08/fixing-encoding-for-excel-csv/">PowerShell 技能连载 - 修正 Excel CSV 的编码</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/08/fixing-encoding-for-excel-csv/">
-            <time datetime="2014-04-07T16:00:00.000Z" itemprop="datePublished">2014-04-08</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>当您将 Microsoft Excel 的数据保存为 CSV 格式时，很不幸的是保存的编码和 <code>Import-Csv</code> 的缺省编码并不匹配。所以当您将 CSV 文件导入 PowerShell 时，无论您指定哪种编码，特殊字符都会变成乱码。</p>
-<p>以下是一个我从 Excel 导出的 list.csv 文件，它包含一些特殊字符。如果您使用缺省编码，特殊字符会变成乱码，并且如果您指定了 -Encoding 参数，无论您传什么值，特殊字符都不会显示回原来正常的状态：</p>
-<p><img src="/img/2014-04-08-fixing-encoding-for-excel-csv-001.png" alt=""></p>
-<p>当您模拟在这些场景中 <code>Import-Csv</code> 的行为时，它很意外地可以完美处理：</p>
-<p><img src="/img/2014-04-08-fixing-encoding-for-excel-csv-002.png" alt=""></p>
-<p>这说明要正确地读取 Excel CSV 文件，您必须显式地指定“缺省”编码（这引出了一个问题：当您未指定编码的时候，缺省使用的是什么编码）：</p>
-<p><img src="/img/2014-04-08-fixing-encoding-for-excel-csv-003.png" alt=""></p></p>
-            <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/08/fixing-encoding-for-excel-csv/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/08/fixing-encoding-for-excel-csv/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/08/fixing-encoding-for-excel-csv/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-reading-all-text" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/07/reading-all-text/">PowerShell 技能连载 - 读取整个文本文件</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/07/reading-all-text/">
-            <time datetime="2014-04-06T16:00:00.000Z" itemprop="datePublished">2014-04-07</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>您可以用 <code>Get-Content</code> 来读入整个文本文件。但是，<code>Get-Content</code> 是逐行返回文件的内容，您得到的是一个 string 数组，并且换行符被去掉了。</p>
-<p>要一次性读取整个文本文件，从 PowerShell 3.0 开始，您可以使用 <code>-Raw</code> 参数（它还有个好处，能够大大加快读取文件的速度）。</p>
-<p>所以通过以下代码您可以获得一个字符串数组，每个元素是一行文本：</p>
-<p><img src="/img/2014-04-07-reading-all-text-001.png" alt=""></p>
-<p>Length 属性表示文件的行数。</p>
-<p>以下代码一次性读取整个文本文件，返回单个字符串：</p>
-<p><img src="/img/2014-04-07-reading-all-text-002.png" alt=""></p>
-<p>这回，Length 属性表示整个文件的字符数，并且读取文件的速度大大提高（虽然也更占内存了）。</p>
-<p>那种方法更好？这取决于您要如何使用这些数据。</p></p>
-            <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/07/reading-all-text/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/07/reading-all-text/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/07/reading-all-text/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-storing-secret-data" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/powershell/tip/2014/04/04/storing-secret-data/">PowerShell 技能连载 - 存储秘密数据</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/powershell/tip/2014/04/04/storing-secret-data/">
-            <time datetime="2014-04-03T16:00:00.000Z" itemprop="datePublished">2014-04-04</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>如果您想以只有您能获取的方式保存敏感数据，您可以使用这个有趣的方法：将明文转换成密文，需要时将密文转换回明文，并将它保存到磁盘中：</p>
-<pre><code>$storage = &quot;$env:temp\secretdata.txt&quot;
-$mysecret = &apos;Hello, I am safe.&apos;
-
-$mysecret | 
-  ConvertTo-SecureString -AsPlainText -Force |
-  ConvertFrom-SecureString |
-  Out-File -FilePath $storage
-</code></pre><p>当您打开该文件的时候，它读起来像这个样子：</p>
-<p><img src="/img/2014-04-04-storing-secret-data-001.png" alt=""></p>
-<p>您的秘密被 Windows 自带的数据保护 API(DPAPI) 用您的身份和机器作为密钥加密。所以只有您（或任何以您的身份运行的进程）可以将该密文解密，而且只能在加密时所用的计算机上解密。</p>
-<p>要得到明文，请使用这段代码：</p>
-<pre><code>$storage = &quot;$env:temp\secretdata.txt&quot;
-$secureString = Get-Content -Path $storage | 
-  ConvertTo-SecureString
-
-$ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToGlobalAllocUnicode($secureString)
-$mysecret = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($ptr) 
-
-$mysecret 
-</code></pre><p>它可以正常使用——您可以获得和加密前一模一样的文本。</p>
-<p>现在，以其他人的身份试一下。您会发现其他人无法解密该加密文件。而且您在别的机器上也无法解密。</p></p>
-            <p class="article-more-link">
-                <a href="/powershell/tip/2014/04/04/storing-secret-data/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/powershell/tip/2014/04/04/storing-secret-data/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/04/04/storing-secret-data/">评论</a>
+        <a href="http://blog.vichamp.com/powershell/tip/2014/05/08/getting-variable-value-in-parent-scope/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/powershell/tip/2014/05/08/getting-variable-value-in-parent-scope/">评论</a>
     
 
         </footer>
@@ -1593,7 +1711,7 @@ $mysecret
 
 
     <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/49/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/48/">48</a><a class="page-number" href="/page/49/">49</a><span class="page-number current">50</span><a class="page-number" href="/page/51/">51</a><a class="page-number" href="/page/52/">52</a><span class="space">&hellip;</span><a class="page-number" href="/page/70/">70</a><a class="extend next" rel="next" href="/page/51/">下一页 &raquo;</a>
+        <a class="extend prev" rel="prev" href="/page/49/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/48/">48</a><a class="page-number" href="/page/49/">49</a><span class="page-number current">50</span><a class="page-number" href="/page/51/">51</a><a class="page-number" href="/page/52/">52</a><span class="space">&hellip;</span><a class="page-number" href="/page/73/">73</a><a class="extend next" rel="next" href="/page/51/">下一页 &raquo;</a>
     </nav>
 </section>
             
@@ -1608,7 +1726,7 @@ $mysecret
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/09/23/working-with-utc-times/" class="thumbnail">
+                            <a href="/powershell/tip/2016/10/03/finding-ip-address-assigned-by-dhcp/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1619,15 +1737,15 @@ $mysecret
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/09/23/working-with-utc-times/" class="title">PowerShell 技能连载 - 使用 UTC 时间</a></p>
-                            <p class="item-date"><time datetime="2016-09-23T04:00:00.000Z" itemprop="datePublished">2016-09-23</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/10/03/finding-ip-address-assigned-by-dhcp/" class="title">PowerShell 技能连载 - 查找由 DHCP 分配的 IP 地址</a></p>
+                            <p class="item-date"><time datetime="2016-10-02T16:00:00.000Z" itemprop="datePublished">2016-10-03</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/23/using-net-types-directly/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/30/enum-week-enums-in-powershell-5/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1638,15 +1756,15 @@ $mysecret
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/23/using-net-types-directly/" class="title">PowerShell 技能连载 - 直接使用 .NET 类型</a></p>
-                            <p class="item-date"><time datetime="2016-02-23T04:00:00.000Z" itemprop="datePublished">2016-02-23</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/30/enum-week-enums-in-powershell-5/" class="title">PowerShell 技能连载 - Enum 之周: PowerShell 5 中的枚举</a></p>
+                            <p class="item-date"><time datetime="2016-09-29T16:00:00.000Z" itemprop="datePublished">2016-09-30</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/22/using-workflows-to-parallelize-code/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/29/enum-week-suppressing-cmdlet-errors-fast/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1657,15 +1775,15 @@ $mysecret
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/22/using-workflows-to-parallelize-code/" class="title">PowerShell 技能连载 - 使用工作流来并发执行代码</a></p>
-                            <p class="item-date"><time datetime="2016-02-22T04:00:00.000Z" itemprop="datePublished">2016-02-22</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/29/enum-week-suppressing-cmdlet-errors-fast/" class="title">PowerShell 技能连载 - Enum 之周: 快速关闭 Cmdlet 错误提示</a></p>
+                            <p class="item-date"><time datetime="2016-09-28T16:00:00.000Z" itemprop="datePublished">2016-09-29</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/19/decorate-scripts-with-requires-statements/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/28/enum-week-understanding-enumeration-values/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1676,15 +1794,15 @@ $mysecret
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/19/decorate-scripts-with-requires-statements/" class="title">PowerShell 技能连载 - 用 #requires 语句装饰脚本</a></p>
-                            <p class="item-date"><time datetime="2016-02-19T04:00:00.000Z" itemprop="datePublished">2016-02-19</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/28/enum-week-understanding-enumeration-values/" class="title">PowerShell 技能连载 - Enum 之周: 理解枚举值</a></p>
+                            <p class="item-date"><time datetime="2016-09-27T16:00:00.000Z" itemprop="datePublished">2016-09-28</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/powershell/tip/2016/02/18/do-not-mix-different-objects/" class="thumbnail">
+                            <a href="/powershell/tip/2016/09/27/enum-week-listing-enumeration-values/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1695,8 +1813,8 @@ $mysecret
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/powershell/tip/2016/02/18/do-not-mix-different-objects/" class="title">PowerShell 技能连载 - </a></p>
-                            <p class="item-date"><time datetime="2016-02-17T21:00:00.000Z" itemprop="datePublished">2016-02-18</time></p>
+                            <p class="item-title"><a href="/powershell/tip/2016/09/27/enum-week-listing-enumeration-values/" class="title">PowerShell 技能连载 - Enum 之周: 列出枚举值</a></p>
+                            <p class="item-date"><time datetime="2016-09-26T16:00:00.000Z" itemprop="datePublished">2016-09-27</time></p>
                         </div>
                     </li>
                 
@@ -1709,7 +1827,7 @@ $mysecret
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C#</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/angularjs/">angularjs</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/career/">career</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/embedded/">embedded</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ionic/">ionic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/markdown/">markdown</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongoose/">mongoose</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mvp/">mvp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nodejs/">nodejs</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/">powershell</a><span class="category-list-count">664</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/office/">office</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/text/">text</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/tip/">tip</a><span class="category-list-count">603</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/program/">program</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/server/">server</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/software-engineering/">software-engineering</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/text/">text</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vim/">vim</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/visualstudio/">visualstudio</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><span class="category-list-count">2</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C#</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/angularjs/">angularjs</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/career/">career</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/embedded/">embedded</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/ionic/">ionic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/markdown/">markdown</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongoose/">mongoose</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mvp/">mvp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/network/">network</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node-js/">node.js</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nodejs/">nodejs</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/">powershell</a><span class="category-list-count">689</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/geek/">geek</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/office/">office</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/text/">text</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/powershell/tip/">tip</a><span class="category-list-count">628</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/program/">program</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/server/">server</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/software-engineering/">software-engineering</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/text/">text</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vim/">vim</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/visualstudio/">visualstudio</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><span class="category-list-count">2</span></li></ul>
         </div>
     </div>
 
@@ -1718,7 +1836,7 @@ $mysecret
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -1727,7 +1845,7 @@ $mysecret
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">.net</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/0day/">0day</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ad/">ad</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angularjs/">angularjs</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/appz/">appz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/asciiart/">asciiart</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/batch/">batch</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bestpractice/">bestpractice</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/block/">block</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bug/">bug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/career/">career</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cdn/">cdn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cheatsheet/">cheatsheet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmd/">cmd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmdlet/">cmdlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/command/">command</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/csharp/">csharp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ddns/">ddns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/delicious/">delicious</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/">develop</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dos/">dos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/download/">download</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ebook/">ebook</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ed2k/">ed2k</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/embedded/">embedded</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/">encoding</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/excel/">excel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/extension/">extension</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/geek/">geek</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guide/">guide</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guideline/">guideline</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gvim/">gvim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ide/">ide</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ionic/">ionic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iso/">iso</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/language/">language</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/">learning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lesson/">lesson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/link/">link</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microsoft/">microsoft</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/module/">module</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/">mongoose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/monthly/">monthly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvp/">mvp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nosql/">nosql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oray/">oray</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powershell/">powershell</a><span class="tag-list-count">662</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powertip/">powertip</a><span class="tag-list-count">603</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/productivity/">productivity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qq/">qq</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regex/">regex</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/registry/">registry</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/release/">release</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/repack/">repack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resource/">resource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm/">scm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/script/">script</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/series/">series</a><span class="tag-list-count">603</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/skill/">skill</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/software/">software</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sp1/">sp1</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/study/">study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/style/">style</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/text/">text</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip/">tip</a><span class="tag-list-count">602</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip个/">tip个</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/">translation</a><span class="tag-list-count">609</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/uac/">uac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/update/">update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/video/">video</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualstudio/">visualstudio</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vmware/">vmware</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/window/">window</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xampp/">xampp</a><span class="tag-list-count">2</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/net/">.net</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/0day/">0day</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ad/">ad</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angularjs/">angularjs</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apache/">apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/appz/">appz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/asciiart/">asciiart</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/batch/">batch</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bestpractice/">bestpractice</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/block/">block</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bug/">bug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/career/">career</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cdn/">cdn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cheatsheet/">cheatsheet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmd/">cmd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmdlet/">cmdlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/command/">command</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/csharp/">csharp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/">database</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ddns/">ddns</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/delicious/">delicious</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/">develop</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dos/">dos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/download/">download</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ebook/">ebook</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ed2k/">ed2k</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/embedded/">embedded</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/encoding/">encoding</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/excel/">excel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/extension/">extension</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/front-end/">front-end</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/geek/">geek</a><span class="tag-list-count">29</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guide/">guide</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/guideline/">guideline</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gvim/">gvim</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ide/">ide</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ionic/">ionic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ip/">ip</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iso/">iso</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/language/">language</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/learning/">learning</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lesson/">lesson</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/link/">link</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microsoft/">microsoft</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/module/">module</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongoose/">mongoose</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/monthly/">monthly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvp/">mvp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node-js/">node.js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nosql/">nosql</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oray/">oray</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powershell/">powershell</a><span class="tag-list-count">687</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/powertip/">powertip</a><span class="tag-list-count">628</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/productivity/">productivity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/">proxy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qq/">qq</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regex/">regex</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/registry/">registry</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/release/">release</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/repack/">repack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resource/">resource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scm/">scm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/script/">script</a><span class="tag-list-count">25</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/series/">series</a><span class="tag-list-count">628</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/skill/">skill</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/software/">software</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sp1/">sp1</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/study/">study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/style/">style</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/text/">text</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip/">tip</a><span class="tag-list-count">627</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tip个/">tip个</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/">translation</a><span class="tag-list-count">634</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/uac/">uac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/update/">update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/video/">video</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualstudio/">visualstudio</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vmware/">vmware</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/window/">window</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/">windows</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xampp/">xampp</a><span class="tag-list-count">2</span></li></ul>
         </div>
     </div>
 

@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://blog.vichamp.com/2016/11/10/careful-with-add-member/index.html">
 <meta property="og:site_name" content="叹为观止">
 <meta property="og:description" content="PowerTip of the Day - Careful with Add-Member!">
-<meta property="og:updated_time" content="2016-11-19T02:12:25.043Z">
+<meta property="og:updated_time" content="2016-11-19T02:19:31.422Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PowerShell 技能连载 - 使用 Add-Member 时请注意！">
 <meta name="twitter:description" content="PowerTip of the Day - Careful with Add-Member!">
@@ -272,7 +272,6 @@ var _hmt = _hmt || [];
             
             <p><code>Add-Member</code> 常用来创建自定义对象，例如：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$o</span> = <span class="built_in">New-Object</span> -TypeName PSObject</div><div class="line"><span class="variable">$o</span> | <span class="built_in">Add-Member</span> -MemberType NoteProperty -Name Notes -Value <span class="string">'Something'</span></div><div class="line"><span class="variable">$o</span> | <span class="built_in">Add-Member</span> -MemberType NoteProperty -Name Date -Value (<span class="built_in">Get-Date</span>)</div><div class="line"></div><div class="line"><span class="variable">$o</span></div></pre></td></tr></table></figure>
-<p>This works, and the result looks like this:</p>
 <p>这可以工作，结果类似这样：</p>
 <pre><code>PS C:\&gt; $o 
 
@@ -283,22 +282,9 @@ Something 10/28/2016 3:56:53 PM
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$o</span> = [PSCustomObject]@&#123;</div><div class="line">  Notes = <span class="string">'Something'</span></div><div class="line">  Date  = <span class="built_in">Get-Date</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line"><span class="variable">$o</span></div></pre></td></tr></table></figure>
 <p><code>Add-Member</code> 可以做更多高级的事情，例如添加脚本属性和方法。请检查当您向以上对象添加动态脚本属性时发生了什么：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$o</span> = [PSCustomObject]@&#123;</div><div class="line">  Notes = <span class="string">'Something'</span></div><div class="line">  Date  = <span class="built_in">Get-Date</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line"><span class="variable">$o</span> | <span class="built_in">Add-Member</span> -MemberType ScriptProperty -Name CurrentDate -Value &#123; <span class="built_in">Get-Date</span> &#125;</div></pre></td></tr></table></figure>
-<p>Now watch the Date and CurrentDate properties when you query the object multiple times:</p>
 <p>现在请看多次查询该对象时，它的 <code>Date</code> 和 <code>CurrentDate</code> 属性</p>
-<pre><code>PS C:\&gt; $o 
-
-Notes     Date                  CurrentDate          
------     ----                  -----------          
-Something 10/28/2016 4:01:54 PM 10/28/2016 4:01:57 PM
-</code></pre><p>​<br>    PS C:> $o </p>
-<pre><code>Notes     Date                  CurrentDate          
------     ----                  -----------          
-Something 10/28/2016 4:01:54 PM 10/28/2016 4:02:00 PM
-</code></pre><p>​<br>    PS C:> $o </p>
-<pre><code>Notes     Date                  CurrentDate          
------     ----                  -----------          
-Something 10/28/2016 4:01:54 PM 10/28/2016 4:02:02 PM
-</code></pre><p><code>Date</code> 属性返回的是静态信息；而<code>CurrentDate</code> 属性总是返回当前时间，因为它的值是一个脚本，每次查询这个属性的时候都会执行一次。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$o</span> </div><div class="line"></div><div class="line">Notes     Date                  CurrentDate          </div><div class="line">-----     ----                  -----------          </div><div class="line">Something <span class="number">10</span><span class="regexp">/28/</span><span class="number">2016</span> <span class="number">4</span>:<span class="number">01</span>:<span class="number">54</span> PM <span class="number">10</span><span class="regexp">/28/</span><span class="number">2016</span> <span class="number">4</span>:<span class="number">01</span>:<span class="number">57</span> PM</div><div class="line"></div><div class="line"></div><div class="line">​    </div><div class="line">PS C:\&gt; <span class="variable">$o</span> </div><div class="line"></div><div class="line">Notes     Date                  CurrentDate          </div><div class="line">-----     ----                  -----------          </div><div class="line">Something <span class="number">10</span><span class="regexp">/28/</span><span class="number">2016</span> <span class="number">4</span>:<span class="number">01</span>:<span class="number">54</span> PM <span class="number">10</span><span class="regexp">/28/</span><span class="number">2016</span> <span class="number">4</span>:<span class="number">02</span>:<span class="number">00</span> PM</div><div class="line"></div><div class="line"></div><div class="line">​    </div><div class="line">PS C:\&gt; <span class="variable">$o</span> </div><div class="line"></div><div class="line">Notes     Date                  CurrentDate          </div><div class="line">-----     ----                  -----------          </div><div class="line">Something <span class="number">10</span><span class="regexp">/28/</span><span class="number">2016</span> <span class="number">4</span>:<span class="number">01</span>:<span class="number">54</span> PM <span class="number">10</span><span class="regexp">/28/</span><span class="number">2016</span> <span class="number">4</span>:<span class="number">02</span>:<span class="number">02</span> PM</div></pre></td></tr></table></figure>
+<p><code>Date</code> 属性返回的是静态信息；而<code>CurrentDate</code> 属性总是返回当前时间，因为它的值是一个脚本，每次查询这个属性的时候都会执行一次。</p>
 <a id="more"></a>
 <p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/careful-with-add-member" target="_blank" rel="external">Careful with Add-Member!</a></p>
 

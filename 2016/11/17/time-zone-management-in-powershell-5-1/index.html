@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://blog.vichamp.com/2016/11/17/time-zone-management-in-powershell-5-1/index.html">
 <meta property="og:site_name" content="叹为观止">
 <meta property="og:description" content="PowerTip of the Day - Time Zone Management in PowerShell 5.1">
-<meta property="og:updated_time" content="2016-11-19T02:08:00.603Z">
+<meta property="og:updated_time" content="2016-11-19T02:12:25.058Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PowerShell 技能连载 - PowerShell 5.1 中的时区管理">
 <meta name="twitter:description" content="PowerTip of the Day - Time Zone Management in PowerShell 5.1">
@@ -270,10 +270,17 @@ var _hmt = _hmt || [];
         <div class="article-entry" itemprop="articleBody">
         
             
-            <p>PowerShell 5.1 (available on Windows 10 and Server 2016) comes with some new cmdlets to manage computer time zones. Get-TimeZone returns the current settings, and Set-TimeZone would change it:<br>PowerShell 5.1（随 Windows 10 和 Server 2016 发布）带来一系列管理计算机时区的新 cmdlet。<code>Get-TimeZone</code> 返回当前的设置，而 <code>Set-TimeZone</code> 可以改变时区设置：</p>
+            <p>PowerShell 5.1（随 Windows 10 和 Server 2016 发布）带来一系列管理计算机时区的新 cmdlet。<code>Get-TimeZone</code> 返回当前的设置，而 <code>Set-TimeZone</code> 可以改变时区设置：</p>
 <pre><code>PS C:\&gt; Get-TimeZone
-</code></pre><p>​<br>    Id                         : W. Europe Standard Time<br>    DisplayName                : (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm,<br>                                 Vienna<br>    StandardName               : W. Europe Standard Time<br>    DaylightName               : W. Europe Daylight Time<br>    BaseUtcOffset              : 01:00:00<br>    SupportsDaylightSavingTime : True</p>
-<a id="more"></a>
+
+Id                         : W. Europe Standard Time
+DisplayName                : (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, 
+                             Vienna
+StandardName               : W. Europe Standard Time
+DaylightName               : W. Europe Daylight Time
+BaseUtcOffset              : 01:00:00
+SupportsDaylightSavingTime : True
+</code></pre><a id="more"></a>
 <p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/time-zone-management-in-powershell-5-1" target="_blank" rel="external">Time Zone Management in PowerShell 5.1</a></p>
 
         

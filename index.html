@@ -269,9 +269,17 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>PowerShell 5.1 (available on Windows 10 and Server 2016) comes with some new cmdlets to manage computer time zones. Get-TimeZone returns the current settings, and Set-TimeZone would change it:<br>PowerShell 5.1（随 Windows 10 和 Server 2016 发布）带来一系列管理计算机时区的新 cmdlet。<code>Get-TimeZone</code> 返回当前的设置，而 <code>Set-TimeZone</code> 可以改变时区设置：</p>
+            <p><p>PowerShell 5.1（随 Windows 10 和 Server 2016 发布）带来一系列管理计算机时区的新 cmdlet。<code>Get-TimeZone</code> 返回当前的设置，而 <code>Set-TimeZone</code> 可以改变时区设置：</p>
 <pre><code>PS C:\&gt; Get-TimeZone
-</code></pre><p>​<br>    Id                         : W. Europe Standard Time<br>    DisplayName                : (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm,<br>                                 Vienna<br>    StandardName               : W. Europe Standard Time<br>    DaylightName               : W. Europe Daylight Time<br>    BaseUtcOffset              : 01:00:00<br>    SupportsDaylightSavingTime : True</p></p>
+
+Id                         : W. Europe Standard Time
+DisplayName                : (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, 
+                             Vienna
+StandardName               : W. Europe Standard Time
+DaylightName               : W. Europe Daylight Time
+BaseUtcOffset              : 01:00:00
+SupportsDaylightSavingTime : True
+</code></pre></p>
             <p class="article-more-link">
                 <a href="/2016/11/17/time-zone-management-in-powershell-5-1/#more">查看更多</a>
             </p>

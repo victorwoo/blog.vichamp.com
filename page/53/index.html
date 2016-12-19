@@ -227,7 +227,7 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-speeding-up-arrays" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-show-powershell-hide-powershell" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2014/06/23/speeding-up-arrays/">PowerShell 技能连载 - 加速数组操作</a>
+            <a class="article-title" href="/2014/06/23/show-powershell-hide-powershell/">显示、隐藏 PowerShell</a>
         </h1>
     
 
@@ -245,7 +245,7 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2014/06/23/speeding-up-arrays/">
+        <a href="/2014/06/23/show-powershell-hide-powershell/">
             <time datetime="2014-06-22T16:00:00.000Z" itemprop="datePublished">2014-06-23</time>
         </a>
     </div>
@@ -254,13 +254,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+        <a class="tag-link" href="/tags/module/">module</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/window/">window</a>
     </div>
 
                     </div>
@@ -269,29 +269,31 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>当您频繁地向数组添加新元素时，您可能会遇到性能问题。以下是一个演示这个问题的反例，您应该<strong>避免</strong>这样使用：</p>
-<pre><code>Measure-Command {
-  $ar = @()
+            
+            <p>在 WPF 之周中，有个朋友希望有个最小化 PowerShell 窗口的例子。</p>
+<p>以下是一个快速实现该需求的 module。只要将以下代码复制粘贴到 Documents\WindowsPowerShell\Packages\PowerShell\PowerShell.psm1 即可。</p>
+<pre><code>$script:showWindowAsync = Add-Type –memberDefinition @&quot;
+[DllImport(&quot;user32.dll&quot;)]
+public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+&quot;@ -name &quot;Win32ShowWindowAsync&quot; -namespace Win32Functions –passThru
 
-  for ($x=0; $x -lt 10000; $x++)
-  {
-    $ar += $x  
-  }
+function Show-PowerShell() {
+$null = $showWindowAsync::ShowWindowAsync((Get-Process –id $pid).MainWindowHandle, 10)
 }
-</code></pre><p>在循环中，数组用“+=”运算符不断地添加新元素。这将消耗许多时间，因为每次改变数组的大小时，PowerShell 都需要创建一个新的数组。</p>
-<p>以下是一个快许多倍的实现方式——用 ArrayList，它专门为大小变化的情况设计：</p>
-<pre><code>Measure-Command {
-  $ar = New-Object -TypeName System.Collections.ArrayList
 
-  for ($x=0; $x -lt 10000; $x++)
-  {
-    $ar.Add($x)
-  }
+function Hide-PowerShell() {
+$null = $showWindowAsync::ShowWindowAsync((Get-Process –id $pid).MainWindowHandle, 2)
 }
-</code></pre><p>两段代码实现相同的效果，但第二段效率要高得多。</p></p>
-            <p class="article-more-link">
-                <a href="/2014/06/23/speeding-up-arrays/#more">查看更多</a>
-            </p>
+</code></pre><p>现在，您可以用这段代码来显示或隐藏 PowerShell：</p>
+<pre><code>Add-Module PowerShell
+# Minimize PowerShell
+Hide-PowerShell
+sleep 2
+# Then Restore it
+Show-PowerShell
+</code></pre><p>希望这篇文章有所帮助。<br>James Brundage[MSFT]</p>
+<p>译者注：<code>ShowWindowAsync()</code> 的第二个参数取值范围可以参照 API 文档 <a href="http://technet.microsoft.com/zh-cn/magazine/ms633548.aspx" target="_blank" rel="external">ShowWindow function</a><br><a href="http://blogs.msdn.com/b/powershell/archive/2008/06/03/show-powershell-hide-powershell.aspx" target="_blank" rel="external">本文国际来源</a></p>
+
         
         </div>
         <footer class="article-footer">
@@ -354,7 +356,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2014/06/23/speeding-up-arrays/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2014/06/23/speeding-up-arrays/">评论</a>
+        <a href="http://blog.vichamp.com/2014/06/23/show-powershell-hide-powershell/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2014/06/23/show-powershell-hide-powershell/">评论</a>
     
 
         </footer>

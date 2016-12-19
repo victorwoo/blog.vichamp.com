@@ -227,7 +227,7 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
-    <article id="post-manually-control-vmware-service" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-setting-default-email-address-for-ad-users" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -236,7 +236,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2013/12/13/manually-control-vmware-service/">手动控制 VMware 服务</a>
+            <a class="article-title" href="/2013/12/13/setting-default-email-address-for-ad-users/">PowerShell 技能连载 - 为 AD 用户设置缺省的 Email 地址</a>
         </h1>
     
 
@@ -245,7 +245,7 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2013/12/13/manually-control-vmware-service/">
+        <a href="/2013/12/13/setting-default-email-address-for-ad-users/">
             <time datetime="2013-12-12T16:00:00.000Z" itemprop="datePublished">2013-12-13</time>
         </a>
     </div>
@@ -254,13 +254,13 @@ var _hmt = _hmt || [];
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/geek/">geek</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/vmware/">vmware</a>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
     </div>
 
                     </div>
@@ -269,31 +269,31 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
         
-            
-            <p>VMware Workstation 想必是很多朋友的必装软件，强大的虚拟机功能已经不用多解释了。这里提点小小的内存优化建议，就是我们在安装完 VMware Workstation 之后，它默认是开机自启动的。那有人会说，打开msconfig，在启动项里将它关闭不就行了吗？其实不然，VMware的几个进程都是以服务方式启动的，vmware-authd.exe、vmnetdhcp.exe、vmnat.exe等等，如不经处理，它们会常驻在系统内存中。而我们并不是每天都会使用虚拟机，所以那些进程大部分时间是在浪费我们的系统资源。</p>
-<p>但如果在服务里面将它们全部禁用，那么 VMware 也就不能使用了。最好的方法就是打开服务管理器，将它的几个服务项先全部右击停止，然后双击进去，在启动类型中改为“手动”。这样一来，开机就不会自动启动了。那么，要开 VMware 的时候怎么办呢？一个个手工开启？没必要，写个 PowerShell 脚本就可以了，我用的是最新版VMware Workstation 10，代码如下：</p>
-<p>将所有 VMware 服务设置为手动：</p>
-<pre><code># Set-VMWareServiceToManual.ps1
-Get-Service -DisplayName vmware* | % {
-    Set-Service -Name $_.Name -StartupType Manual
-}
-</code></pre><p>将所有 VMware 服务设置为自动（缺省）：</p>
-<pre><code># Set-VMWareServiceToAuto.ps1
-Get-Service -DisplayName vmware* | % {
-    Set-Service -Name $_.Name -StartupType Automatic
-}
-</code></pre><p>启动所有 VMware 服务（准备运行 VMware 的时候）：</p>
-<pre><code># Start-VMWareService.ps1
-Get-Service -DisplayName vmware* | % {
-    Start-Service -Name $_.Name
-}
-</code></pre><p>停止所有 VMware 服务（运行 VMware 完毕以后）：</p>
-<pre><code># Stop-VMWareService.ps1
-Get-Service -DisplayName vmware* | % {
-    Stop-Service -Name $_.Name -Force
-}
-</code></pre><p>下载地址：<a href="/assets/download/VMWareService.zip">VMWareService.zip</a></p>
+            <p><p>编写 Active Directory 脚本不需要额外的 module。通过简单的 .NET 框架方法，您可以实现令人惊叹的功能。实际上，这个技术十分强大，您不应该在您的生产环境下运行以下的例子，除非您知道自己在做什么。</p>
+<p>一下代码片段在您的 Active Directory 中查找存储于 <code>CN=Users</code> 并且没有邮箱地址的的所有用户。然后，脚本将为他们设置一个缺省的邮箱地址。该地址由姓名 + “mycompany.com” 组成。</p>
+<pre><code># adjust LDAP path (i.e. remove CN=Users to search the entire domain):
+$SearchRoot = &apos;LDAP://CN=Users,{0}&apos; -f ([ADSI]&apos;&apos;).distinguishedName.ToString()
+# adjust LDAPFilter. Example: (!mail=*) = all users with no defined mail attribute
+$LdapFilter = &quot;(&amp;(objectClass=user)(objectCategory=person)(!mail=*))&quot;
 
+$Searcher = New-Object DirectoryServices.DirectorySearcher($SearchRoot, $LdapFilter)
+$Searcher.PageSize = 1000
+$Searcher.FindAll() | ForEach-Object {
+  $User = $_.GetDirectoryEntry()
+  try
+  {
+        # Set mail attribute
+        $User.Put(&quot;mail&quot;, (&apos;{0}.{1}@mycompany.com&apos; -f $user.givenName.ToString(), $user.sn.ToString()))
+
+        # Commit the change
+        $User.SetInfo()
+  }
+  catch { Write-Warning &quot;Problems with $user. Reason: $_&quot; }
+}
+</code></pre><p>这个示例代码可以读取并且修改、设置任意的属性。它特别适用于不能通过 cmdlet 设置的自定义属性。</p></p>
+            <p class="article-more-link">
+                <a href="/2013/12/13/setting-default-email-address-for-ad-users/#more">查看更多</a>
+            </p>
         
         </div>
         <footer class="article-footer">
@@ -356,7 +356,7 @@ Get-Service -DisplayName vmware* | % {
 
             
     
-        <a href="http://blog.vichamp.com/2013/12/13/manually-control-vmware-service/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2013/12/13/manually-control-vmware-service/">评论</a>
+        <a href="http://blog.vichamp.com/2013/12/13/setting-default-email-address-for-ad-users/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2013/12/13/setting-default-email-address-for-ad-users/">评论</a>
     
 
         </footer>

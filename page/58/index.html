@@ -1455,7 +1455,7 @@ $mysecret
 
 
 
-    <article id="post-mvp" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-using-encrypting-file-system-efs-to-protect-passwords" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -1464,7 +1464,7 @@ $mysecret
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2014/04/03/mvp/">[转] 浅谈Microsoft MVP</a>
+            <a class="article-title" href="/2014/04/03/using-encrypting-file-system-efs-to-protect-passwords/">PowerShell 技能连载 - 使用加密文件系统（EFS）来保护密码</a>
         </h1>
     
 
@@ -1473,7 +1473,7 @@ $mysecret
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2014/04/03/mvp/">
+        <a href="/2014/04/03/using-encrypting-file-system-efs-to-protect-passwords/">
             <time datetime="2014-04-02T16:00:00.000Z" itemprop="datePublished">2014-04-03</time>
         </a>
     </div>
@@ -1482,13 +1482,13 @@ $mysecret
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/mvp/">mvp</a>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/microsoft/">microsoft</a>, <a class="tag-link" href="/tags/mvp/">mvp</a>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
     </div>
 
                     </div>
@@ -1497,11 +1497,21 @@ $mysecret
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p><img src="/img/2014-04-03-mvp-001.png" alt="MS MVP Logo"></p>
-<p>微软MVP，这个自1993 年开始在社群上出现的计划(MVP Award Program)，目前在全球已经累积超过5,000 人，其中在台湾已经有一百多人了，包括我在内，这个计画现在已经成为以微软技术为主的技术社群(technology community) 中，最高等级的奖励计画，虽然它是由微软主办，但是它是以社群为主的一个计画，对于在社群中活跃​​但可能不知名的技术高手或是专家们，是一个很具吸引力的计画，因为它除了提供实质性，非金钱价值的奖励以外，还提供了出名的机会（出席研讨会，主持场次，与微软共同推广技术等），所以有很多走微软技术的人都很想拿到它。</p>
-<p>不过，据我个人的观察，似乎很多人都 <strong>只想拿到它，但却忽略了它背后真正的意义</strong> 。</p></p>
+            <p><p>如果您必须在脚本中以硬编码的方式包含密码和其它隐私信息（正常情况下应避免使用），那么您还可以通过 EFS（加密文件系统）的方式来保障安全性。加密的脚本只能被加密者读取（和执行），所以只有您在自己的机器上能运行该脚本。</p>
+<p>一下是加密一个 PowerShell 脚本的简单方法：</p>
+<pre><code># create some sample script
+# replace path with some real-world existing script if you want
+# and remove the line that creates the script
+$path = &quot;$env:temp\test.ps1&quot;
+&quot;Write-Host &apos;I run only for my master.&apos;&quot; &gt; $path
+
+$file = Get-Item -Path $path
+$file.Encrypt() 
+</code></pre><p>当您运行这段脚本时，它将在您的临时文件夹中创建一个用 EFS 加密的新的 PowerShell 脚本（如果您见到一条错误提示信息，那么很有可能您机器上的 EFS 不可用或者被禁用了）。</p>
+<p>加密之后，该文件在 Windows 资源管理器中呈现绿色，并且只有您能够运行它。别人无法看见源代码。</p>
+<p>请注意在许多企业环境中，EFS 系统是通过恢复密钥部署的。指定的维护人员可以通过主密钥解密文件。如果没有主密钥，一旦您丢失了您的 EFS 证书，就连您也无法查看或运行加密的脚本。</p></p>
             <p class="article-more-link">
-                <a href="/2014/04/03/mvp/#more">查看更多</a>
+                <a href="/2014/04/03/using-encrypting-file-system-efs-to-protect-passwords/#more">查看更多</a>
             </p>
         
         </div>
@@ -1565,7 +1575,7 @@ $mysecret
 
             
     
-        <a href="http://blog.vichamp.com/2014/04/03/mvp/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2014/04/03/mvp/">评论</a>
+        <a href="http://blog.vichamp.com/2014/04/03/using-encrypting-file-system-efs-to-protect-passwords/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2014/04/03/using-encrypting-file-system-efs-to-protect-passwords/">评论</a>
     
 
         </footer>

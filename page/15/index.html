@@ -227,6 +227,130 @@ var _hmt = _hmt || [];
 
             
             <section id="main">
+    <article id="post-process-data-part-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2016/02/03/process-data-part-1/">PowerShell 技能连载 - 处理数据（第 1 部分）</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/02/03/process-data-part-1/">
+            <time datetime="2016-02-03T04:00:00.000Z" itemprop="datePublished">2016-02-03</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p><p>这是关于 PowerShell 函数如何通过管道或参数接受数据的三个技巧中的第一个。</p>
+<p>在第一部分中，函数实时处理输入的信息。这消耗最少的内存并且快速提供结果：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 2</span></div><div class="line"><span class="keyword">function</span> Process-Data</div><div class="line">&#123;  </div><div class="line">  <span class="keyword">param</span>  (</div><div class="line">    [Parameter(Mandatory=<span class="literal">$true</span>, ValueFromPipeline=<span class="literal">$true</span>)]</div><div class="line">    [Object[]]</div><div class="line">    <span class="variable">$Object</span>  )</div><div class="line"></div><div class="line">  <span class="keyword">process</span>  &#123;</div><div class="line">    <span class="keyword">foreach</span> (<span class="variable">$element</span> <span class="keyword">in</span> <span class="variable">$Object</span>)</div><div class="line">    &#123;</div><div class="line">      <span class="string">"Processing received element <span class="variable">$element</span>..."</span>    </div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>请注意如何通过参数调用函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; Process-Data -Object 1</div><div class="line">Processing received element 1...</div><div class="line"></div><div class="line">PS C:\&gt; Process-Data -Object 1,2,3,4</div><div class="line">Processing received element 1...</div><div class="line">Processing received element 2...</div><div class="line">Processing received element 3...</div><div class="line">Processing received element 4...</div></pre></td></tr></table></figure>
+<p>您也可以通过管道传送信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; 1..4 | Process-Data</div><div class="line">Processing received element 1...</div><div class="line">Processing received element 2...</div><div class="line">Processing received element 3...</div><div class="line">Processing received element 4...</div></pre></td></tr></table></figure></p>
+            <p class="article-more-link">
+                <a href="/2016/02/03/process-data-part-1/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://blog.vichamp.com/2016/02/03/process-data-part-1/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/02/03/process-data-part-1/">评论</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-process-data-part-2" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
@@ -378,130 +502,6 @@ Received 3 objects.
             
     
         <a href="http://blog.vichamp.com/2016/02/03/process-data-part-2/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/02/03/process-data-part-2/">评论</a>
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-process-data-part-1" class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2016/02/03/process-data-part-1/">PowerShell 技能连载 - 处理数据（第 1 部分）</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2016/02/03/process-data-part-1/">
-            <time datetime="2016-02-03T04:00:00.000Z" itemprop="datePublished">2016-02-03</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p><p>这是关于 PowerShell 函数如何通过管道或参数接受数据的三个技巧中的第一个。</p>
-<p>在第一部分中，函数实时处理输入的信息。这消耗最少的内存并且快速提供结果：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 2</span></div><div class="line"><span class="keyword">function</span> Process-Data</div><div class="line">&#123;  </div><div class="line">  <span class="keyword">param</span>  (</div><div class="line">    [Parameter(Mandatory=<span class="literal">$true</span>, ValueFromPipeline=<span class="literal">$true</span>)]</div><div class="line">    [Object[]]</div><div class="line">    <span class="variable">$Object</span>  )</div><div class="line"></div><div class="line">  <span class="keyword">process</span>  &#123;</div><div class="line">    <span class="keyword">foreach</span> (<span class="variable">$element</span> <span class="keyword">in</span> <span class="variable">$Object</span>)</div><div class="line">    &#123;</div><div class="line">      <span class="string">"Processing received element <span class="variable">$element</span>..."</span>    </div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>请注意如何通过参数调用函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; Process-Data -Object 1</div><div class="line">Processing received element 1...</div><div class="line"></div><div class="line">PS C:\&gt; Process-Data -Object 1,2,3,4</div><div class="line">Processing received element 1...</div><div class="line">Processing received element 2...</div><div class="line">Processing received element 3...</div><div class="line">Processing received element 4...</div></pre></td></tr></table></figure>
-<p>您也可以通过管道传送信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; 1..4 | Process-Data</div><div class="line">Processing received element 1...</div><div class="line">Processing received element 2...</div><div class="line">Processing received element 3...</div><div class="line">Processing received element 4...</div></pre></td></tr></table></figure></p>
-            <p class="article-more-link">
-                <a href="/2016/02/03/process-data-part-1/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-    <div class="jiathis_style">
-    <span class="jiathis_txt">分享到：</span>
-    <a class="jiathis_button_qzone">QQ空间</a>
-    <a class="jiathis_button_tsina">新浪微博</a>
-    <a class="jiathis_button_tqq">腾讯微博</a>
-    <a class="jiathis_button_weixin">微信</a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
-    <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<style>
-    .jiathis_style div:first-child:not(.jiadiv_01) {
-        width: auto !important;
-        border: none !important;
-    }
-    .jiathis_style .jiadiv_01 {
-        margin: 10px 0;
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .jiathis_style .jiadiv_01 div:first-child {
-        display: none;
-    }
-    .jiathis_style .jiadiv_02 {
-        padding: 7px 0 !important;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle {
-        width: 85px;
-        border: none;
-        height: auto;
-        margin: 3px 10px;
-        padding: 6px 10px;
-        border-radius: 4px;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:hover {
-        border: none;
-    }
-    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
-        margin-left: 0;
-    }
-    .jiathis_style .jtico:hover {
-        opacity: 1;
-    }
-    .jiathis_style .ckepopBottom,
-    .jiathis_style .centerBottom {
-        width: auto !important;
-        padding: 5px;
-        background: #f7f7f7;
-    }
-</style>
-
-
-
-</div>
-
-            
-    
-        <a href="http://blog.vichamp.com/2016/02/03/process-data-part-1/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/02/03/process-data-part-1/">评论</a>
     
 
         </footer>
@@ -1564,7 +1564,7 @@ Received 3 objects.
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/02/15/free-guides-to-start-with-powershell/" class="title">PowerShell 技能连载 - Free Guides to Start With PowerShell</a></p>
+                            <p class="item-title"><a href="/2017/02/15/free-guides-to-start-with-powershell/" class="title">PowerShell 技能连载 - 免费的 PowerShell 起步指南</a></p>
                             <p class="item-date"><time datetime="2017-02-15T08:00:00.000Z" itemprop="datePublished">2017-02-15</time></p>
                         </div>
                     </li>
@@ -1583,7 +1583,7 @@ Received 3 objects.
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/02/14/identifying-problematic-execution-policy-settings/" class="title">PowerShell 技能连载 - 检测有问题的 Execution Policy Settings</a></p>
+                            <p class="item-title"><a href="/2017/02/14/identifying-problematic-execution-policy-settings/" class="title">PowerShell 技能连载 - 检测有问题的 Execution Policy 设置</a></p>
                             <p class="item-date"><time datetime="2017-02-14T08:00:00.000Z" itemprop="datePublished">2017-02-14</time></p>
                         </div>
                     </li>
@@ -1602,7 +1602,7 @@ Received 3 objects.
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/02/13/checking-execution-policy/" class="title">PowerShell 技能连载 - Checking Execution Policy</a></p>
+                            <p class="item-title"><a href="/2017/02/13/checking-execution-policy/" class="title">PowerShell 技能连载 - 检查 Execution Policy</a></p>
                             <p class="item-date"><time datetime="2017-02-13T08:00:00.000Z" itemprop="datePublished">2017-02-13</time></p>
                         </div>
                     </li>
@@ -1621,7 +1621,7 @@ Received 3 objects.
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/02/12/classes-static-members-part-6/" class="title">PowerShell 技能连载 - Classes (Static Members - Part 6)</a></p>
+                            <p class="item-title"><a href="/2017/02/12/classes-static-members-part-6/" class="title">PowerShell 技能连载 - 使用类（静态成员 - 第六部分）</a></p>
                             <p class="item-date"><time datetime="2017-02-12T08:00:00.000Z" itemprop="datePublished">2017-02-12</time></p>
                         </div>
                     </li>

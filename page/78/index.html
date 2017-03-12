@@ -1049,7 +1049,7 @@ $account.distinguishedName
 
 
 
-    <article id="post-searching-in-different-domains" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-n-ways-to-run-ps1-rapidly" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -1058,7 +1058,7 @@ $account.distinguishedName
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2013/10/23/searching-in-different-domains/">PowerShell 技能连载 - 在不同的 Domain 中查找</a>
+            <a class="article-title" href="/2013/10/23/n-ways-to-run-ps1-rapidly/">快速运行 .ps1 脚本的 N 种方法</a>
         </h1>
     
 
@@ -1067,7 +1067,7 @@ $account.distinguishedName
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2013/10/23/searching-in-different-domains/">
+        <a href="/2013/10/23/n-ways-to-run-ps1-rapidly/">
             <time datetime="2013-10-22T16:00:00.000Z" itemprop="datePublished">2013-10-23</time>
         </a>
     </div>
@@ -1076,13 +1076,13 @@ $account.distinguishedName
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
+        <a class="tag-link" href="/tags/cmd/">cmd</a>, <a class="tag-link" href="/tags/command/">command</a>, <a class="tag-link" href="/tags/geek/">geek</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/registry/">registry</a>, <a class="tag-link" href="/tags/script/">script</a>
     </div>
 
                     </div>
@@ -1091,20 +1091,14 @@ $account.distinguishedName
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>当你那使用 ADSISearcher 类型加速器来查找 Active Directory 账户时，它缺省情况下在您当前登录的域中查找。如果您需要在一个不同的域中查找，请确保相应地定义了搜索的根路径。</p>
-<p>This example will find all accounts with a SamAccountName that starts with “tobias”, and it searches the domain “powershell.local” (adjust to a real domain name, of course):<br>这个例子将查找所有 SamAccountName 以 <em>“tobias”</em> 开头的账户，并且它在 <em>“powershell.local”</em> 域中搜索（当然，请根据实际情况调整名字）：</p>
-<pre><code># get all users with a SamAccountName that starts with &quot;tobias&quot;
-$searcher = [ADSISearcher]&quot;(&amp;(objectClass=User)(objectCategory=person)(sAMAccountName=tobias*))&quot;
-
-# use powershell.local for searching
-$domain = New-Object System.DirectoryServices.DirectoryEntry(&apos;DC=powershell,DC=local&apos;)
-$searcher.SearchRoot = $domain
-
-# execute the query
-$searcher.FindAll() 
-</code></pre></p>
+            <p><p>由于安全的原因，微软禁止以双击的方式执行 PowerShell 的 .ps1 脚本。但如果我们一味地追求效率，而暂时“无视”其安全性的话，要怎样快速地执行 .ps1 脚本呢？以下是 QQ 群里讨论的一些方案：</p>
+<h1 id="为每个-ps1-配一个-cmd-批处理文件"><a href="#为每个-ps1-配一个-cmd-批处理文件" class="headerlink" title="为每个 .ps1 配一个 .cmd 批处理文件"></a>为每个 .ps1 配一个 .cmd 批处理文件</h1><p>这种方法适用于可能需要将 PowerShell 脚本发送给朋友执行，而朋友可能只是初学者或普通用户的场景，并且该脚本不会修改注册表。具体做法是：将以下代码保存为一个 .cmd 文件，放在 .ps1 的同一个目录下。<strong>注意主文件名必须和 .ps1 的主文件名一致</strong>。</p>
+<pre><code>@set Path=%Path%;%SystemRoot%\system32\WindowsPowerShell\v1.0\ &amp; powershell -ExecutionPolicy Unrestricted -NoExit -NoProfile %~dpn0.ps1
+</code></pre><p>例如，您希望朋友执行 My-Script.ps1，那么您只需要将以上代码保存为 My-Script.cmd，放在同一个目录之下发给您的朋友即可。</p>
+<p>这种方法还有个小小的好处是，不需要为不同的 .ps1 而修改 .cmd 的内容。</p>
+<h1 id="用批处理文件做一个简单的菜单，列出-ps1-文件"><a href="#用批处理文件做一个简单的菜单，列出-ps1-文件" class="headerlink" title="用批处理文件做一个简单的菜单，列出 .ps1 文件"></a>用批处理文件做一个简单的菜单，列出 .ps1 文件</h1></p>
             <p class="article-more-link">
-                <a href="/2013/10/23/searching-in-different-domains/#more">查看更多</a>
+                <a href="/2013/10/23/n-ways-to-run-ps1-rapidly/#more">查看更多</a>
             </p>
         
         </div>
@@ -1168,7 +1162,7 @@ $searcher.FindAll()
 
             
     
-        <a href="http://blog.vichamp.com/2013/10/23/searching-in-different-domains/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2013/10/23/searching-in-different-domains/">评论</a>
+        <a href="http://blog.vichamp.com/2013/10/23/n-ways-to-run-ps1-rapidly/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2013/10/23/n-ways-to-run-ps1-rapidly/">评论</a>
     
 
         </footer>
@@ -1327,7 +1321,7 @@ ConvertFrom-Csv
 
 
 
-    <article id="post-n-ways-to-run-ps1-rapidly" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-searching-in-different-domains" class="article article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
         
@@ -1336,7 +1330,7 @@ ConvertFrom-Csv
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2013/10/23/n-ways-to-run-ps1-rapidly/">快速运行 .ps1 脚本的 N 种方法</a>
+            <a class="article-title" href="/2013/10/23/searching-in-different-domains/">PowerShell 技能连载 - 在不同的 Domain 中查找</a>
         </h1>
     
 
@@ -1345,7 +1339,7 @@ ConvertFrom-Csv
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2013/10/23/n-ways-to-run-ps1-rapidly/">
+        <a href="/2013/10/23/searching-in-different-domains/">
             <time datetime="2013-10-22T16:00:00.000Z" itemprop="datePublished">2013-10-23</time>
         </a>
     </div>
@@ -1354,13 +1348,13 @@ ConvertFrom-Csv
                         
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/powershell/">powershell</a>
+        <a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a>
     </div>
 
                         
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/cmd/">cmd</a>, <a class="tag-link" href="/tags/command/">command</a>, <a class="tag-link" href="/tags/geek/">geek</a>, <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/registry/">registry</a>, <a class="tag-link" href="/tags/script/">script</a>
+        <a class="tag-link" href="/tags/powershell/">powershell</a>, <a class="tag-link" href="/tags/powertip/">powertip</a>, <a class="tag-link" href="/tags/series/">series</a>, <a class="tag-link" href="/tags/tip/">tip</a>, <a class="tag-link" href="/tags/translation/">translation</a>
     </div>
 
                     </div>
@@ -1369,14 +1363,20 @@ ConvertFrom-Csv
         
         <div class="article-entry" itemprop="articleBody">
         
-            <p><p>由于安全的原因，微软禁止以双击的方式执行 PowerShell 的 .ps1 脚本。但如果我们一味地追求效率，而暂时“无视”其安全性的话，要怎样快速地执行 .ps1 脚本呢？以下是 QQ 群里讨论的一些方案：</p>
-<h1 id="为每个-ps1-配一个-cmd-批处理文件"><a href="#为每个-ps1-配一个-cmd-批处理文件" class="headerlink" title="为每个 .ps1 配一个 .cmd 批处理文件"></a>为每个 .ps1 配一个 .cmd 批处理文件</h1><p>这种方法适用于可能需要将 PowerShell 脚本发送给朋友执行，而朋友可能只是初学者或普通用户的场景，并且该脚本不会修改注册表。具体做法是：将以下代码保存为一个 .cmd 文件，放在 .ps1 的同一个目录下。<strong>注意主文件名必须和 .ps1 的主文件名一致</strong>。</p>
-<pre><code>@set Path=%Path%;%SystemRoot%\system32\WindowsPowerShell\v1.0\ &amp; powershell -ExecutionPolicy Unrestricted -NoExit -NoProfile %~dpn0.ps1
-</code></pre><p>例如，您希望朋友执行 My-Script.ps1，那么您只需要将以上代码保存为 My-Script.cmd，放在同一个目录之下发给您的朋友即可。</p>
-<p>这种方法还有个小小的好处是，不需要为不同的 .ps1 而修改 .cmd 的内容。</p>
-<h1 id="用批处理文件做一个简单的菜单，列出-ps1-文件"><a href="#用批处理文件做一个简单的菜单，列出-ps1-文件" class="headerlink" title="用批处理文件做一个简单的菜单，列出 .ps1 文件"></a>用批处理文件做一个简单的菜单，列出 .ps1 文件</h1></p>
+            <p><p>当你那使用 ADSISearcher 类型加速器来查找 Active Directory 账户时，它缺省情况下在您当前登录的域中查找。如果您需要在一个不同的域中查找，请确保相应地定义了搜索的根路径。</p>
+<p>This example will find all accounts with a SamAccountName that starts with “tobias”, and it searches the domain “powershell.local” (adjust to a real domain name, of course):<br>这个例子将查找所有 SamAccountName 以 <em>“tobias”</em> 开头的账户，并且它在 <em>“powershell.local”</em> 域中搜索（当然，请根据实际情况调整名字）：</p>
+<pre><code># get all users with a SamAccountName that starts with &quot;tobias&quot;
+$searcher = [ADSISearcher]&quot;(&amp;(objectClass=User)(objectCategory=person)(sAMAccountName=tobias*))&quot;
+
+# use powershell.local for searching
+$domain = New-Object System.DirectoryServices.DirectoryEntry(&apos;DC=powershell,DC=local&apos;)
+$searcher.SearchRoot = $domain
+
+# execute the query
+$searcher.FindAll() 
+</code></pre></p>
             <p class="article-more-link">
-                <a href="/2013/10/23/n-ways-to-run-ps1-rapidly/#more">查看更多</a>
+                <a href="/2013/10/23/searching-in-different-domains/#more">查看更多</a>
             </p>
         
         </div>
@@ -1440,7 +1440,7 @@ ConvertFrom-Csv
 
             
     
-        <a href="http://blog.vichamp.com/2013/10/23/n-ways-to-run-ps1-rapidly/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2013/10/23/n-ways-to-run-ps1-rapidly/">评论</a>
+        <a href="http://blog.vichamp.com/2013/10/23/searching-in-different-domains/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2013/10/23/searching-in-different-domains/">评论</a>
     
 
         </footer>

@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://blog.vichamp.com/2017/03/06/managing-bit-flags-part-3/index.html">
 <meta property="og:site_name" content="叹为观止">
 <meta property="og:description" content="PowerTip of the Day - Managing Bit Flags (Part 3)">
-<meta property="og:updated_time" content="2017-03-12T14:36:18.719Z">
+<meta property="og:updated_time" content="2017-03-12T14:58:09.196Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PowerShell 技能连载 - 管理比特标志位（第三部分）">
 <meta name="twitter:description" content="PowerTip of the Day - Managing Bit Flags (Part 3)">
@@ -273,12 +273,9 @@ var _hmt = _hmt || [];
             
             <p>对十进制数设置比特标志位不是很难，但是不够直观。以下是一个快速的新方法，演示如何设置或取消一个数字中特定的比特：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$decimal</span> = <span class="number">6254</span></div><div class="line">[Convert]::ToString(<span class="variable">$decimal</span>, <span class="number">2</span>)</div><div class="line"></div><div class="line"><span class="comment"># set bit 4</span></div><div class="line"><span class="variable">$bit</span> = <span class="number">4</span></div><div class="line"><span class="variable">$decimal</span> = <span class="variable">$decimal</span> -bor [Math]::Pow(<span class="number">2</span>, <span class="variable">$bit</span>)</div><div class="line">[Convert]::ToString(<span class="variable">$decimal</span>, <span class="number">2</span>)</div><div class="line"></div><div class="line"><span class="comment"># set bit 0</span></div><div class="line"><span class="variable">$bit</span> = <span class="number">0</span></div><div class="line"><span class="variable">$decimal</span> = <span class="variable">$decimal</span> -bor [Math]::Pow(<span class="number">2</span>, <span class="variable">$bit</span>)</div><div class="line">[Convert]::ToString(<span class="variable">$decimal</span>, <span class="number">2</span>)</div><div class="line"></div><div class="line"><span class="comment"># clear bit 1</span></div><div class="line"><span class="variable">$bit</span> = <span class="number">1</span></div><div class="line"><span class="variable">$decimal</span> = <span class="variable">$decimal</span> -band -bnot [Math]::Pow(<span class="number">2</span>, <span class="variable">$bit</span>)</div><div class="line">[Convert]::ToString(<span class="variable">$decimal</span>, <span class="number">2</span>)</div></pre></td></tr></table></figure>
-<p>The result illustrates what the code does. ToString() shows bits from right to left, so bit #0 is to the far right. In line 2 and 3 below, two individual bits were set without tampering with the others. In the last line, a bit was cleared.<br>结果演示了代码做了什么。<code>ToString()</code> 从右到左显示比特，所以第 0 比特是在最右边。在第二行和第三行，设置了两个独立的比特位，而并不影响其它位。在最后一行中，清除了一个比特位。</p>
-<pre><code>1100001101110
-1100001111110
-1100001111111
-1100001111101
-</code></pre><a id="more"></a>
+<p>结果演示了代码做了什么。<code>ToString()</code> 从右到左显示比特，所以第 0 比特是在最右边。在第二行和第三行，设置了两个独立的比特位，而并不影响其它位。在最后一行中，清除了一个比特位。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">1100001101110</span></div><div class="line"><span class="number">1100001111110</span></div><div class="line"><span class="number">1100001111111</span></div><div class="line"><span class="number">1100001111101</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/managing-bit-flags-part-3" target="_blank" rel="external">Managing Bit Flags (Part 3)</a></p>
 
         

@@ -18,7 +18,7 @@
     
 
     
-        <link rel="alternate" href="/" title="叹为观止" type="application/atom+xml" />
+        <link rel="alternate" href="/atom.xml" title="叹为观止" type="application/atom+xml" />
     
 
     
@@ -214,7 +214,7 @@ var _hmt = _hmt || [];
                     </td>
                     
                     <td>
-                        <a href="/" target="_blank" title="rss" class=tooltip>
+                        <a href="/atom.xml" target="_blank" title="rss" class=tooltip>
                             <i class="fa fa-rss"></i>
                         </a>
                     </td>
@@ -237,7 +237,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/02/07/using-classes-adding-methods-part-3/">PowerShell 技能连载 - 使用类（增加方法 - 第三部分）</a>
+            <a class="article-title" href="/2017/02/08/using-classes-adding-methods-part-3/">PowerShell 技能连载 - 使用类（增加方法 - 第三部分）</a>
         </h1>
     
 
@@ -246,8 +246,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/02/07/using-classes-adding-methods-part-3/">
-            <time datetime="2017-02-07T08:00:00.000Z" itemprop="datePublished">2017-02-07</time>
+        <a href="/2017/02/08/using-classes-adding-methods-part-3/">
+            <time datetime="2017-02-07T16:00:00.000Z" itemprop="datePublished">2017-02-08</time>
         </a>
     </div>
 
@@ -284,7 +284,7 @@ var _hmt = _hmt || [];
 <li>要引用这个类中的属性或方法，请在前面加上“<code>$this.</code>”</li>
 </ul></p>
             <p class="article-more-link">
-                <a href="/2017/02/07/using-classes-adding-methods-part-3/#more">查看更多</a>
+                <a href="/2017/02/08/using-classes-adding-methods-part-3/#more">查看更多</a>
             </p>
         
         </div>
@@ -348,7 +348,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/02/07/using-classes-adding-methods-part-3/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/07/using-classes-adding-methods-part-3/">评论</a>
+        <a href="http://blog.vichamp.com/2017/02/08/using-classes-adding-methods-part-3/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/08/using-classes-adding-methods-part-3/">评论</a>
     
 
         </footer>
@@ -367,7 +367,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/02/06/using-classes-initializing-properties-part-2/">PowerShell 技能连载 - 使用类（初始化属性 - 第二部分）</a>
+            <a class="article-title" href="/2017/02/07/using-classes-initializing-properties-part-2/">PowerShell 技能连载 - 使用类（初始化属性 - 第二部分）</a>
         </h1>
     
 
@@ -376,8 +376,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/02/06/using-classes-initializing-properties-part-2/">
-            <time datetime="2017-02-06T08:00:00.000Z" itemprop="datePublished">2017-02-06</time>
+        <a href="/2017/02/07/using-classes-initializing-properties-part-2/">
+            <time datetime="2017-02-06T16:00:00.000Z" itemprop="datePublished">2017-02-07</time>
         </a>
     </div>
 
@@ -403,7 +403,7 @@ var _hmt = _hmt || [];
             <p><p>可以为类的属性手动指定一个数据类型和缺省值。当您从一个类实例化一个对象时，属性已经填充好并且只接受指定的数据类型：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 5.0</span></div><div class="line">class Info</div><div class="line">&#123;</div><div class="line">  <span class="comment"># strongly typed properties with default values</span></div><div class="line">  [String]</div><div class="line">  <span class="variable">$Name</span> = <span class="variable">$env:USERNAME</span></div><div class="line"></div><div class="line">  [String]</div><div class="line">  <span class="variable">$Computer</span> = <span class="variable">$env:COMPUTERNAME</span></div><div class="line"></div><div class="line">  [DateTime]</div><div class="line">  <span class="variable">$Date</span> = (<span class="built_in">Get-Date</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># create instance</span></div><div class="line"><span class="variable">$infoObj</span> = [Info]::new()</div><div class="line"></div><div class="line"><span class="comment"># view default (initial) values</span></div><div class="line"><span class="variable">$infoObj</span></div><div class="line"></div><div class="line"><span class="comment"># change value</span></div><div class="line"><span class="variable">$infoObj</span>.Name = <span class="string">'test'</span></div><div class="line"><span class="variable">$infoObj</span></div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2017/02/06/using-classes-initializing-properties-part-2/#more">查看更多</a>
+                <a href="/2017/02/07/using-classes-initializing-properties-part-2/#more">查看更多</a>
             </p>
         
         </div>
@@ -467,7 +467,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/02/06/using-classes-initializing-properties-part-2/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/06/using-classes-initializing-properties-part-2/">评论</a>
+        <a href="http://blog.vichamp.com/2017/02/07/using-classes-initializing-properties-part-2/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/07/using-classes-initializing-properties-part-2/">评论</a>
     
 
         </footer>
@@ -486,7 +486,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/02/05/using-classes-creating-objects-part-1/">PowerShell 技能连载 - 使用类（创建对象 - 第一部分）</a>
+            <a class="article-title" href="/2017/02/06/using-classes-creating-objects-part-1/">PowerShell 技能连载 - 使用类（创建对象 - 第一部分）</a>
         </h1>
     
 
@@ -495,8 +495,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/02/05/using-classes-creating-objects-part-1/">
-            <time datetime="2017-02-05T08:00:00.000Z" itemprop="datePublished">2017-02-05</time>
+        <a href="/2017/02/06/using-classes-creating-objects-part-1/">
+            <time datetime="2017-02-05T16:00:00.000Z" itemprop="datePublished">2017-02-06</time>
         </a>
     </div>
 
@@ -529,7 +529,7 @@ var _hmt = _hmt || [];
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Name            Computer        Date               </div><div class="line">----            --------        ----               </div><div class="line">DESKTOP-<span class="number">7</span>AAMJLF DESKTOP-<span class="number">7</span>AAMJLF <span class="number">1</span>/<span class="number">2</span>/<span class="number">2017</span> <span class="number">2</span>:<span class="number">02</span>:<span class="number">39</span> PM</div><div class="line">PSCustomObject</div></pre></td></tr></table></figure>
 <p>所以新创建的对象类型永远是 “<code>PSCustomObject</code>“；而在前一个例子中，对象的类型是通过类名定义的。</p></p>
             <p class="article-more-link">
-                <a href="/2017/02/05/using-classes-creating-objects-part-1/#more">查看更多</a>
+                <a href="/2017/02/06/using-classes-creating-objects-part-1/#more">查看更多</a>
             </p>
         
         </div>
@@ -593,7 +593,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/02/05/using-classes-creating-objects-part-1/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/05/using-classes-creating-objects-part-1/">评论</a>
+        <a href="http://blog.vichamp.com/2017/02/06/using-classes-creating-objects-part-1/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/06/using-classes-creating-objects-part-1/">评论</a>
     
 
         </footer>
@@ -612,7 +612,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/02/02/using-using-namespace/">PowerShell 技能连载 - 使用命名空间</a>
+            <a class="article-title" href="/2017/02/03/using-using-namespace/">PowerShell 技能连载 - 使用命名空间</a>
         </h1>
     
 
@@ -621,8 +621,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/02/02/using-using-namespace/">
-            <time datetime="2017-02-02T08:00:00.000Z" itemprop="datePublished">2017-02-02</time>
+        <a href="/2017/02/03/using-using-namespace/">
+            <time datetime="2017-02-02T16:00:00.000Z" itemprop="datePublished">2017-02-03</time>
         </a>
     </div>
 
@@ -654,7 +654,7 @@ var _hmt = _hmt || [];
 <p>现在可以不必重复地使用 <code>[System.IO.Path]</code> 来访问这些方法。添加一句 “<code>using namespace System.IO</code>“ 语句之后就可以直接访问 <code>[Path]</code> 类型：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 5.0</span></div><div class="line"></div><div class="line">using namespace System.IO</div><div class="line"></div><div class="line">[Path]::ChangeExtension(<span class="string">'test.txt'</span>, <span class="string">'bat'</span>)</div><div class="line">[Path]::GetExtension(<span class="string">'test.txt'</span>)</div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2017/02/02/using-using-namespace/#more">查看更多</a>
+                <a href="/2017/02/03/using-using-namespace/#more">查看更多</a>
             </p>
         
         </div>
@@ -718,7 +718,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/02/02/using-using-namespace/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/02/using-using-namespace/">评论</a>
+        <a href="http://blog.vichamp.com/2017/02/03/using-using-namespace/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/03/using-using-namespace/">评论</a>
     
 
         </footer>
@@ -737,7 +737,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/02/01/determining-person-age/">PowerShell 技能连载 - 确定个人年龄</a>
+            <a class="article-title" href="/2017/02/02/determining-person-age/">PowerShell 技能连载 - 确定个人年龄</a>
         </h1>
     
 
@@ -746,8 +746,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/02/01/determining-person-age/">
-            <time datetime="2017-02-01T08:00:00.000Z" itemprop="datePublished">2017-02-01</time>
+        <a href="/2017/02/02/determining-person-age/">
+            <time datetime="2017-02-01T16:00:00.000Z" itemprop="datePublished">2017-02-02</time>
         </a>
     </div>
 
@@ -779,7 +779,7 @@ var _hmt = _hmt || [];
 <p>这是计算结果的样子：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Born on <span class="number">1978</span>-<span class="number">12</span>-<span class="number">09</span> = <span class="number">38</span> Years old (at time of printing)</div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2017/02/01/determining-person-age/#more">查看更多</a>
+                <a href="/2017/02/02/determining-person-age/#more">查看更多</a>
             </p>
         
         </div>
@@ -843,7 +843,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/02/01/determining-person-age/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/01/determining-person-age/">评论</a>
+        <a href="http://blog.vichamp.com/2017/02/02/determining-person-age/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/02/determining-person-age/">评论</a>
     
 
         </footer>
@@ -862,7 +862,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/01/31/speeding-up-new-object-synthesizer/">PowerShell 技能连载 - 加速 New-Object Synthesizer</a>
+            <a class="article-title" href="/2017/02/01/speeding-up-new-object-synthesizer/">PowerShell 技能连载 - 加速 New-Object Synthesizer</a>
         </h1>
     
 
@@ -871,8 +871,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/01/31/speeding-up-new-object-synthesizer/">
-            <time datetime="2017-01-31T08:00:00.000Z" itemprop="datePublished">2017-01-31</time>
+        <a href="/2017/02/01/speeding-up-new-object-synthesizer/">
+            <time datetime="2017-01-31T16:00:00.000Z" itemprop="datePublished">2017-02-01</time>
         </a>
     </div>
 
@@ -907,7 +907,7 @@ var _hmt = _hmt || [];
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[System.Net.NetworkInformation.Ping]::New().Send(<span class="string">'powershellmagazine.com'</span>, <span class="number">1000</span>)</div></pre></td></tr></table></figure>
 <p>请注意：一旦您使用 <code>New()</code> 来代替 <code>New-Object</code>，您的代码需要 PowerShell 5.0 以上版本。</p></p>
             <p class="article-more-link">
-                <a href="/2017/01/31/speeding-up-new-object-synthesizer/#more">查看更多</a>
+                <a href="/2017/02/01/speeding-up-new-object-synthesizer/#more">查看更多</a>
             </p>
         
         </div>
@@ -971,7 +971,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/01/31/speeding-up-new-object-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/31/speeding-up-new-object-synthesizer/">评论</a>
+        <a href="http://blog.vichamp.com/2017/02/01/speeding-up-new-object-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/02/01/speeding-up-new-object-synthesizer/">评论</a>
     
 
         </footer>
@@ -990,7 +990,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/01/30/speech-week-using-advanced-speech-synthesizer-options-synthesizer/">PowerShell 技能连载 - 语音之周：使用语音合成器高级选项</a>
+            <a class="article-title" href="/2017/01/31/speech-week-using-advanced-speech-synthesizer-options-synthesizer/">PowerShell 技能连载 - 语音之周：使用语音合成器高级选项</a>
         </h1>
     
 
@@ -999,8 +999,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/01/30/speech-week-using-advanced-speech-synthesizer-options-synthesizer/">
-            <time datetime="2017-01-30T08:00:00.000Z" itemprop="datePublished">2017-01-30</time>
+        <a href="/2017/01/31/speech-week-using-advanced-speech-synthesizer-options-synthesizer/">
+            <time datetime="2017-01-30T16:00:00.000Z" itemprop="datePublished">2017-01-31</time>
         </a>
     </div>
 
@@ -1029,7 +1029,7 @@ var _hmt = _hmt || [];
 <p>以下是完整的例子：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 2.0</span></div><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.Speech</div><div class="line"><span class="variable">$speak</span> = <span class="built_in">New-Object</span> System.Speech.Synthesis.SpeechSynthesizer</div><div class="line"><span class="variable">$ssml</span> = <span class="string">'</div><div class="line">&lt;speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" </div><div class="line">    xml:lang="en-US"&gt;</div><div class="line">    &lt;voice xml:lang="en-US"&gt;</div><div class="line">    &lt;prosody rate="1"&gt;</div><div class="line">        &lt;p&gt;I can speak English!&lt;/p&gt;</div><div class="line">    &lt;/prosody&gt;</div><div class="line">    &lt;/voice&gt;</div><div class="line">    &lt;voice xml:lang="de-DE"&gt;</div><div class="line">    &lt;prosody rate="1"&gt;</div><div class="line">        &lt;p&gt;und ich kann auch deutsch sprechen!&lt;/p&gt;</div><div class="line">    &lt;/prosody&gt;</div><div class="line">    &lt;/voice&gt;</div><div class="line">    &lt;voice xml:lang="en-US"&gt;</div><div class="line">    &lt;prosody rate="0"&gt;</div><div class="line">        &lt;p&gt;...and sometimes I get really tired.&lt;/p&gt;</div><div class="line">    &lt;/prosody&gt;</div><div class="line">    &lt;/voice&gt;</div><div class="line">&lt;/speak&gt;</div><div class="line">'</span></div><div class="line"></div><div class="line"><span class="variable">$speak</span>.SpeakSsml(<span class="variable">$ssml</span>)</div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2017/01/30/speech-week-using-advanced-speech-synthesizer-options-synthesizer/#more">查看更多</a>
+                <a href="/2017/01/31/speech-week-using-advanced-speech-synthesizer-options-synthesizer/#more">查看更多</a>
             </p>
         
         </div>
@@ -1093,7 +1093,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/01/30/speech-week-using-advanced-speech-synthesizer-options-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/30/speech-week-using-advanced-speech-synthesizer-options-synthesizer/">评论</a>
+        <a href="http://blog.vichamp.com/2017/01/31/speech-week-using-advanced-speech-synthesizer-options-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/31/speech-week-using-advanced-speech-synthesizer-options-synthesizer/">评论</a>
     
 
         </footer>
@@ -1112,7 +1112,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/01/29/speech-week-recording-voice-to-file-synthesizer/">PowerShell 技能连载 - 语音之周：记录语音到文件合成器</a>
+            <a class="article-title" href="/2017/01/30/speech-week-recording-voice-to-file-synthesizer/">PowerShell 技能连载 - 语音之周：记录语音到文件合成器</a>
         </h1>
     
 
@@ -1121,8 +1121,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/01/29/speech-week-recording-voice-to-file-synthesizer/">
-            <time datetime="2017-01-29T08:00:00.000Z" itemprop="datePublished">2017-01-29</time>
+        <a href="/2017/01/30/speech-week-recording-voice-to-file-synthesizer/">
+            <time datetime="2017-01-29T16:00:00.000Z" itemprop="datePublished">2017-01-30</time>
         </a>
     </div>
 
@@ -1148,7 +1148,7 @@ var _hmt = _hmt || [];
             <p><p>内置的 Microsoft 文本到语音引擎可以将音频文件保存到文件。通过这种方式，您可以自动生成 WAV 文件。以下是一个例子：它在您的桌面上创建一个新的 “clickme.wav” 文件，当您打开这个文件时，将会听到语音文本：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 2.0</span></div><div class="line"><span class="variable">$Path</span> = <span class="string">"<span class="variable">$home</span>\Desktop\clickme.wav"</span></div><div class="line"></div><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.Speech</div><div class="line"><span class="variable">$speak</span> = <span class="built_in">New-Object</span> System.Speech.Synthesis.SpeechSynthesizer</div><div class="line"><span class="variable">$speak</span>.SetOutputToWaveFile(<span class="variable">$Path</span>)</div><div class="line"><span class="variable">$speak</span>.Speak(<span class="string">'Hello I am PowerShell!'</span>)</div><div class="line"><span class="variable">$speak</span>.SetOutputToDefaultAudioDevice()</div><div class="line"></div><div class="line"><span class="built_in">Invoke-Item</span> -Path <span class="variable">$Path</span></div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2017/01/29/speech-week-recording-voice-to-file-synthesizer/#more">查看更多</a>
+                <a href="/2017/01/30/speech-week-recording-voice-to-file-synthesizer/#more">查看更多</a>
             </p>
         
         </div>
@@ -1212,7 +1212,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/01/29/speech-week-recording-voice-to-file-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/29/speech-week-recording-voice-to-file-synthesizer/">评论</a>
+        <a href="http://blog.vichamp.com/2017/01/30/speech-week-recording-voice-to-file-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/30/speech-week-recording-voice-to-file-synthesizer/">评论</a>
     
 
         </footer>
@@ -1231,7 +1231,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/01/26/speech-week-using-different-voices-with-speech-synthesizer/">PowerShell 技能连载 - 语音之周：更改讲述人的语音</a>
+            <a class="article-title" href="/2017/01/27/speech-week-using-different-voices-with-speech-synthesizer/">PowerShell 技能连载 - 语音之周：更改讲述人的语音</a>
         </h1>
     
 
@@ -1240,8 +1240,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/01/26/speech-week-using-different-voices-with-speech-synthesizer/">
-            <time datetime="2017-01-26T08:00:00.000Z" itemprop="datePublished">2017-01-26</time>
+        <a href="/2017/01/27/speech-week-using-different-voices-with-speech-synthesizer/">
+            <time datetime="2017-01-26T16:00:00.000Z" itemprop="datePublished">2017-01-27</time>
         </a>
     </div>
 
@@ -1273,7 +1273,7 @@ var _hmt = _hmt || [];
 <p>假设您的系统安装了多个语音，以下是选择一个不同语音的方法。只需要传入您想使用的语音名字。这个例子在德文 Windows 10 系统上使用德语语音引擎：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 2.0</span></div><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.speech</div><div class="line"><span class="variable">$speak</span> = <span class="built_in">New-Object</span> System.Speech.Synthesis.SpeechSynthesizer</div><div class="line"><span class="variable">$speak</span>.SelectVoice(<span class="string">'Microsoft Hedda Desktop'</span>)</div><div class="line"><span class="variable">$speak</span>.Speak(<span class="string">'Jetzt spreche ich deutsch.'</span>)</div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2017/01/26/speech-week-using-different-voices-with-speech-synthesizer/#more">查看更多</a>
+                <a href="/2017/01/27/speech-week-using-different-voices-with-speech-synthesizer/#more">查看更多</a>
             </p>
         
         </div>
@@ -1337,7 +1337,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/01/26/speech-week-using-different-voices-with-speech-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/26/speech-week-using-different-voices-with-speech-synthesizer/">评论</a>
+        <a href="http://blog.vichamp.com/2017/01/27/speech-week-using-different-voices-with-speech-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/27/speech-week-using-different-voices-with-speech-synthesizer/">评论</a>
     
 
         </footer>
@@ -1356,7 +1356,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2017/01/25/speech-week-using-a-speech-synthesizer/">PowerShell 技能连载 - 语音之周：使用语音讲述人</a>
+            <a class="article-title" href="/2017/01/26/speech-week-using-a-speech-synthesizer/">PowerShell 技能连载 - 语音之周：使用语音讲述人</a>
         </h1>
     
 
@@ -1365,8 +1365,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/01/25/speech-week-using-a-speech-synthesizer/">
-            <time datetime="2017-01-25T08:00:00.000Z" itemprop="datePublished">2017-01-25</time>
+        <a href="/2017/01/26/speech-week-using-a-speech-synthesizer/">
+            <time datetime="2017-01-25T16:00:00.000Z" itemprop="datePublished">2017-01-26</time>
         </a>
     </div>
 
@@ -1393,7 +1393,7 @@ var _hmt = _hmt || [];
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.Speech</div><div class="line"><span class="variable">$speak</span> = <span class="built_in">New-Object</span> System.Speech.Synthesis.SpeechSynthesizer</div><div class="line"><span class="variable">$speak</span>.Speak(<span class="string">'Hello I am PowerShell!'</span>)</div></pre></td></tr></table></figure>
 <p>请注意语音讲述人用的是您系统的缺省语音。您的讲述人缺省情况下可能说的不是英文。我们将在接下来的技能当中介绍如何使用不同的语音。</p></p>
             <p class="article-more-link">
-                <a href="/2017/01/25/speech-week-using-a-speech-synthesizer/#more">查看更多</a>
+                <a href="/2017/01/26/speech-week-using-a-speech-synthesizer/#more">查看更多</a>
             </p>
         
         </div>
@@ -1457,7 +1457,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2017/01/25/speech-week-using-a-speech-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/25/speech-week-using-a-speech-synthesizer/">评论</a>
+        <a href="http://blog.vichamp.com/2017/01/26/speech-week-using-a-speech-synthesizer/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2017/01/26/speech-week-using-a-speech-synthesizer/">评论</a>
     
 
         </footer>
@@ -1501,7 +1501,7 @@ var _hmt = _hmt || [];
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/21/invoking-a-script-block/" class="thumbnail">
+                            <a href="/2017/03/22/invoking-a-script-block/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1512,15 +1512,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/21/invoking-a-script-block/" class="title">PowerShell 技能连载 - 调用一个脚本块</a></p>
-                            <p class="item-date"><time datetime="2017-03-21T08:00:00.000Z" itemprop="datePublished">2017-03-21</time></p>
+                            <p class="item-title"><a href="/2017/03/22/invoking-a-script-block/" class="title">PowerShell 技能连载 - 调用一个脚本块</a></p>
+                            <p class="item-date"><time datetime="2017-03-21T16:00:00.000Z" itemprop="datePublished">2017-03-22</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/20/running-cmdlets-without-verb/" class="thumbnail">
+                            <a href="/2017/03/21/running-cmdlets-without-verb/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1531,15 +1531,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/20/running-cmdlets-without-verb/" class="title">PowerShell 技能连载 - 不带动词运行 Cmdlet</a></p>
-                            <p class="item-date"><time datetime="2017-03-20T08:00:00.000Z" itemprop="datePublished">2017-03-20</time></p>
+                            <p class="item-title"><a href="/2017/03/21/running-cmdlets-without-verb/" class="title">PowerShell 技能连载 - 不带动词运行 Cmdlet</a></p>
+                            <p class="item-date"><time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished">2017-03-21</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/19/texts-with-maximum-length-part-2/" class="thumbnail">
+                            <a href="/2017/03/20/texts-with-maximum-length-part-2/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1550,15 +1550,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/19/texts-with-maximum-length-part-2/" class="title">PowerShell 技能连载 - 限制文本的长度（第二部分）</a></p>
-                            <p class="item-date"><time datetime="2017-03-19T08:00:00.000Z" itemprop="datePublished">2017-03-19</time></p>
+                            <p class="item-title"><a href="/2017/03/20/texts-with-maximum-length-part-2/" class="title">PowerShell 技能连载 - 限制文本的长度（第二部分）</a></p>
+                            <p class="item-date"><time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished">2017-03-20</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/16/texts-with-maximum-length-part-1/" class="thumbnail">
+                            <a href="/2017/03/17/texts-with-maximum-length-part-1/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1569,15 +1569,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/16/texts-with-maximum-length-part-1/" class="title">PowerShell 技能连载 - 限制文本的长度（第一部分）</a></p>
-                            <p class="item-date"><time datetime="2017-03-16T08:00:00.000Z" itemprop="datePublished">2017-03-16</time></p>
+                            <p class="item-title"><a href="/2017/03/17/texts-with-maximum-length-part-1/" class="title">PowerShell 技能连载 - 限制文本的长度（第一部分）</a></p>
+                            <p class="item-date"><time datetime="2017-03-16T16:00:00.000Z" itemprop="datePublished">2017-03-17</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/15/finding-all-profiles-with-desktop/" class="thumbnail">
+                            <a href="/2017/03/16/finding-all-profiles-with-desktop/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1588,8 +1588,8 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/15/finding-all-profiles-with-desktop/" class="title">PowerShell 技能连载 - 查找所有含桌面的配置文件</a></p>
-                            <p class="item-date"><time datetime="2017-03-15T08:00:00.000Z" itemprop="datePublished">2017-03-15</time></p>
+                            <p class="item-title"><a href="/2017/03/16/finding-all-profiles-with-desktop/" class="title">PowerShell 技能连载 - 查找所有含桌面的配置文件</a></p>
+                            <p class="item-date"><time datetime="2017-03-15T16:00:00.000Z" itemprop="datePublished">2017-03-16</time></p>
                         </div>
                     </li>
                 
@@ -1611,7 +1611,7 @@ var _hmt = _hmt || [];
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 

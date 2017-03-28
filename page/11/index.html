@@ -18,7 +18,7 @@
     
 
     
-        <link rel="alternate" href="/" title="叹为观止" type="application/atom+xml" />
+        <link rel="alternate" href="/atom.xml" title="叹为观止" type="application/atom+xml" />
     
 
     
@@ -214,7 +214,7 @@ var _hmt = _hmt || [];
                     </td>
                     
                     <td>
-                        <a href="/" target="_blank" title="rss" class=tooltip>
+                        <a href="/atom.xml" target="_blank" title="rss" class=tooltip>
                             <i class="fa fa-rss"></i>
                         </a>
                     </td>
@@ -237,7 +237,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/03/testing-files-and-folders-separately/">PowerShell 技能连载 - （分别）测试文件和文件夹</a>
+            <a class="article-title" href="/2016/11/04/testing-files-and-folders-separately/">PowerShell 技能连载 - （分别）测试文件和文件夹</a>
         </h1>
     
 
@@ -246,8 +246,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/11/03/testing-files-and-folders-separately/">
-            <time datetime="2016-11-03T08:00:00.000Z" itemprop="datePublished">2016-11-03</time>
+        <a href="/2016/11/04/testing-files-and-folders-separately/">
+            <time datetime="2016-11-03T16:00:00.000Z" itemprop="datePublished">2016-11-04</time>
         </a>
     </div>
 
@@ -275,7 +275,7 @@ var _hmt = _hmt || [];
 <p>在近期的 PowerShell 版本中，<code>Test-Path</code> 还可以区分容器（例如文件夹）和叶子（例如文件）：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$path</span> = <span class="string">'c:\windows\explorer.exe'</span></div><div class="line"><span class="comment"># any item type</span></div><div class="line"><span class="built_in">Test-Path</span> -Path <span class="variable">$path</span></div><div class="line"><span class="comment"># just files</span></div><div class="line"><span class="built_in">Test-Path</span> -Path <span class="variable">$path</span> -PathType Leaf</div><div class="line"><span class="comment"># just folders</span></div><div class="line"><span class="built_in">Test-Path</span> -Path <span class="variable">$path</span> -PathType Container</div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/11/03/testing-files-and-folders-separately/#more">查看更多</a>
+                <a href="/2016/11/04/testing-files-and-folders-separately/#more">查看更多</a>
             </p>
         
         </div>
@@ -339,7 +339,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/11/03/testing-files-and-folders-separately/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/11/03/testing-files-and-folders-separately/">评论</a>
+        <a href="http://blog.vichamp.com/2016/11/04/testing-files-and-folders-separately/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/11/04/testing-files-and-folders-separately/">评论</a>
     
 
         </footer>
@@ -358,7 +358,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/02/getting-help-for-cmdlet-parameters/">PowerShell 技能连载 - 获取 Cmdlet 参数的帮助</a>
+            <a class="article-title" href="/2016/11/03/getting-help-for-cmdlet-parameters/">PowerShell 技能连载 - 获取 Cmdlet 参数的帮助</a>
         </h1>
     
 
@@ -367,8 +367,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/11/02/getting-help-for-cmdlet-parameters/">
-            <time datetime="2016-11-02T08:00:00.000Z" itemprop="datePublished">2016-11-02</time>
+        <a href="/2016/11/03/getting-help-for-cmdlet-parameters/">
+            <time datetime="2016-11-02T16:00:00.000Z" itemprop="datePublished">2016-11-03</time>
         </a>
     </div>
 
@@ -436,7 +436,7 @@ var _hmt = _hmt || [];
 </code></pre><p>通过这些信息，您现在可以知道如何格式化日期和时间：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$date</span> = <span class="built_in">Read-Host</span> -Prompt <span class="string">'Enter a date'</span></div><div class="line"><span class="variable">$weekday</span> = <span class="built_in">Get-Date</span> -Date <span class="variable">$date</span> -Format <span class="string">'dddd'</span></div><div class="line"><span class="string">"<span class="variable">$date</span> is a <span class="variable">$weekday</span>"</span></div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/11/02/getting-help-for-cmdlet-parameters/#more">查看更多</a>
+                <a href="/2016/11/03/getting-help-for-cmdlet-parameters/#more">查看更多</a>
             </p>
         
         </div>
@@ -500,7 +500,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/11/02/getting-help-for-cmdlet-parameters/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/11/02/getting-help-for-cmdlet-parameters/">评论</a>
+        <a href="http://blog.vichamp.com/2016/11/03/getting-help-for-cmdlet-parameters/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/11/03/getting-help-for-cmdlet-parameters/">评论</a>
     
 
         </footer>
@@ -519,7 +519,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/11/01/updating-powershell-help-with-one-liner/">PowerShell 技能连载 - 用一行代码更新 PowerShell 帮助信息</a>
+            <a class="article-title" href="/2016/11/02/updating-powershell-help-with-one-liner/">PowerShell 技能连载 - 用一行代码更新 PowerShell 帮助信息</a>
         </h1>
     
 
@@ -528,8 +528,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/11/01/updating-powershell-help-with-one-liner/">
-            <time datetime="2016-11-01T08:00:00.000Z" itemprop="datePublished">2016-11-01</time>
+        <a href="/2016/11/02/updating-powershell-help-with-one-liner/">
+            <time datetime="2016-11-01T16:00:00.000Z" itemprop="datePublished">2016-11-02</time>
         </a>
     </div>
 
@@ -557,7 +557,7 @@ var _hmt = _hmt || [];
 <p>以下是一个单行命令，演示了如何以管理员特权运行任何 PowerShell 命令。这个命令将更新本地的 PowerShell 帮助文件：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Start-Process</span> -FilePath powershell -Verb RunAs -ArgumentList <span class="string">"-noprofile -command Update-Help -UICulture en-us  -Force"</span></div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/11/01/updating-powershell-help-with-one-liner/#more">查看更多</a>
+                <a href="/2016/11/02/updating-powershell-help-with-one-liner/#more">查看更多</a>
             </p>
         
         </div>
@@ -621,7 +621,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/11/01/updating-powershell-help-with-one-liner/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/11/01/updating-powershell-help-with-one-liner/">评论</a>
+        <a href="http://blog.vichamp.com/2016/11/02/updating-powershell-help-with-one-liner/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/11/02/updating-powershell-help-with-one-liner/">评论</a>
     
 
         </footer>
@@ -640,7 +640,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/31/getting-intellisense-for-cmdlet-powershell-ise/">PowerShell 技能连载 - 在 PowerShell ISE 中获得 Cmdlet 的 IntelliSense</a>
+            <a class="article-title" href="/2016/11/01/getting-intellisense-for-cmdlet-powershell-ise/">PowerShell 技能连载 - 在 PowerShell ISE 中获得 Cmdlet 的 IntelliSense</a>
         </h1>
     
 
@@ -649,8 +649,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/31/getting-intellisense-for-cmdlet-powershell-ise/">
-            <time datetime="2016-10-31T08:00:00.000Z" itemprop="datePublished">2016-10-31</time>
+        <a href="/2016/11/01/getting-intellisense-for-cmdlet-powershell-ise/">
+            <time datetime="2016-10-31T16:00:00.000Z" itemprop="datePublished">2016-11-01</time>
         </a>
     </div>
 
@@ -677,7 +677,7 @@ var _hmt = _hmt || [];
 <p>这将调出 IntelliSense 菜单，即平时按下 “-“ 和 “.” 触发键时显示的菜单。由于只有一个 cmdlet 匹配成功，所以该列表只有一个项目。过一小会儿，就会弹出一个显示该 cmdlet 支持的所有参数的 tooltip。</p>
 <p>如果您想了解更多，请按 F1 键。PowerShell ISE 将把当前位置的 cmdlet 名送给 <code>Get-Help</code> 命令。该帮助将在一个独立的新窗口中显示。</p></p>
             <p class="article-more-link">
-                <a href="/2016/10/31/getting-intellisense-for-cmdlet-powershell-ise/#more">查看更多</a>
+                <a href="/2016/11/01/getting-intellisense-for-cmdlet-powershell-ise/#more">查看更多</a>
             </p>
         
         </div>
@@ -741,7 +741,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/10/31/getting-intellisense-for-cmdlet-powershell-ise/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/31/getting-intellisense-for-cmdlet-powershell-ise/">评论</a>
+        <a href="http://blog.vichamp.com/2016/11/01/getting-intellisense-for-cmdlet-powershell-ise/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/11/01/getting-intellisense-for-cmdlet-powershell-ise/">评论</a>
     
 
         </footer>
@@ -760,7 +760,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/30/downloading-pictures-from-website/">PowerShell 技能连载 - 从网站上下载图片</a>
+            <a class="article-title" href="/2016/10/31/downloading-pictures-from-website/">PowerShell 技能连载 - 从网站上下载图片</a>
         </h1>
     
 
@@ -769,8 +769,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/30/downloading-pictures-from-website/">
-            <time datetime="2016-10-30T08:00:00.000Z" itemprop="datePublished">2016-10-30</time>
+        <a href="/2016/10/31/downloading-pictures-from-website/">
+            <time datetime="2016-10-30T16:00:00.000Z" itemprop="datePublished">2016-10-31</time>
         </a>
     </div>
 
@@ -798,7 +798,7 @@ var _hmt = _hmt || [];
 <p>当您运行这段脚本时，它访问所有的 33 个网页，检查所有的图片链接，并将它们保存到硬盘上：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># open destination folder (and create it if needed)</span></div><div class="line"><span class="variable">$folder</span> = <span class="string">'c:\drawings'</span></div><div class="line"><span class="variable">$exists</span> = <span class="built_in">Test-Path</span> -Path <span class="variable">$folder</span></div><div class="line"><span class="keyword">if</span> (!<span class="variable">$exists</span>) &#123; <span class="literal">$null</span> = <span class="built_in">New-Item</span> -Path <span class="variable">$folder</span> -ItemType Directory &#125;</div><div class="line">explorer <span class="variable">$folder</span></div><div class="line"></div><div class="line"><span class="comment"># walk all 33 web pages that www.metabene.de offers</span></div><div class="line"><span class="number">1</span>..<span class="number">33</span> | <span class="built_in">ForEach-Object</span> &#123;</div><div class="line">  <span class="variable">$url</span> = <span class="string">"http://www.metabene.de/galerie/page/<span class="variable">$_</span>"</span></div><div class="line"></div><div class="line">  <span class="comment"># navigate to website...</span></div><div class="line">  <span class="variable">$webpage</span> = <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$url</span> -UseBasicParsing</div><div class="line"></div><div class="line">  <span class="comment"># take sources of all images on this website...</span></div><div class="line">  <span class="variable">$webpage</span>.Images.src |</div><div class="line">  <span class="built_in">Where-Object</span> &#123;</div><div class="line">    <span class="comment"># take only images that were uploaded to this blog</span></div><div class="line">    <span class="variable">$_</span> <span class="nomarkup">-like</span> <span class="string">'*/uploads/*'</span></div><div class="line">  &#125;</div><div class="line">&#125; |</div><div class="line"><span class="built_in">ForEach-Object</span> &#123;</div><div class="line">  <span class="comment"># get filename of URL</span></div><div class="line">  <span class="variable">$filename</span> = <span class="variable">$_</span>.Split(<span class="string">'/'</span>)[-<span class="number">1</span>]</div><div class="line">  <span class="comment"># create local file name</span></div><div class="line">  <span class="variable">$destination</span>= <span class="built_in">Join-Path</span> -Path <span class="variable">$Folder</span> -ChildPath <span class="variable">$filename</span></div><div class="line">  <span class="comment"># download pictures</span></div><div class="line">  <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$url</span> -OutFile <span class="variable">$destination</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/10/30/downloading-pictures-from-website/#more">查看更多</a>
+                <a href="/2016/10/31/downloading-pictures-from-website/#more">查看更多</a>
             </p>
         
         </div>
@@ -862,7 +862,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/10/30/downloading-pictures-from-website/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/30/downloading-pictures-from-website/">评论</a>
+        <a href="http://blog.vichamp.com/2016/10/31/downloading-pictures-from-website/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/31/downloading-pictures-from-website/">评论</a>
     
 
         </footer>
@@ -881,7 +881,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/27/simple-strategy-for-cmdlet-error-reporting-directory/">PowerShell 技能连载 - Cmelet 错误报告的简单策略</a>
+            <a class="article-title" href="/2016/10/28/simple-strategy-for-cmdlet-error-reporting-directory/">PowerShell 技能连载 - Cmelet 错误报告的简单策略</a>
         </h1>
     
 
@@ -890,8 +890,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/27/simple-strategy-for-cmdlet-error-reporting-directory/">
-            <time datetime="2016-10-27T08:00:00.000Z" itemprop="datePublished">2016-10-27</time>
+        <a href="/2016/10/28/simple-strategy-for-cmdlet-error-reporting-directory/">
+            <time datetime="2016-10-27T16:00:00.000Z" itemprop="datePublished">2016-10-28</time>
         </a>
     </div>
 
@@ -923,7 +923,7 @@ var _hmt = _hmt || [];
 <p>现在，两个 cmdlet 运行起来都看不到错误信息了。最后，您可以容易地在 <code>$errorList</code> 中容易地分析错误信息，例如用 <code>Out-File</code> 将它们写入某些错误日志文件：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$issues</span> = <span class="variable">$errorList</span>.CategoryInfo | <span class="built_in">Select-Object</span> -Property Category, TargetName</div><div class="line"><span class="variable">$issues</span></div><div class="line"><span class="variable">$issues</span> | <span class="built_in">Out-File</span> -FilePath <span class="variable">$home</span>\Desktop\report.txt -Append</div></pre></td></tr></table></figure></p>
             <p class="article-more-link">
-                <a href="/2016/10/27/simple-strategy-for-cmdlet-error-reporting-directory/#more">查看更多</a>
+                <a href="/2016/10/28/simple-strategy-for-cmdlet-error-reporting-directory/#more">查看更多</a>
             </p>
         
         </div>
@@ -987,7 +987,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/10/27/simple-strategy-for-cmdlet-error-reporting-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/27/simple-strategy-for-cmdlet-error-reporting-directory/">评论</a>
+        <a href="http://blog.vichamp.com/2016/10/28/simple-strategy-for-cmdlet-error-reporting-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/28/simple-strategy-for-cmdlet-error-reporting-directory/">评论</a>
     
 
         </footer>
@@ -1006,7 +1006,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/26/check-file-names-for-illegal-characters-directory/">PowerShell 技能连载 - 检查文件名的非法字符</a>
+            <a class="article-title" href="/2016/10/27/check-file-names-for-illegal-characters-directory/">PowerShell 技能连载 - 检查文件名的非法字符</a>
         </h1>
     
 
@@ -1015,8 +1015,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/26/check-file-names-for-illegal-characters-directory/">
-            <time datetime="2016-10-26T08:00:00.000Z" itemprop="datePublished">2016-10-26</time>
+        <a href="/2016/10/27/check-file-names-for-illegal-characters-directory/">
+            <time datetime="2016-10-26T16:00:00.000Z" itemprop="datePublished">2016-10-27</time>
         </a>
     </div>
 
@@ -1045,7 +1045,7 @@ var _hmt = _hmt || [];
 <pre><code>Do not use these characters in file names: : ?
 </code></pre></p>
             <p class="article-more-link">
-                <a href="/2016/10/26/check-file-names-for-illegal-characters-directory/#more">查看更多</a>
+                <a href="/2016/10/27/check-file-names-for-illegal-characters-directory/#more">查看更多</a>
             </p>
         
         </div>
@@ -1109,7 +1109,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/10/26/check-file-names-for-illegal-characters-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/26/check-file-names-for-illegal-characters-directory/">评论</a>
+        <a href="http://blog.vichamp.com/2016/10/27/check-file-names-for-illegal-characters-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/27/check-file-names-for-illegal-characters-directory/">评论</a>
     
 
         </footer>
@@ -1128,7 +1128,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/25/finding-illegal-characters-in-paths-file-system-directory/">PowerShell 技能连载 - 查找文件路径中的非法字符（基于文件系统）</a>
+            <a class="article-title" href="/2016/10/26/finding-illegal-characters-in-paths-file-system-directory/">PowerShell 技能连载 - 查找文件路径中的非法字符（基于文件系统）</a>
         </h1>
     
 
@@ -1137,8 +1137,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/25/finding-illegal-characters-in-paths-file-system-directory/">
-            <time datetime="2016-10-25T08:00:00.000Z" itemprop="datePublished">2016-10-25</time>
+        <a href="/2016/10/26/finding-illegal-characters-in-paths-file-system-directory/">
+            <time datetime="2016-10-25T16:00:00.000Z" itemprop="datePublished">2016-10-26</time>
         </a>
     </div>
 
@@ -1169,7 +1169,7 @@ var _hmt = _hmt || [];
 <pre><code>Do not use these characters in paths: | &lt; &gt;
 </code></pre></p>
             <p class="article-more-link">
-                <a href="/2016/10/25/finding-illegal-characters-in-paths-file-system-directory/#more">查看更多</a>
+                <a href="/2016/10/26/finding-illegal-characters-in-paths-file-system-directory/#more">查看更多</a>
             </p>
         
         </div>
@@ -1233,7 +1233,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/10/25/finding-illegal-characters-in-paths-file-system-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/25/finding-illegal-characters-in-paths-file-system-directory/">评论</a>
+        <a href="http://blog.vichamp.com/2016/10/26/finding-illegal-characters-in-paths-file-system-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/26/finding-illegal-characters-in-paths-file-system-directory/">评论</a>
     
 
         </footer>
@@ -1252,7 +1252,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/24/finding-multiple-illegal-characters-directory/">PowerShell 技能连载 - 查找多个非法字符</a>
+            <a class="article-title" href="/2016/10/25/finding-multiple-illegal-characters-directory/">PowerShell 技能连载 - 查找多个非法字符</a>
         </h1>
     
 
@@ -1261,8 +1261,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/24/finding-multiple-illegal-characters-directory/">
-            <time datetime="2016-10-24T08:00:00.000Z" itemprop="datePublished">2016-10-24</time>
+        <a href="/2016/10/25/finding-multiple-illegal-characters-directory/">
+            <time datetime="2016-10-24T16:00:00.000Z" itemprop="datePublished">2016-10-25</time>
         </a>
     </div>
 
@@ -1291,7 +1291,7 @@ var _hmt = _hmt || [];
 <pre><code>Illegal characters found: _, ö, ß
 </code></pre></p>
             <p class="article-more-link">
-                <a href="/2016/10/24/finding-multiple-illegal-characters-directory/#more">查看更多</a>
+                <a href="/2016/10/25/finding-multiple-illegal-characters-directory/#more">查看更多</a>
             </p>
         
         </div>
@@ -1355,7 +1355,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/10/24/finding-multiple-illegal-characters-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/24/finding-multiple-illegal-characters-directory/">评论</a>
+        <a href="http://blog.vichamp.com/2016/10/25/finding-multiple-illegal-characters-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/25/finding-multiple-illegal-characters-directory/">评论</a>
     
 
         </footer>
@@ -1374,7 +1374,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 itemprop="name">
-            <a class="article-title" href="/2016/10/23/checking-email-addresses-and-other-text-for-illegal-chars-directory/">PowerShell 技能连载 - 检查电子邮件地址（或其它文本）中的非法字符</a>
+            <a class="article-title" href="/2016/10/24/checking-email-addresses-and-other-text-for-illegal-chars-directory/">PowerShell 技能连载 - 检查电子邮件地址（或其它文本）中的非法字符</a>
         </h1>
     
 
@@ -1383,8 +1383,8 @@ var _hmt = _hmt || [];
                         
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2016/10/23/checking-email-addresses-and-other-text-for-illegal-chars-directory/">
-            <time datetime="2016-10-23T08:00:00.000Z" itemprop="datePublished">2016-10-23</time>
+        <a href="/2016/10/24/checking-email-addresses-and-other-text-for-illegal-chars-directory/">
+            <time datetime="2016-10-23T16:00:00.000Z" itemprop="datePublished">2016-10-24</time>
         </a>
     </div>
 
@@ -1413,7 +1413,7 @@ var _hmt = _hmt || [];
 <pre><code>Invalid character in email address: ö
 </code></pre></p>
             <p class="article-more-link">
-                <a href="/2016/10/23/checking-email-addresses-and-other-text-for-illegal-chars-directory/#more">查看更多</a>
+                <a href="/2016/10/24/checking-email-addresses-and-other-text-for-illegal-chars-directory/#more">查看更多</a>
             </p>
         
         </div>
@@ -1477,7 +1477,7 @@ var _hmt = _hmt || [];
 
             
     
-        <a href="http://blog.vichamp.com/2016/10/23/checking-email-addresses-and-other-text-for-illegal-chars-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/23/checking-email-addresses-and-other-text-for-illegal-chars-directory/">评论</a>
+        <a href="http://blog.vichamp.com/2016/10/24/checking-email-addresses-and-other-text-for-illegal-chars-directory/#comments" class="article-comment-link ds-thread-count" data-thread-key="http://blog.vichamp.com/2016/10/24/checking-email-addresses-and-other-text-for-illegal-chars-directory/">评论</a>
     
 
         </footer>
@@ -1521,7 +1521,7 @@ var _hmt = _hmt || [];
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/21/invoking-a-script-block/" class="thumbnail">
+                            <a href="/2017/03/22/invoking-a-script-block/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1532,15 +1532,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/21/invoking-a-script-block/" class="title">PowerShell 技能连载 - 调用一个脚本块</a></p>
-                            <p class="item-date"><time datetime="2017-03-21T08:00:00.000Z" itemprop="datePublished">2017-03-21</time></p>
+                            <p class="item-title"><a href="/2017/03/22/invoking-a-script-block/" class="title">PowerShell 技能连载 - 调用一个脚本块</a></p>
+                            <p class="item-date"><time datetime="2017-03-21T16:00:00.000Z" itemprop="datePublished">2017-03-22</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/20/running-cmdlets-without-verb/" class="thumbnail">
+                            <a href="/2017/03/21/running-cmdlets-without-verb/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1551,15 +1551,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/20/running-cmdlets-without-verb/" class="title">PowerShell 技能连载 - 不带动词运行 Cmdlet</a></p>
-                            <p class="item-date"><time datetime="2017-03-20T08:00:00.000Z" itemprop="datePublished">2017-03-20</time></p>
+                            <p class="item-title"><a href="/2017/03/21/running-cmdlets-without-verb/" class="title">PowerShell 技能连载 - 不带动词运行 Cmdlet</a></p>
+                            <p class="item-date"><time datetime="2017-03-20T16:00:00.000Z" itemprop="datePublished">2017-03-21</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/19/texts-with-maximum-length-part-2/" class="thumbnail">
+                            <a href="/2017/03/20/texts-with-maximum-length-part-2/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1570,15 +1570,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/19/texts-with-maximum-length-part-2/" class="title">PowerShell 技能连载 - 限制文本的长度（第二部分）</a></p>
-                            <p class="item-date"><time datetime="2017-03-19T08:00:00.000Z" itemprop="datePublished">2017-03-19</time></p>
+                            <p class="item-title"><a href="/2017/03/20/texts-with-maximum-length-part-2/" class="title">PowerShell 技能连载 - 限制文本的长度（第二部分）</a></p>
+                            <p class="item-date"><time datetime="2017-03-19T16:00:00.000Z" itemprop="datePublished">2017-03-20</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/16/texts-with-maximum-length-part-1/" class="thumbnail">
+                            <a href="/2017/03/17/texts-with-maximum-length-part-1/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1589,15 +1589,15 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/16/texts-with-maximum-length-part-1/" class="title">PowerShell 技能连载 - 限制文本的长度（第一部分）</a></p>
-                            <p class="item-date"><time datetime="2017-03-16T08:00:00.000Z" itemprop="datePublished">2017-03-16</time></p>
+                            <p class="item-title"><a href="/2017/03/17/texts-with-maximum-length-part-1/" class="title">PowerShell 技能连载 - 限制文本的长度（第一部分）</a></p>
+                            <p class="item-date"><time datetime="2017-03-16T16:00:00.000Z" itemprop="datePublished">2017-03-17</time></p>
                         </div>
                     </li>
                 
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/03/15/finding-all-profiles-with-desktop/" class="thumbnail">
+                            <a href="/2017/03/16/finding-all-profiles-with-desktop/" class="thumbnail">
     
     
         <span class="thumbnail-image thumbnail-none"></span>
@@ -1608,8 +1608,8 @@ var _hmt = _hmt || [];
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/powershell/">powershell</a><i class="fa fa-angle-right"></i><a class="article-category-link" href="/categories/powershell/tip/">tip</a></p>
-                            <p class="item-title"><a href="/2017/03/15/finding-all-profiles-with-desktop/" class="title">PowerShell 技能连载 - 查找所有含桌面的配置文件</a></p>
-                            <p class="item-date"><time datetime="2017-03-15T08:00:00.000Z" itemprop="datePublished">2017-03-15</time></p>
+                            <p class="item-title"><a href="/2017/03/16/finding-all-profiles-with-desktop/" class="title">PowerShell 技能连载 - 查找所有含桌面的配置文件</a></p>
+                            <p class="item-date"><time datetime="2017-03-15T16:00:00.000Z" itemprop="datePublished">2017-03-16</time></p>
                         </div>
                     </li>
                 
@@ -1631,7 +1631,7 @@ var _hmt = _hmt || [];
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">20</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">一月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">十一月 2014</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">39</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07/">七月 2014</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06/">六月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05/">五月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">22</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">一月 2014</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">九月 2013</a><span class="archive-list-count">30</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/04/">四月 2012</a><span class="archive-list-count">1</span></li></ul>
         </div>
     </div>
 

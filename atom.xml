@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.vichamp.com/"/>
-  <updated>2017-04-05T12:07:00.032Z</updated>
+  <updated>2017-04-10T02:23:56.546Z</updated>
   <id>http://blog.vichamp.com/</id>
   
   <author>
@@ -16,11 +16,123 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>PowerShell 技能连载 - 处理长文件路径</title>
+    <link href="http://blog.vichamp.com/2017/04/07/dealing-with-long-file-paths/"/>
+    <id>http://blog.vichamp.com/2017/04/07/dealing-with-long-file-paths/</id>
+    <published>2017-04-06T16:00:00.000Z</published>
+    <updated>2017-04-10T02:23:56.546Z</updated>
+    
+    <content type="html"><![CDATA[<p>以前，当路径长于 256 字符时，Windows 文件系统有时会变得缓慢。在 PowerShell Gallery 有一个 module，增加了一系列 cmdlet，可以快速搜索文件系统，并且支持任意长度的路径。</p>
+<p>如果您使用 PowerShell 5 或安装了 PowerShellGet(<a href="http://www.powershellgallery.com" target="_blank" rel="external">www.powershellgallery.com</a>)，那么您可以从 PowerShell Gallery 中下载和安装 “PSAlphaFS” module：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Install-Module -Name PSAlphaFS -Scope CurrentUser</div></pre></td></tr></table></figure>
+<p>不幸的是，这些 cmdlet 似乎需要完整的管理员特权，而对普通用户会抛出异常。如果您是管理员，您可以以这种方式查找长路径的文件：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Get-LongChildItem -Path c:\windows -Recurse -File |</div><div class="line">    <span class="built_in">Where-Object</span> &#123; <span class="variable">$_</span>.FullName.Length <span class="nomarkup">-gt</span> <span class="number">250</span> &#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/dealing-with-long-file-paths" target="_blank" rel="external">Dealing with Long File Paths</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Dealing with Long File Paths
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 检测字符代码 0</title>
+    <link href="http://blog.vichamp.com/2017/04/06/detecting-character-code-0/"/>
+    <id>http://blog.vichamp.com/2017/04/06/detecting-character-code-0/</id>
+    <published>2017-04-05T16:00:00.000Z</published>
+    <updated>2017-04-10T02:23:56.542Z</updated>
+    
+    <content type="html"><![CDATA[<p>有些时候，字符串适用 “<code>\0</code>“ 作为分隔符。不像其它大多数分隔符，这个分隔符并不显示在文本输出中，但仍然可以用于分割文本。</p>
+<p>PowerShell 可以处理包含字符代码 0 的字符串。它用反斜杠后跟着数字 0 来表示。请注意文本需要放在双引号之内，才能将反斜杠序列转换为字节 0。</p>
+<p>以下是一个演示如何分割 <code>\0</code> 分割的文本的例子：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># create a sample text</span></div><div class="line"><span class="variable">$text</span> = <span class="string">"Part 1`0Part 2`0Part 3"</span></div><div class="line"><span class="comment"># delimiter does not show in output...</span></div><div class="line"><span class="variable">$text</span> </div><div class="line"><span class="comment"># ...but can be used to split:</span></div><div class="line"><span class="variable">$text</span> -split <span class="string">"`0"</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/detecting-character-code-0" target="_blank" rel="external">Detecting Character Code 0</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Detecting Character Code 0
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 自动定义函数的别名</title>
+    <link href="http://blog.vichamp.com/2017/04/05/auto-declaring-alias-names-for-functions/"/>
+    <id>http://blog.vichamp.com/2017/04/05/auto-declaring-alias-names-for-functions/</id>
+    <published>2017-04-04T16:00:00.000Z</published>
+    <updated>2017-04-10T02:23:56.538Z</updated>
+    
+    <content type="html"><![CDATA[<p>您也许知道 PowerShell 支持命令的别名。但是您是否知道也可以在函数定义内部为 PowerShell 函数定义别名（PowerShell 4 引入的功能）呢？让我们来看看：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> Get-AlcoholicBeverage</div><div class="line">&#123;</div><div class="line">    [Alias(<span class="string">'Beer'</span>,<span class="string">'Drink'</span>)]</div><div class="line">    [CmdletBinding()]</div><div class="line">    <span class="keyword">param</span>()</div><div class="line"></div><div class="line">    <span class="string">"Here is your beer."</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个函数的“正式”名称是 <code>Get-AlcoholicBeverage</code>，但是这个函数也可以通过 “<code>Beer</code>“ 和 “<code>Drink</code>“ 别名来引用。在函数定义时，PowerShell 自动增加了这些别名：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CommandType     Name</div><div class="line">-----------     ----</div><div class="line">Alias           Beer -&gt; Get-AlcoholicBeverage</div><div class="line">Alias           Drink -&gt; Get-AlcoholicBeverage</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/auto-declaring-alias-names-for-functions" target="_blank" rel="external">Auto-Declaring Alias Names for Functions</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Auto-Declaring Alias Names for Functions
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
     <title>PowerShell 技能连载 - 检查操作系统版本</title>
     <link href="http://blog.vichamp.com/2017/04/04/checking-operating-system-version/"/>
     <id>http://blog.vichamp.com/2017/04/04/checking-operating-system-version/</id>
     <published>2017-04-03T16:00:00.000Z</published>
-    <updated>2017-04-05T12:07:00.032Z</updated>
+    <updated>2017-04-10T02:23:56.534Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个简单快速的检查操作系统版本的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; [Environment]::OSVersion</div><div class="line"></div><div class="line"></div><div class="line">Platform ServicePack Version      VersionString                    </div><div class="line">-------- ----------- -------      -------------                    </div><div class="line">    Win32NT             <span class="number">10.0</span>.<span class="number">14393.0</span> Microsoft Windows NT <span class="number">10.0</span>.<span class="number">14393.0</span></div></pre></td></tr></table></figure>
@@ -57,7 +169,7 @@
     <link href="http://blog.vichamp.com/2017/04/03/comparing-against-null/"/>
     <id>http://blog.vichamp.com/2017/04/03/comparing-against-null/</id>
     <published>2017-04-02T16:00:00.000Z</published>
-    <updated>2017-04-05T12:07:00.028Z</updated>
+    <updated>2017-04-10T02:23:56.530Z</updated>
     
     <content type="html"><![CDATA[<p>如果您想检查一个变量是否为 <code>$Null</code>（空），请记住始终将 <code>$null</code> 放在比较运算符的左边。大多数情况下，顺序不重要：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$a</span> = <span class="literal">$null</span></div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$b</span> = <span class="number">12</span></div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$a</span> <span class="nomarkup">-eq</span> <span class="literal">$null</span></div><div class="line">True</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$b</span> <span class="nomarkup">-eq</span> <span class="literal">$null</span></div><div class="line">False</div></pre></td></tr></table></figure>
@@ -98,7 +210,7 @@
     <link href="http://blog.vichamp.com/2017/03/31/examining-certificate-details/"/>
     <id>http://blog.vichamp.com/2017/03/31/examining-certificate-details/</id>
     <published>2017-03-30T16:00:00.000Z</published>
-    <updated>2017-04-05T12:07:00.024Z</updated>
+    <updated>2017-04-10T02:23:56.526Z</updated>
     
     <content type="html"><![CDATA[<p>如果您想检查和查看一个证书文件的详细信息而不需要将它导入证书存储空间，以下是一个简单的例子：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># replace path with actual path to CER file </span></div><div class="line"><span class="variable">$Path</span> = <span class="string">'C:\Path\To\CertificateFile\test.cer'</span></div><div class="line"></div><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.Security</div><div class="line">[Security.Cryptography.X509Certificates.X509Certificate2]<span class="variable">$cert</span> = [Security.Cryptography.X509Certificates.X509Certificate2]::CreateFromCertFile(<span class="variable">$Path</span>)</div><div class="line"></div><div class="line"><span class="variable">$cert</span> | <span class="built_in">Select-Object</span> -Property *</div></pre></td></tr></table></figure>
@@ -135,7 +247,7 @@
     <link href="http://blog.vichamp.com/2017/03/30/exporting-activedirectory-module/"/>
     <id>http://blog.vichamp.com/2017/03/30/exporting-activedirectory-module/</id>
     <published>2017-03-29T16:00:00.000Z</published>
-    <updated>2017-04-05T12:07:00.020Z</updated>
+    <updated>2017-04-10T02:23:56.522Z</updated>
     
     <content type="html"><![CDATA[<p>要在 PowerShell 中管理 Active Directory 的用户和计算机，您需要 Microsoft 提供的免费的 RSAT 工具中的 Active Directory 模块。</p>
 <p>假设您是一个域管理员并且拥有远程管理域控制器的权限，您也可以从 DC 中导出 ActiveDirectory 模块，并且可以通过隐式远程操作在本地使用它。</p>
@@ -174,7 +286,7 @@
     <link href="http://blog.vichamp.com/2017/03/29/managing-ntfs-permissions1/"/>
     <id>http://blog.vichamp.com/2017/03/29/managing-ntfs-permissions1/</id>
     <published>2017-03-28T16:00:00.000Z</published>
-    <updated>2017-04-05T12:07:00.015Z</updated>
+    <updated>2017-04-10T02:23:56.516Z</updated>
     
     <content type="html"><![CDATA[<p>由于没有内置的管理 NTFS 权限的 cmdlet，所以有越来越多的开源 PowerShell module 实现这个功能。一个有前途的 module 是由 Raimund Andree，一个德国的 Microsoft 工程师写的。他也将在即将到来的 PowerShell 欧洲会议 (<a href="http://www.psconf.eu" target="_blank" rel="external">www.psconf.eu</a>) 中演讲。</p>
 <p>如果您使用的是 PowerShell 5 或已经安装了 PowerShellGet (<a href="http://www.powershellgallery.com" target="_blank" rel="external">www.powershellgallery.com</a>)，以下是从 PowerShell Gallery 下载并安装 “NTFSSecurity” module 的方法：</p>
@@ -215,7 +327,7 @@
     <link href="http://blog.vichamp.com/2017/03/28/determine-if-array-contains-value-using-wildcards/"/>
     <id>http://blog.vichamp.com/2017/03/28/determine-if-array-contains-value-using-wildcards/</id>
     <published>2017-03-27T16:00:00.000Z</published>
-    <updated>2017-04-05T12:07:00.000Z</updated>
+    <updated>2017-04-10T02:23:56.511Z</updated>
     
     <content type="html"><![CDATA[<p>当您想了解一个数组是否包含某个指定的元素，PowerShell 提供了 <code>-contains</code> 操作符。然而这个操作符不支持通配符，所以您只能使用精确匹配。</p>
 <p>以下是一个帮助您使用通配符过滤数组元素的解决方法：</p>
@@ -251,7 +363,7 @@
     <link href="http://blog.vichamp.com/2017/03/27/working-with-ldap-and-dates/"/>
     <id>http://blog.vichamp.com/2017/03/27/working-with-ldap-and-dates/</id>
     <published>2017-03-26T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.995Z</updated>
+    <updated>2017-04-10T02:23:56.505Z</updated>
     
     <content type="html"><![CDATA[<p>LDAP 过滤器是一个快速和强大的从 Active Directory 中获取信息的方法。然而，LDAP 过滤器使用的是一个很底层的日期和时间格式。它基本上是一个很大的整形数。幸运的是 PowerShell 包含多种将实际 DateTime 对象转换为这些数字，以及相反操作的方法。</p>
 <p>以下是一个使用 ActiveDirectory 模块中 <code>Get-ADUser</code> 方法来查找所有近期更改了密码的用户的示例代码。如果您没有这个 module，请从 Microsoft 下载免费的 RSAT 工具。</p>
@@ -287,7 +399,7 @@
     <link href="http://blog.vichamp.com/2017/03/24/using-a-powershell-parameter-validator/"/>
     <id>http://blog.vichamp.com/2017/03/24/using-a-powershell-parameter-validator/</id>
     <published>2017-03-23T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.989Z</updated>
+    <updated>2017-04-10T02:23:56.498Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 的函数参数支持 <code>ValidateScript</code> 属性，可以关联到一段 PowerShell 代码。当该参数接收到一个值时，该代码将会被调用，并且返回 <code>$true</code> 或 <code>$false</code>。如果该代码返回 <code>$false</code> 则该参数被拒绝。</p>
 <p>以下是一个仅接受 Windows 文件夹中存在的文件的文件名的例子：</p>
@@ -325,7 +437,7 @@
     <link href="http://blog.vichamp.com/2017/03/23/casting-data-with-culture/"/>
     <id>http://blog.vichamp.com/2017/03/23/casting-data-with-culture/</id>
     <published>2017-03-22T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.987Z</updated>
+    <updated>2017-04-10T02:23:56.490Z</updated>
     
     <content type="html"><![CDATA[<p>当转换数据（将它转换为不同的数据类型）时，PowerShell 支持两种不同的方式方式。</p>
 <p>以下是一个例子：</p>
@@ -363,7 +475,7 @@
     <link href="http://blog.vichamp.com/2017/03/22/invoking-a-script-block/"/>
     <id>http://blog.vichamp.com/2017/03/22/invoking-a-script-block/</id>
     <published>2017-03-21T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.980Z</updated>
+    <updated>2017-04-10T02:23:56.482Z</updated>
     
     <content type="html"><![CDATA[<p>可以通过调用操作符，例如 “<code>&amp;</code>“、”<code>.</code>“ 或调用 <code>Invoke()</code> 方法调用在一个脚本块中的代码。</p>
 <p>一个区别是当有多于一个结果时的输出：调用操作符返回一个扁平的对象数组，而 <code>Invoke()</code> 返回一个集合：</p>
@@ -402,7 +514,7 @@
     <link href="http://blog.vichamp.com/2017/03/21/running-cmdlets-without-verb/"/>
     <id>http://blog.vichamp.com/2017/03/21/running-cmdlets-without-verb/</id>
     <published>2017-03-20T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.966Z</updated>
+    <updated>2017-04-10T02:23:56.478Z</updated>
     
     <content type="html"><![CDATA[<p>这是从 PowerShell 1.0 开始就具有的一个特性：调用动词为 “get” 的 cmdlet 可以省略动词。所以调用 “<code>Get-Service</code>“ 时您可以仅执行 “<code>Service</code>“；调用 “<code>Get-Date</code>“ 时可以仅执行 “<code>Date</code>“。</p>
 <p>以下不是别名，甚至 PowerShell 引擎并不知道为什么它能工作。请试试这些代码：</p>
@@ -439,7 +551,7 @@
     <link href="http://blog.vichamp.com/2017/03/20/texts-with-maximum-length-part-2/"/>
     <id>http://blog.vichamp.com/2017/03/20/texts-with-maximum-length-part-2/</id>
     <published>2017-03-19T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.961Z</updated>
+    <updated>2017-04-10T02:23:56.474Z</updated>
     
     <content type="html"><![CDATA[<p>以下是确保一段文本不超过指定长度的另一种策略。和前一个技能不同的是，当文本长度小于最大长度时，这段代码不会补齐空格：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$text</span> = <span class="string">'this'</span></div><div class="line"><span class="variable">$MaxLength</span> = <span class="number">10</span></div><div class="line"><span class="variable">$CutOff</span> = [Math]::Min(<span class="variable">$MaxLength</span>, <span class="variable">$text</span>.Length)</div><div class="line"><span class="variable">$text</span>.Substring(<span class="number">0</span>,<span class="variable">$CutOff</span>)</div></pre></td></tr></table></figure>
@@ -475,7 +587,7 @@
     <link href="http://blog.vichamp.com/2017/03/17/texts-with-maximum-length-part-1/"/>
     <id>http://blog.vichamp.com/2017/03/17/texts-with-maximum-length-part-1/</id>
     <published>2017-03-16T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.954Z</updated>
+    <updated>2017-04-10T02:23:56.470Z</updated>
     
     <content type="html"><![CDATA[<p>如果您想将一个文本的长度限制在某一个长度，以下是一个简单的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$text</span> = <span class="string">'this is a long text'</span></div><div class="line"><span class="variable">$MaxLength</span> = <span class="number">10</span></div><div class="line"></div><div class="line"><span class="variable">$text</span>.PadRight(<span class="variable">$MaxLength</span>).Substring(<span class="number">0</span>,<span class="variable">$MaxLength</span>)</div></pre></td></tr></table></figure>
@@ -511,7 +623,7 @@
     <link href="http://blog.vichamp.com/2017/03/16/finding-all-profiles-with-desktop/"/>
     <id>http://blog.vichamp.com/2017/03/16/finding-all-profiles-with-desktop/</id>
     <published>2017-03-15T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.947Z</updated>
+    <updated>2017-04-10T02:23:56.470Z</updated>
     
     <content type="html"><![CDATA[<p>这一行代码能够列出所有本地用户配置文件中的桌面——请确保以管理员身份运行这行代码才能查看其他人的配置文件：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Resolve-Path</span> -Path C:\users\*\Desktop -ErrorAction SilentlyContinue</div></pre></td></tr></table></figure>
@@ -549,7 +661,7 @@
     <link href="http://blog.vichamp.com/2017/03/15/where-object-and-where/"/>
     <id>http://blog.vichamp.com/2017/03/15/where-object-and-where/</id>
     <published>2017-03-14T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.941Z</updated>
+    <updated>2017-04-10T02:23:56.462Z</updated>
     
     <content type="html"><![CDATA[<p>从 PowerShell 4 开始，当您不想使用管道的时候，可以使用 <code>Where()</code> 和 <code>ForEach()</code> 方法来代替 <code>Where-Object</code> 和 <code>ForEach-Object</code>。</p>
 <p>所以如果您已经将所有数据加载到一个变量中，那么非流式操作会更高效：</p>
@@ -589,7 +701,7 @@
     <link href="http://blog.vichamp.com/2017/03/14/creating-object-arrays-on-the-fly/"/>
     <id>http://blog.vichamp.com/2017/03/14/creating-object-arrays-on-the-fly/</id>
     <published>2017-03-13T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.935Z</updated>
+    <updated>2017-04-10T02:23:56.458Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个用内置的 CSV 处理器生成对象数组的代码实例：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$csv</span> = <span class="string">@'</span></div><div class="line">PC,Date</div><div class="line">PC82012,2017-02-28</div><div class="line">PC82038,2017-02-28</div><div class="line">PC83073,2017-02-28</div><div class="line">PC84004,2017-02-28</div><div class="line">PC84009,2017-02-28</div><div class="line">PC84015,2017-02-28</div><div class="line">PC90435,2017-02-28</div><div class="line">'@</div><div class="line"></div><div class="line"><span class="variable">$data</span> = <span class="variable">$csv</span> | <span class="built_in">ConvertFrom-Csv</span></div><div class="line"></div><div class="line"><span class="variable">$data</span></div><div class="line"><span class="variable">$data</span> | <span class="built_in">Out-GridView</span></div></pre></td></tr></table></figure>
@@ -625,7 +737,7 @@
     <link href="http://blog.vichamp.com/2017/03/13/exploring-type-accelerators/"/>
     <id>http://blog.vichamp.com/2017/03/13/exploring-type-accelerators/</id>
     <published>2017-03-12T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.897Z</updated>
+    <updated>2017-04-10T02:23:56.454Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 使用了大量所谓类型加速器来简化过长的 .NET 类型名。例如 “System.DirectoryServices.DirectoryEntry” 可以简化为 “ADSI”。</p>
 <p>当您需要查询一个类型的完整名称时，您可以获取到实际的完整 .NET 类型名：</p>
@@ -640,132 +752,6 @@
     <summary type="html">
     
       PowerTip of the Day - Exploring Type Accelerators
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 危险的临时文件！</title>
-    <link href="http://blog.vichamp.com/2017/03/10/dangerous-temp-files/"/>
-    <id>http://blog.vichamp.com/2017/03/10/dangerous-temp-files/</id>
-    <published>2017-03-09T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.895Z</updated>
-    
-    <content type="html"><![CDATA[<p>内部的系统功能往往十分有用，但请确保真正了解它们的功能。</p>
-<p>一个特别常见的系统方法叫做 <code>GetTempFileName()</code> ，能够创建临时文件名。而当您进一步观察的时候，您会发现它不仅创建临时文件名，而且还创建了临时文件：</p>
-<pre><code>$file = [System.IO.Path]::GetTempFileName()
-Test-Path -Path $file
-</code></pre><p>所以如果在脚本中只是使用这个方法来创建临时文件名的话，会留下一大堆孤立的文件。</p>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/dangerous-temp-files" target="_blank" rel="external">Dangerous Temp Files!</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Dangerous Temp Files!
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 探索对象</title>
-    <link href="http://blog.vichamp.com/2017/03/09/explore-objects/"/>
-    <id>http://blog.vichamp.com/2017/03/09/explore-objects/</id>
-    <published>2017-03-08T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.891Z</updated>
-    
-    <content type="html"><![CDATA[<p>在 PowerShell 中，一切都是用对象描述。以下是一个检查任意对象并将它的成员以文本的方式复制到剪贴板的单行代码：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="string">"Hello"</span> | </div><div class="line">  <span class="built_in">Get-Member</span> |</div><div class="line">  <span class="built_in">Format-Table</span> -AutoSize -Wrap |</div><div class="line">  <span class="built_in">Out-String</span> -Width <span class="number">150</span> |</div><div class="line">  clip.exe</div></pre></td></tr></table></figure>
-<p>只需要将 “Hello” 替换成任何变量或命令，然后看看复制了什么到剪贴板中。您可以将信息粘贴到文本编辑器或文字处理器中，并将它打印出来或转成 PDF 备用。</p>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/explore-objects" target="_blank" rel="external">Explore Objects</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Explore Objects
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 管理比特标志位（第四部分）</title>
-    <link href="http://blog.vichamp.com/2017/03/08/managing-bit-flags-part-4/"/>
-    <id>http://blog.vichamp.com/2017/03/08/managing-bit-flags-part-4/</id>
-    <published>2017-03-07T16:00:00.000Z</published>
-    <updated>2017-04-05T12:06:59.886Z</updated>
-    
-    <content type="html"><![CDATA[<p>在 PowerShell 5 中，对枚举的新支持特性使得处理比特位比您在前面的 PowerShell 技能中看到的简单得多。现在设置或清除比特位不再需要冗长的逻辑操作符。</p>
-<p>我们先定义一个枚举类型，这样更好管理十进制数：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 5</span></div><div class="line"></div><div class="line">[Flags()]</div><div class="line">enum GardenPartyItems</div><div class="line">&#123;</div><div class="line">    Chair = <span class="number">0</span></div><div class="line">    Table = <span class="number">1</span></div><div class="line">    Barbecue = <span class="number">2</span></div><div class="line">    Fridge = <span class="number">4</span></div><div class="line">    Candle = <span class="number">8</span></div><div class="line">    Knife = <span class="number">16</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="variable">$decimal</span> = <span class="number">11</span></div><div class="line">[GardenPartyItems]<span class="variable">$flags</span> = <span class="variable">$decimal</span></div><div class="line"><span class="variable">$flags</span></div></pre></td></tr></table></figure>
-<p>现在，十进制数的比特位可以很容易地转化为 GardenPartyItem 的列表：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt;  [GardenPartyItems]<span class="number">11</span></div><div class="line">Table, Barbecue, Candle</div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
-<p><strong>注意</strong>：将十进制数转换为枚举型时，请确保枚举型中定义了所有的比特。如果十进制数太大，包含枚举型之外的比特时，转换会失败。</p>
-<p>要增加一个新的标志位，请试试以下的代码：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> += [GardenPartyItems]::Knife</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle, Knife</div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
-<p>要移除一个标志位，请试试以下代码：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle, Knife</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> -= [GardenPartyItems]::Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Knife</div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
-<p>然而，实际上并没有看起来这么简单。当移除一个已有的标志位，没有问题。但移除一个没有置位的标志位，会把比特值搞乱：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> -= [GardenPartyItems]::Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> -= [GardenPartyItems]::Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">-<span class="number">5</span></div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
-<p>所以 PowerShell 在自动处理二进制算法方面明显还不够智能。要安全地使用该功能，您还是要用二进制操作符。要移除标志位，请使用 <code>-band</code> 和 <code>-bnot</code>：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> = <span class="variable">$flags</span> -band -bnot [GardenPartyItems]::Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> = <span class="variable">$flags</span> -band -bnot [GardenPartyItems]::Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue</div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
-<p>要设置标志位，请使用 <code>-bor</code>：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> = <span class="variable">$flags</span> -bor [GardenPartyItems]::Knife</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle, Knife</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span> = <span class="variable">$flags</span> -bor [GardenPartyItems]::Knife</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$flags</span></div><div class="line">Table, Barbecue, Candle, Knife</div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
-<p>在所有这些操作中，实际上是在操作一个十进制数：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; [Int]<span class="variable">$flags</span></div><div class="line"><span class="number">19</span></div></pre></td></tr></table></figure>
-<p>相当棒，对吧？</p>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/managing-bit-flags-part-4" target="_blank" rel="external">Managing Bit Flags (Part 4)</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Managing Bit Flags (Part 4)
     
     </summary>
     

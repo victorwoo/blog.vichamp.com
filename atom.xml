@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.vichamp.com/"/>
-  <updated>2017-04-27T06:32:01.495Z</updated>
+  <updated>2017-04-27T10:38:06.382Z</updated>
   <id>http://blog.vichamp.com/</id>
   
   <author>
@@ -16,11 +16,84 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>PowerShell 技能连载 - 评估 Exit Code（也叫做 Error Level – 第三部分）</title>
+    <link href="http://blog.vichamp.com/2017/04/26/evaluating-exit-codes-aka-error-level-part-3/"/>
+    <id>http://blog.vichamp.com/2017/04/26/evaluating-exit-codes-aka-error-level-part-3/</id>
+    <published>2017-04-25T16:00:00.000Z</published>
+    <updated>2017-04-27T10:38:06.382Z</updated>
+    
+    <content type="html"><![CDATA[<p>在 PowerShell 中运行控制台应用程序的迷你系列的第三部分中，有一个小课题：如何独立于 PowerShell 运行一个控制台应用程序，并且当它执行完成后得到通知，并且获取它的 exit code？</p>
+<p>以下是实现方法：以下代码在一个独立（隐藏）的窗口中运行 ping.exe。PowerShell 继续运行并且可以执行任何其它操作。在这个例子中，它在 ping.exe 正忙于 ping 一个主机名的同时打出一系列“点”号。</p>
+<p>当 exe 执行完成时，这段代码能获取进程的 ExitCode 信息：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$hostname</span> = <span class="string">'powershellmagazine.com'</span></div><div class="line"><span class="comment"># run the console-based application ASYNCHRONOUSLY in its own</span></div><div class="line"><span class="comment"># window (PowerShell continues) and return the</span></div><div class="line"><span class="comment"># process object (-PassThru)</span></div><div class="line"><span class="comment"># Hide the new window (you can also show it if you want)</span></div><div class="line"><span class="variable">$process</span> = <span class="built_in">Start-Process</span> -FilePath ping -ArgumentList <span class="string">"<span class="variable">$hostname</span> -n 4 -w 2000"</span> -WindowStyle Hidden -PassThru</div><div class="line"></div><div class="line"><span class="comment"># wait for the process to complete, and meanwhile</span></div><div class="line"><span class="comment"># display some dots to indicate progress:</span></div><div class="line"><span class="keyword">do</span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">Write-Host</span> <span class="string">'.'</span> -NoNewline</div><div class="line">    <span class="built_in">Start-Sleep</span> -Milliseconds <span class="number">300</span></div><div class="line">&#125; <span class="keyword">until</span> (<span class="variable">$process</span>.HasExited)</div><div class="line"><span class="built_in">Write-Host</span></div><div class="line"></div><div class="line"><span class="comment"># the Error Level information is then found in ExitCode:</span></div><div class="line"><span class="variable">$IsOnline</span> = <span class="variable">$process</span>.ExitCode <span class="nomarkup">-eq</span> <span class="number">0</span></div><div class="line"><span class="variable">$IsOnline</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/evaluating-exit-codes-aka-error-level-part-3" target="_blank" rel="external">Evaluating Exit Codes (aka Error Level – Part 3)</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Evaluating Exit Codes (aka Error Level – Part 3)
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 评估 Exit Code（也叫做 Error Level – 第二部分）</title>
+    <link href="http://blog.vichamp.com/2017/04/25/evaluating-exit-codes-aka-error-level-part-2/"/>
+    <id>http://blog.vichamp.com/2017/04/25/evaluating-exit-codes-aka-error-level-part-2/</id>
+    <published>2017-04-24T16:00:00.000Z</published>
+    <updated>2017-04-27T10:38:06.377Z</updated>
+    
+    <content type="html"><![CDATA[<p>当您直接启动一个控制台应用程序时，PowerShell 会返回它的 exit code（也叫做 Error Level），并存储在 <code>$LASTEXITCODE</code> 变量中。然而，如何获取通过 <code>Start-Process</code> 启动的控制台应用程序的 exit code 呢？</p>
+<p>以下是方法：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$hostname</span> = <span class="string">'powershellmagazine.com'</span></div><div class="line"><span class="comment"># run the console-based application synchronously in the PowerShell window, </span></div><div class="line"><span class="comment"># and return the process object (-PassThru)</span></div><div class="line"><span class="variable">$process</span> = <span class="built_in">Start-Process</span> -FilePath ping -ArgumentList <span class="string">"<span class="variable">$hostname</span> -n 2 -w 2000"</span> -Wait -NoNewWindow -PassThru</div><div class="line"></div><div class="line"><span class="comment"># the Error Level information is then found in ExitCode:</span></div><div class="line"><span class="variable">$IsOnline</span> = <span class="variable">$process</span>.ExitCode <span class="nomarkup">-eq</span> <span class="number">0</span></div><div class="line"><span class="variable">$IsOnline</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/evaluating-exit-codes-aka-error-level-part-2" target="_blank" rel="external">Evaluating Exit Codes (aka Error Level – Part 2)</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Evaluating Exit Codes (aka Error Level – Part 2)
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
     <title>PowerShell 技能连载 - 评估 Exit Code（也叫做 Error Level – 第一部分）</title>
     <link href="http://blog.vichamp.com/2017/04/24/evaluating-exit-codes-aka-error-level-part-1/"/>
     <id>http://blog.vichamp.com/2017/04/24/evaluating-exit-codes-aka-error-level-part-1/</id>
     <published>2017-04-23T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.495Z</updated>
+    <updated>2017-04-27T10:38:06.373Z</updated>
     
     <content type="html"><![CDATA[<p>当运行一个控制台应用程序时，它通常会返回一个数字型的 exit code。该 exit code 的含义取决于控制台应用程序，要查询应用程序才能理解 exit code 的含义。PowerShell 也会将 exit code 传递给用户。它通过 <code>$LASTEXITCODE</code> 体现。</p>
 <p>以下是一个使用 ping.exe 来测试网络响应的例子：</p>
@@ -56,7 +129,7 @@
     <link href="http://blog.vichamp.com/2017/04/21/ejecting-cd-drive/"/>
     <id>http://blog.vichamp.com/2017/04/21/ejecting-cd-drive/</id>
     <published>2017-04-20T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.490Z</updated>
+    <updated>2017-04-27T10:38:06.366Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个用 WMI 弹出 CD 驱动器的小函数。它首先向 WMI 请求所有的 CD 驱动器，然后使用 explorer 对象模型导航到该驱动器并调用它的 “Eject” 上下文菜单项。</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> Eject-CD</div><div class="line">&#123;</div><div class="line">  <span class="variable">$drives</span> = <span class="built_in">Get-WmiObject</span> Win32_Volume -Filter <span class="string">"DriveType=5"</span></div><div class="line">  <span class="keyword">if</span> (<span class="variable">$drives</span> <span class="nomarkup">-eq</span> <span class="literal">$null</span>)</div><div class="line">  &#123;</div><div class="line">    <span class="built_in">Write-Warning</span> <span class="string">"Your computer has no CD drives to eject."</span></div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="variable">$drives</span> | <span class="built_in">ForEach-Object</span> &#123;</div><div class="line">    (<span class="built_in">New-Object</span> -ComObject Shell.Application).Namespace(<span class="number">17</span>).ParseName(<span class="variable">$_</span>.Name).InvokeVerb(<span class="string">"Eject"</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Eject-CD</div></pre></td></tr></table></figure>
@@ -91,7 +164,7 @@
     <link href="http://blog.vichamp.com/2017/04/20/identifying-csv-delimiter/"/>
     <id>http://blog.vichamp.com/2017/04/20/identifying-csv-delimiter/</id>
     <published>2017-04-19T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.485Z</updated>
+    <updated>2017-04-27T10:38:06.355Z</updated>
     
     <content type="html"><![CDATA[<p>当使用 <code>Import-Csv</code> 导入一个 CSV 文件，需要指定一个分隔符。如果用错了，显然会导入失败。您需要事先知道 CSV 文件使用的分隔符。</p>
 <p>以下是一个简单的实践，展示了如何判断一个给定的 CSV 文件的分隔符：</p>
@@ -129,7 +202,7 @@
     <link href="http://blog.vichamp.com/2017/04/19/identifying-duplicate-csv-headers-part-2/"/>
     <id>http://blog.vichamp.com/2017/04/19/identifying-duplicate-csv-headers-part-2/</id>
     <published>2017-04-18T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.480Z</updated>
+    <updated>2017-04-27T10:38:06.348Z</updated>
     
     <content type="html"><![CDATA[<p>当一个 CSV 文件包含重复的表头时，它无法被导入。在前一个技能中我们掩饰了如何检测一个 CSV 文件中重复的表头。以下是一个自动更正重复项的实践。</p>
 <p>第一步，您需要一个包含重复表头的 CSV 文件。例如在德文系统中，您可以这样创建一个文件：</p>
@@ -175,7 +248,7 @@
     <link href="http://blog.vichamp.com/2017/04/18/identifying-duplicate-csv-headers-part-1/"/>
     <id>http://blog.vichamp.com/2017/04/18/identifying-duplicate-csv-headers-part-1/</id>
     <published>2017-04-17T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.474Z</updated>
+    <updated>2017-04-27T10:38:06.345Z</updated>
     
     <content type="html"><![CDATA[<p>CSV 文件只是文本文件，所以可以很容易地提取它的第一行并检查它的表头。如果您手头没有一个 CSV 文件，这行代码可以快速帮您创建一个：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="built_in">Get-Process</span> | <span class="built_in">Export-Csv</span> -Path <span class="variable">$env:temp</span>\test.csv -NoTypeInformation -Encoding UTF8 -UseCulture</div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
@@ -219,7 +292,7 @@
     <link href="http://blog.vichamp.com/2017/04/17/serializing-date-and-time-in-a-culture-invariant-way/"/>
     <id>http://blog.vichamp.com/2017/04/17/serializing-date-and-time-in-a-culture-invariant-way/</id>
     <published>2017-04-16T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.469Z</updated>
+    <updated>2017-04-27T10:38:06.336Z</updated>
     
     <content type="html"><![CDATA[<p>当您保存日期和时间到文本中时，例如导出到 CSV 时，或创建文本报告时，<code>DateTime</code> 对象将会按照您的区域设置转换为相应的日期和时间格式：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$date</span> = <span class="built_in">Get-Date</span> -Date <span class="string">'2017-02-03 19:22:11'</span></div><div class="line"></div><div class="line">PS&gt; <span class="string">"<span class="variable">$date</span>"</span></div><div class="line"><span class="number">02</span>/<span class="number">03</span>/<span class="number">2017</span> <span class="number">19</span>:<span class="number">22</span>:<span class="number">11</span></div><div class="line"></div><div class="line">PS&gt; <span class="variable">$date</span>.ToString()</div><div class="line"><span class="number">03.02</span>.<span class="number">2017</span> <span class="number">19</span>:<span class="number">22</span>:<span class="number">11</span></div><div class="line"></div><div class="line">PS&gt; <span class="built_in">Get-Date</span> -Date <span class="variable">$date</span> -DisplayHint DateTime</div><div class="line"></div><div class="line">Freitag, <span class="number">3</span>. Februar <span class="number">2017</span> <span class="number">19</span>:<span class="number">22</span>:<span class="number">11</span></div></pre></td></tr></table></figure>
@@ -259,7 +332,7 @@
     <link href="http://blog.vichamp.com/2017/04/14/converting-ticks-to-date-and-time-part-2/"/>
     <id>http://blog.vichamp.com/2017/04/14/converting-ticks-to-date-and-time-part-2/</id>
     <published>2017-04-13T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.465Z</updated>
+    <updated>2017-04-27T10:38:06.334Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们解释了如何将用时钟周期数表达的日期时间转换为真实的 <code>DateTime</code> 格式。然而，现实中有两种不同的时钟周期格式，以下是如何转换数字型日期时间信息的概述：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$date</span> = <span class="built_in">Get-Date</span> -Date <span class="string">'2017-02-03 19:22:11'</span></div><div class="line">PS&gt; <span class="variable">$ticks</span> = <span class="variable">$date</span>.Ticks</div><div class="line">PS&gt; <span class="variable">$ticks</span></div><div class="line"><span class="number">636217465310000000</span></div><div class="line"></div><div class="line">PS&gt; [DateTime]<span class="variable">$ticks</span></div><div class="line">Friday, February <span class="number">3</span>, <span class="number">2017</span> <span class="number">19</span>:<span class="number">22</span>:<span class="number">11</span></div><div class="line"></div><div class="line">PS&gt; [DateTime]::FromBinary(<span class="variable">$ticks</span>)</div><div class="line">Friday, February <span class="number">3</span>, <span class="number">2017</span> <span class="number">19</span>:<span class="number">22</span>:<span class="number">11</span></div><div class="line"></div><div class="line">PS&gt; [DateTime]::FromFileTime(<span class="variable">$ticks</span>)</div><div class="line">Friday, February <span class="number">3</span>, <span class="number">3617</span> <span class="number">20</span>:<span class="number">22</span>:<span class="number">11</span></div><div class="line"></div><div class="line">PS&gt; [DateTime]::FromFileTimeUtc(<span class="variable">$ticks</span>)</div><div class="line">Friday, February <span class="number">3</span>, <span class="number">3617</span> <span class="number">19</span>:<span class="number">22</span>:<span class="number">11</span></div></pre></td></tr></table></figure>
@@ -298,7 +371,7 @@
     <link href="http://blog.vichamp.com/2017/04/13/converting-ticks-to-date-and-time-part-1/"/>
     <id>http://blog.vichamp.com/2017/04/13/converting-ticks-to-date-and-time-part-1/</id>
     <published>2017-04-12T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.464Z</updated>
+    <updated>2017-04-27T10:38:06.324Z</updated>
     
     <content type="html"><![CDATA[<p>有时候您可能会遇到一些奇怪的日期和时间格式，它们可能用的是类似这样的 64 位 integer 数值：636264671350358729。</p>
 <p>如果您想将这样的“时钟周期”（Windows 中最小的时间片），只需要将数字转换为 <code>DateTime</code> 类型：</p>
@@ -337,7 +410,7 @@
     <link href="http://blog.vichamp.com/2017/04/12/directly-importing-certificates-part-2/"/>
     <id>http://blog.vichamp.com/2017/04/12/directly-importing-certificates-part-2/</id>
     <published>2017-04-11T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.460Z</updated>
+    <updated>2017-04-27T10:38:06.315Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们演示了如何在任何版本的 PowerShell 中用 .NET 方法导入数字证书。新版本的 PowerShell 有一个 “PKI” module，其中包括了 <code>Import-Certificate</code> cmdlet，导入证书变得更简单了。</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 2.0 -Modules PKI </span></div><div class="line"><span class="comment"># importing to personal store</span></div><div class="line"><span class="variable">$Path</span> = <span class="string">'C:\Path\To\CertFile.cer'</span></div><div class="line">Import-Certificate -FilePath <span class="variable">$Path</span> -CertStoreLocation Cert:\CurrentUser\My</div></pre></td></tr></table></figure>
@@ -373,7 +446,7 @@
     <link href="http://blog.vichamp.com/2017/04/11/directly-importing-certificates-part-1/"/>
     <id>http://blog.vichamp.com/2017/04/11/directly-importing-certificates-part-1/</id>
     <published>2017-04-10T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.457Z</updated>
+    <updated>2017-04-27T10:38:06.310Z</updated>
     
     <content type="html"><![CDATA[<p>可以在任意版本的 PowerShell 中用 .NET 方法将证书安装到计算机中。这将导入一个证书文件到个人存储中：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># importing to personal store</span></div><div class="line"><span class="variable">$Path</span> = <span class="string">'C:\Path\To\CertFile.cer'</span></div><div class="line"><span class="variable">$Store</span> = <span class="built_in">New-Object</span> -TypeName System.Security.Cryptography.X509Certificates.X509Store -ArgumentList My, CurrentUser</div><div class="line"><span class="variable">$Store</span>.Open(<span class="string">'ReadWrite'</span>)</div><div class="line"><span class="variable">$Store</span>.Add(<span class="variable">$Path</span>)</div><div class="line"><span class="variable">$Store</span>.Close()</div></pre></td></tr></table></figure>
@@ -411,7 +484,7 @@
     <link href="http://blog.vichamp.com/2017/04/10/beware-of-aliases/"/>
     <id>http://blog.vichamp.com/2017/04/10/beware-of-aliases/</id>
     <published>2017-04-09T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.450Z</updated>
+    <updated>2017-04-27T10:38:06.301Z</updated>
     
     <content type="html"><![CDATA[<p>您能指出这段代码的错误吗？</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="keyword">function</span> r &#123; <span class="string">"This never runs"</span> &#125;</div><div class="line"></div><div class="line">PS C:\&gt; r</div><div class="line"><span class="keyword">function</span> r &#123; <span class="string">"This never runs"</span> &#125;</div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
@@ -450,7 +523,7 @@
     <link href="http://blog.vichamp.com/2017/04/07/dealing-with-long-file-paths/"/>
     <id>http://blog.vichamp.com/2017/04/07/dealing-with-long-file-paths/</id>
     <published>2017-04-06T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.448Z</updated>
+    <updated>2017-04-27T10:38:06.295Z</updated>
     
     <content type="html"><![CDATA[<p>以前，当路径长于 256 字符时，Windows 文件系统有时会变得缓慢。在 PowerShell Gallery 有一个 module，增加了一系列 cmdlet，可以快速搜索文件系统，并且支持任意长度的路径。</p>
 <p>如果您使用 PowerShell 5 或安装了 PowerShellGet(<a href="http://www.powershellgallery.com" target="_blank" rel="external">www.powershellgallery.com</a>)，那么您可以从 PowerShell Gallery 中下载和安装 “PSAlphaFS” module：</p>
@@ -488,7 +561,7 @@
     <link href="http://blog.vichamp.com/2017/04/06/detecting-character-code-0/"/>
     <id>http://blog.vichamp.com/2017/04/06/detecting-character-code-0/</id>
     <published>2017-04-05T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.444Z</updated>
+    <updated>2017-04-27T10:38:06.281Z</updated>
     
     <content type="html"><![CDATA[<p>有些时候，字符串适用 “<code>\0</code>“ 作为分隔符。不像其它大多数分隔符，这个分隔符并不显示在文本输出中，但仍然可以用于分割文本。</p>
 <p>PowerShell 可以处理包含字符代码 0 的字符串。它用反斜杠后跟着数字 0 来表示。请注意文本需要放在双引号之内，才能将反斜杠序列转换为字节 0。</p>
@@ -525,7 +598,7 @@
     <link href="http://blog.vichamp.com/2017/04/05/auto-declaring-alias-names-for-functions/"/>
     <id>http://blog.vichamp.com/2017/04/05/auto-declaring-alias-names-for-functions/</id>
     <published>2017-04-04T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.439Z</updated>
+    <updated>2017-04-27T10:38:06.278Z</updated>
     
     <content type="html"><![CDATA[<p>您也许知道 PowerShell 支持命令的别名。但是您是否知道也可以在函数定义内部为 PowerShell 函数定义别名（PowerShell 4 引入的功能）呢？让我们来看看：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> Get-AlcoholicBeverage</div><div class="line">&#123;</div><div class="line">    [Alias(<span class="string">'Beer'</span>,<span class="string">'Drink'</span>)]</div><div class="line">    [CmdletBinding()]</div><div class="line">    <span class="keyword">param</span>()</div><div class="line"></div><div class="line">    <span class="string">"Here is your beer."</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -562,7 +635,7 @@
     <link href="http://blog.vichamp.com/2017/04/04/checking-operating-system-version/"/>
     <id>http://blog.vichamp.com/2017/04/04/checking-operating-system-version/</id>
     <published>2017-04-03T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.435Z</updated>
+    <updated>2017-04-27T10:38:06.273Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个简单快速的检查操作系统版本的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; [Environment]::OSVersion</div><div class="line"></div><div class="line"></div><div class="line">Platform ServicePack Version      VersionString                    </div><div class="line">-------- ----------- -------      -------------                    </div><div class="line">    Win32NT             <span class="number">10.0</span>.<span class="number">14393.0</span> Microsoft Windows NT <span class="number">10.0</span>.<span class="number">14393.0</span></div></pre></td></tr></table></figure>
@@ -599,7 +672,7 @@
     <link href="http://blog.vichamp.com/2017/04/03/comparing-against-null/"/>
     <id>http://blog.vichamp.com/2017/04/03/comparing-against-null/</id>
     <published>2017-04-02T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.430Z</updated>
+    <updated>2017-04-27T10:38:06.266Z</updated>
     
     <content type="html"><![CDATA[<p>如果您想检查一个变量是否为 <code>$Null</code>（空），请记住始终将 <code>$null</code> 放在比较运算符的左边。大多数情况下，顺序不重要：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$a</span> = <span class="literal">$null</span></div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$b</span> = <span class="number">12</span></div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$a</span> <span class="nomarkup">-eq</span> <span class="literal">$null</span></div><div class="line">True</div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$b</span> <span class="nomarkup">-eq</span> <span class="literal">$null</span></div><div class="line">False</div></pre></td></tr></table></figure>
@@ -640,7 +713,7 @@
     <link href="http://blog.vichamp.com/2017/03/31/examining-certificate-details/"/>
     <id>http://blog.vichamp.com/2017/03/31/examining-certificate-details/</id>
     <published>2017-03-30T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.427Z</updated>
+    <updated>2017-04-27T10:38:06.261Z</updated>
     
     <content type="html"><![CDATA[<p>如果您想检查和查看一个证书文件的详细信息而不需要将它导入证书存储空间，以下是一个简单的例子：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># replace path with actual path to CER file </span></div><div class="line"><span class="variable">$Path</span> = <span class="string">'C:\Path\To\CertificateFile\test.cer'</span></div><div class="line"></div><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.Security</div><div class="line">[Security.Cryptography.X509Certificates.X509Certificate2]<span class="variable">$cert</span> = [Security.Cryptography.X509Certificates.X509Certificate2]::CreateFromCertFile(<span class="variable">$Path</span>)</div><div class="line"></div><div class="line"><span class="variable">$cert</span> | <span class="built_in">Select-Object</span> -Property *</div></pre></td></tr></table></figure>
@@ -677,7 +750,7 @@
     <link href="http://blog.vichamp.com/2017/03/30/exporting-activedirectory-module/"/>
     <id>http://blog.vichamp.com/2017/03/30/exporting-activedirectory-module/</id>
     <published>2017-03-29T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.420Z</updated>
+    <updated>2017-04-27T10:38:06.253Z</updated>
     
     <content type="html"><![CDATA[<p>要在 PowerShell 中管理 Active Directory 的用户和计算机，您需要 Microsoft 提供的免费的 RSAT 工具中的 Active Directory 模块。</p>
 <p>假设您是一个域管理员并且拥有远程管理域控制器的权限，您也可以从 DC 中导出 ActiveDirectory 模块，并且可以通过隐式远程操作在本地使用它。</p>
@@ -691,83 +764,6 @@
     <summary type="html">
     
       PowerTip of the Day - Exporting ActiveDirectory Module
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 管理 NTFS 权限</title>
-    <link href="http://blog.vichamp.com/2017/03/29/managing-ntfs-permissions1/"/>
-    <id>http://blog.vichamp.com/2017/03/29/managing-ntfs-permissions1/</id>
-    <published>2017-03-28T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.416Z</updated>
-    
-    <content type="html"><![CDATA[<p>由于没有内置的管理 NTFS 权限的 cmdlet，所以有越来越多的开源 PowerShell module 实现这个功能。一个有前途的 module 是由 Raimund Andree，一个德国的 Microsoft 工程师写的。他也将在即将到来的 PowerShell 欧洲会议 (<a href="http://www.psconf.eu" target="_blank" rel="external">www.psconf.eu</a>) 中演讲。</p>
-<p>如果您使用的是 PowerShell 5 或已经安装了 PowerShellGet (<a href="http://www.powershellgallery.com" target="_blank" rel="external">www.powershellgallery.com</a>)，以下是从 PowerShell Gallery 下载并安装 “NTFSSecurity” module 的方法：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># review module details</span></div><div class="line">Find-Module -Repository PSGallery -Name NTFSSecurity | <span class="built_in">Select-Object</span> -Property * | <span class="built_in">Out-GridView</span></div><div class="line"></div><div class="line"><span class="comment"># download module</span></div><div class="line">Install-Module -Repository PSGallery -Name NTFSSecurity -Scope CurrentUser</div></pre></td></tr></table></figure>
-<p>要查看所有的新 cmdlet，请试试这段代码：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="built_in">Get-Command</span> -Module NTFSSecurity</div><div class="line"></div><div class="line">CommandType     Name                                               Version</div><div class="line"></div><div class="line">-----------     ----                                               -------    </div><div class="line">Cmdlet          Add-NTFSAccess                                     <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Add-NTFSAudit                                      <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Clear-NTFSAccess                                   <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Clear-NTFSAudit                                    <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          <span class="built_in">Copy-Item</span>2                                         <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Disable-NTFSAccessInheritance                      <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Disable-NTFSAuditInheritance                       <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Disable-Privileges                                 <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Enable-NTFSAccessInheritance                       <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Enable-NTFSAuditInheritance                        <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Enable-Privileges                                  <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          <span class="built_in">Get-ChildItem</span>2                                     <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-DiskSpace                                      <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-FileHash2                                      <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          <span class="built_in">Get-Item</span>2                                          <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSAccess                                     <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSAudit                                      <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSEffectiveAccess                            <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSHardLink                                   <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSInheritance                                <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSOrphanedAccess                             <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSOrphanedAudit                              <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSOwner                                      <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSSecurityDescriptor                         <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-NTFSSimpleAccess                               <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Get-Privileges                                     <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          <span class="built_in">Move-Item</span>2                                         <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          New-NTFSHardLink                                   <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          New-NTFSSymbolicLink                               <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          <span class="built_in">Remove-Item</span>2                                       <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Remove-NTFSAccess                                  <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Remove-NTFSAudit                                   <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Set-NTFSInheritance                                <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Set-NTFSOwner                                      <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          Set-NTFSSecurityDescriptor                         <span class="number">4.2</span>.<span class="number">3</span></div><div class="line">Cmdlet          <span class="built_in">Test-Path</span>2                                         <span class="number">4.2</span>.<span class="number">3</span></div></pre></td></tr></table></figure>
-<p>当您获取到这些 cmdlet，那么增加或设置 NTFS 权限就轻而易举：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$path</span> = <span class="string">'c:\test1'</span></div><div class="line"></div><div class="line">mkdir <span class="variable">$path</span></div><div class="line"></div><div class="line">Get-NTFSAccess -Path <span class="variable">$Path</span> | </div><div class="line">    Add-NTFSAccess -Account training14\student14 -AccessRights CreateFiles -AccessType Allow</div></pre></td></tr></table></figure>
-<p>警告：您需要管理员权限才能更改 NTFS 权限，即使是操作您拥有的文件系统对象。</p>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/managing-ntfs-permissions1" target="_blank" rel="external">Managing NTFS Permissions</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Managing NTFS Permissions
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 使用通配符确定数组是否包含值</title>
-    <link href="http://blog.vichamp.com/2017/03/28/determine-if-array-contains-value-using-wildcards/"/>
-    <id>http://blog.vichamp.com/2017/03/28/determine-if-array-contains-value-using-wildcards/</id>
-    <published>2017-03-27T16:00:00.000Z</published>
-    <updated>2017-04-27T06:32:01.411Z</updated>
-    
-    <content type="html"><![CDATA[<p>当您想了解一个数组是否包含某个指定的元素，PowerShell 提供了 <code>-contains</code> 操作符。然而这个操作符不支持通配符，所以您只能使用精确匹配。</p>
-<p>以下是一个帮助您使用通配符过滤数组元素的解决方法：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$a</span> = <span class="string">'Hanover'</span>, <span class="string">'Hamburg'</span>, <span class="string">'Vienna'</span>, <span class="string">'Zurich'</span></div><div class="line"></div><div class="line"><span class="comment"># is the exact phrase present in array?</span></div><div class="line"><span class="variable">$a</span> <span class="nomarkup">-contains</span> <span class="string">'Hannover'</span></div><div class="line"><span class="comment"># is ANY phrase present in array that matches the wildcard expression?</span></div><div class="line">(@(<span class="variable">$a</span>) <span class="nomarkup">-like</span> <span class="string">'Ha*'</span>).Count <span class="nomarkup">-gt</span> <span class="number">0</span></div><div class="line"></div><div class="line"><span class="comment"># list all phrases from array that match the wildcard expressions</span></div><div class="line">@(<span class="variable">$a</span>) <span class="nomarkup">-like</span> <span class="string">'Ha*'</span></div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/determine-if-array-contains-value-using-wildcards" target="_blank" rel="external">Determine if Array Contains Value – Using Wildcards</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Determine if Array Contains Value – Using Wildcards
     
     </summary>
     

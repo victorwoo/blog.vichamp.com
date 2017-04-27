@@ -12,7 +12,7 @@
 <meta property="og:url" content="http://blog.vichamp.com/2013/09/28/integrating-microsoft-word-with-powershell-generate-a-document/index.html">
 <meta property="og:site_name" content="叹为观止">
 <meta property="og:description" content="Integrating Microsoft Word with PowerShell: Generate a Document">
-<meta property="og:updated_time" content="2017-04-27T03:25:36.821Z">
+<meta property="og:updated_time" content="2017-04-27T06:31:56.806Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在PowerShell中操作Word - 生成文档">
 <meta name="twitter:description" content="Integrating Microsoft Word with PowerShell: Generate a Document">
@@ -248,7 +248,7 @@ var _hmt = _hmt || [];
         <div class="article-entry" itemprop="articleBody">
         
             
-            <p>我假设许多读者用PowerShell生成服务器、事件以及Windows网络上各种数据的报表。您也许创建过纯文本文件，甚至漂亮的HTML报表。但是您也可以用上Microsoft Word，当然，前提是您已经安装了Word。在这个系列的第二部分，我将会向您演示<a href="/powershell/office/2013/09/29/integrating-microsoft-word-with-powershell-format-style-documents" title="在PowerShell中操作Word - 使用格式化样式">如何用PowerShell为Word文档套用样式</a>。</p>
+            <p>我假设许多读者用PowerShell生成服务器、事件以及Windows网络上各种数据的报表。您也许创建过纯文本文件，甚至漂亮的HTML报表。但是您也可以用上Microsoft Word，当然，前提是您已经安装了Word。在这个系列的第二部分，我将会向您演示<a href="/2013/09/29/integrating-microsoft-word-with-powershell-format-style-documents" title="在PowerShell中操作Word - 使用格式化样式">如何用PowerShell为Word文档套用样式</a>。</p>
 <h1 id="创建Word应用程序对象"><a href="#创建Word应用程序对象" class="headerlink" title="创建Word应用程序对象"></a>创建Word应用程序对象</h1><p>PowerShell可以通过COM接口控制Word应用程序。有趣的地方是，虽然您可以交互式地做所有的操作，但我希望您最终能够用脚本操作一切。我们从创建一个Word程序对象开始。</p>
 <pre><code>PS C:\&gt; $word=new-object -ComObject &quot;Word.Application&quot;
 </code></pre><a id="more"></a>
@@ -277,11 +277,11 @@ PS C:\&gt; $doc.Close()
 <pre><code>PS C:\&gt; $word.quit()
 </code></pre><p>这些就是要做的所有事情。最终生成的Word文档是可用的，虽然可能不太漂亮。在我的例子中发现一个问题：Word用的事非等宽字体，而PowerShell的输出格式假设用的是等宽字体。（译者注：可能会造成输出的结果对不整齐）。在第二部分，我将向您演示如何解决这些问题。同时，欢迎<a href="/download/New-WordDoc.ps1">下载示例脚本 New-WordDoc.ps1</a>。</p>
 <h1 id="用PowerShell操作Office系列文章"><a href="#用PowerShell操作Office系列文章" class="headerlink" title="用PowerShell操作Office系列文章"></a>用PowerShell操作Office系列文章</h1><ul>
-<li><a href="/powershell/office/2013/09/28/integrating-microsoft-word-with-powershell-generate-a-document" title="在PowerShell中操作Word - 生成文档">在PowerShell中操作Word - 生成文档</a></li>
-<li><a href="/powershell/office/2013/09/29/integrating-microsoft-word-with-powershell-format-style-documents" title="在PowerShell中操作Word - 使用格式化样式">在PowerShell中操作Word - 使用格式化样式</a></li>
-<li><a href="/powershell/office/2013/09/19/integrating-microsoft-excel-with-powershell-build-a-basic-report" title="在PowerShell中操作Excel - 创建一个简单的报表">在PowerShell中操作Excel - 创建一个简单的报表</a></li>
-<li><a href="/powershell/office/2013/09/19/integrating-microsoft-excel-with-powershell-create-a-rich-excel-doc" title="在PowerShell中操作Excel - 创建一个富Excel文档">在PowerShell中操作Excel - 创建一个富Excel文档</a></li>
-<li><a href="/powershell/office/2013/09/21/integrating-microsoft-excel-with-powershell-reading-data" title="在PowerShell中操作Excel - 读取数据">在PowerShell中操作Excel - 读取数据</a></li>
+<li><a href="/2013/09/28/integrating-microsoft-word-with-powershell-generate-a-document" title="在PowerShell中操作Word - 生成文档">在PowerShell中操作Word - 生成文档</a></li>
+<li><a href="/2013/09/29/integrating-microsoft-word-with-powershell-format-style-documents" title="在PowerShell中操作Word - 使用格式化样式">在PowerShell中操作Word - 使用格式化样式</a></li>
+<li><a href="/2013/09/19/integrating-microsoft-excel-with-powershell-build-a-basic-report" title="在PowerShell中操作Excel - 创建一个简单的报表">在PowerShell中操作Excel - 创建一个简单的报表</a></li>
+<li><a href="/2013/09/19/integrating-microsoft-excel-with-powershell-create-a-rich-excel-doc" title="在PowerShell中操作Excel - 创建一个富Excel文档">在PowerShell中操作Excel - 创建一个富Excel文档</a></li>
+<li><a href="/2013/09/21/integrating-microsoft-excel-with-powershell-reading-data" title="在PowerShell中操作Excel - 读取数据">在PowerShell中操作Excel - 读取数据</a></li>
 </ul>
         
         </div>
@@ -348,19 +348,19 @@ PS C:\&gt; $doc.Close()
     
         <nav id="article-nav">
     
-        <a href="/2013/09/28/powershell-tools-for-visual-studio/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2013/09/29/integrating-microsoft-word-with-powershell-format-style-documents/" id="article-nav-newer" class="article-nav-link-wrap">
             <strong class="article-nav-caption">上一篇</strong>
             <div class="article-nav-title">
                 
-                    Visual Studio的PowerShell扩展工具
+                    在PowerShell中操作Word - 使用格式化样式
                 
             </div>
         </a>
     
     
-        <a href="/2013/09/27/setting-monitor-brightness/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2013/09/28/powershell-tools-for-visual-studio/" id="article-nav-older" class="article-nav-link-wrap">
             <strong class="article-nav-caption">下一篇</strong>
-            <div class="article-nav-title">PowerShell 技能连载 - 设置显示器亮度</div>
+            <div class="article-nav-title">Visual Studio的PowerShell扩展工具</div>
         </a>
     
 </nav>

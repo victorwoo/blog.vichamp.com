@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.vichamp.com/"/>
-  <updated>2017-05-27T16:17:57.034Z</updated>
+  <updated>2017-06-01T01:35:26.155Z</updated>
   <id>http://blog.vichamp.com/</id>
   
   <author>
@@ -16,11 +16,162 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>PowerShell 技能连载 - 查找 OU</title>
+    <link href="http://blog.vichamp.com/2017/05/31/finding-organizational-units/"/>
+    <id>http://blog.vichamp.com/2017/05/31/finding-organizational-units/</id>
+    <published>2017-05-30T16:00:00.000Z</published>
+    <updated>2017-06-01T01:35:26.155Z</updated>
+    
+    <content type="html"><![CDATA[<p>（来自 Microsoft 免费的 RSAT 工具的）<code>Get-OrganizationalUnit</code> 可以基于识别名或 GUID 来搜索 OU，或者可以使用 <code>-Filter</code> 参数。</p>
+<p>不幸的是，<code>-Filter</code> 不能方便地自动化。以下代码并不能工作，并不能返回所有名字中包含 “Test” 的 OU：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$Name</span> = <span class="string">'Test'</span></div><div class="line">Get-ADOrganizationalUnit -Filter &#123; Name <span class="nomarkup">-like</span> <span class="string">"*<span class="variable">$Name</span>*"</span> &#125;</div></pre></td></tr></table></figure>
+<p>这个结果很令人惊讶，因为以下这行代码可以工作（前提是您确实有名字包含 “Test” 的 OU）：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Get-ADOrganizationalUnit -Filter &#123; Name <span class="nomarkup">-like</span> <span class="string">"*Test*"</span> &#125;</div></pre></td></tr></table></figure>
+<p>通常情况下，如果您想用简单的通配符来搜索，那么使用简单的 LDAP 过滤器十分管用。以下代码查找所有名字中包含 “Test” 的 OU：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$Name</span> = <span class="string">'Test'</span></div><div class="line">Get-ADOrganizationalUnit -LDAPFilter <span class="string">"(Name=*<span class="variable">$Name</span>*)"</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/finding-organizational-units" target="_blank" rel="external">Finding Organizational Units</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Finding Organizational Units
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 测试 OU</title>
+    <link href="http://blog.vichamp.com/2017/05/30/testing-organizational-unit/"/>
+    <id>http://blog.vichamp.com/2017/05/30/testing-organizational-unit/</id>
+    <published>2017-05-29T16:00:00.000Z</published>
+    <updated>2017-06-01T01:35:26.151Z</updated>
+    
+    <content type="html"><![CDATA[<p>假设您已安装了免费的 Microsoft RSAT 工具，以下是一个简单的方法来检测一个 OU 是否存在：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$OUPath</span> = <span class="string">'OU=TestOU,DC=train,DC=powershell,DC=local'</span></div><div class="line"><span class="variable">$exists</span> = $(<span class="keyword">try</span> &#123; Get-ADOrganizationalUnit -Identity <span class="variable">$OUPath</span> -ErrorAction Ignore &#125; <span class="keyword">catch</span>&#123;&#125;) <span class="nomarkup">-ne</span> <span class="literal">$null</span></div><div class="line"><span class="string">"<span class="variable">$OUPath</span> : <span class="variable">$exists</span>"</span></div></pre></td></tr></table></figure>
+<p><code>$exits</code> 的值将是 <code>$true</code> 或 <code>$false</code>，表示是否找到该 OU。请注意使用 try/catch 处理错误的方法：<code>Get-ADOrganizationalUnit</code> 将在指定的 OU 不存在时抛出终止错误，所以需要 try/catch 来捕获这些错误。</p>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/testing-organizational-unit" target="_blank" rel="external">Testing Organizational Unit</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Testing Organizational Unit
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 验证变量有效性</title>
+    <link href="http://blog.vichamp.com/2017/05/29/validating-variables/"/>
+    <id>http://blog.vichamp.com/2017/05/29/validating-variables/</id>
+    <published>2017-05-28T16:00:00.000Z</published>
+    <updated>2017-06-01T01:35:26.146Z</updated>
+    
+    <content type="html"><![CDATA[<p>变量和函数参数可以通过验证属性自动地验证有效性。以下是一个简单的例子，确保 <code>$test1</code> 只能存储 1-10 之间的值：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[ValidateRange(<span class="number">1</span>,<span class="number">10</span>)]<span class="variable">$test1</span> = <span class="number">10</span></div></pre></td></tr></table></figure>
+<p>当您将一个小于 1 或大于 10 的值赋给这个变量，PowerShell 将会抛出一个异常。不过通过这种方式您无法控制异常的问本。</p>
+<p>通过使用脚本验证器，您可以选择自己希望的错误信息：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[ValidateScript(&#123;</div><div class="line"><span class="keyword">If</span> (<span class="variable">$_</span> <span class="nomarkup">-gt</span> <span class="number">10</span>)</div><div class="line">&#123; <span class="keyword">throw</span> <span class="string">'You have submitted a value greater than 10. That will not work, dummy!'</span> &#125;</div><div class="line"><span class="keyword">Elseif</span> (<span class="variable">$_</span> <span class="nomarkup">-lt</span> <span class="number">1</span>)</div><div class="line">&#123; <span class="keyword">throw</span> <span class="string">'You have submitted a value lower than 1. That will not work, dummy!'</span> &#125;</div><div class="line"></div><div class="line"><span class="literal">$true</span></div><div class="line">&#125;)]<span class="variable">$test2</span> = <span class="number">10</span></div></pre></td></tr></table></figure>
+<p>以下是输出结果：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$test2</span> =  <span class="number">4</span></div><div class="line"></div><div class="line">PS C:\&gt; <span class="variable">$test2</span> =  <span class="number">11</span></div><div class="line">You have submitted a  value greater than <span class="number">10</span>. That will  not work, dummy!</div><div class="line">At line:<span class="number">5</span> char:<span class="number">3</span></div><div class="line">+ &#123; <span class="keyword">throw</span> <span class="string">'You have submitted  a value greater than 10. That will not work, dummy ...</span></div><div class="line">+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div><div class="line">    + CategoryInfo          : OperationStopped: (You have submitted  a...not work, dummy!:String</div><div class="line">    ) [], RuntimeException</div><div class="line">    + FullyQualifiedErrorId : You have submitted  a value greater than 10. That  will not work, dummy!</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">PS C:\&gt; $test2 =  -2</div><div class="line">You have submitted a  value lower than 1. That will  not work, dummy!</div><div class="line">At line:7 char:3</div><div class="line">+ &#123; throw 'You have submitted  a value lower than <span class="number">1</span>. That will not work, dummy ...</div><div class="line">+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div><div class="line">    + CategoryInfo          : OperationStopped: (You have submitted  a...not work, dummy!:String</div><div class="line">    ) [], RuntimeException</div><div class="line">    + FullyQualifiedErrorId : You have  submitted a value lower than <span class="number">1</span>. That  will not work, dummy!</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/validating-variables" target="_blank" rel="external">Validating Variables</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Validating Variables
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 克隆 DHCP 服务器设置</title>
+    <link href="http://blog.vichamp.com/2017/05/26/cloning-dhcp-server-settings/"/>
+    <id>http://blog.vichamp.com/2017/05/26/cloning-dhcp-server-settings/</id>
+    <published>2017-05-25T16:00:00.000Z</published>
+    <updated>2017-06-01T01:35:26.142Z</updated>
+    
+    <content type="html"><![CDATA[<p>从 Windows Server 2012 开市，您可以快速地导出和重新导入 DHCP 设置。克隆或迁移 DHCP 服务器是通过快照的形式。以下的例子从 \ORIGDHCP 导出设置并导入本地的 DHCP 服务器中：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Export-DHCPServer -File <span class="string">"<span class="variable">$env:temp</span>\dhcpsettings.xml"</span> -Computername ORIGDHCP</div><div class="line">Import-DHCPServer -File <span class="string">"<span class="variable">$env:temp</span>\dhcpsettings.xml"</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/cloning-dhcp-server-settings" target="_blank" rel="external">Cloning DHCP Server Settings</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Cloning DHCP Server Settings
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
     <title>PowerShell 技能连载 - 搜索 AD 用户</title>
     <link href="http://blog.vichamp.com/2017/05/25/searching-for-adusers/"/>
     <id>http://blog.vichamp.com/2017/05/25/searching-for-adusers/</id>
     <published>2017-05-24T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.034Z</updated>
+    <updated>2017-06-01T01:35:26.137Z</updated>
     
     <content type="html"><![CDATA[<p>免费的 Microsoft RSAT 工具给我们带来了 “ActiveDirectory” PowerShell module：许多 cmdlet 可以帮助您管理 Active Directory 用户和计算机。</p>
 <p>一个 cmdlet 特别有用。与其使用 <code>Get-ADUser</code> 和复杂得过滤器来查找 AD 用户，我们可以使用更方便的 <code>Search-ADAccount</code>。它注重于某些公共场景的查找用户功能。例如这行代码可以找出所有 120 天未活跃的用户账户：</p>
@@ -56,7 +207,7 @@
     <link href="http://blog.vichamp.com/2017/05/24/generating-random-password/"/>
     <id>http://blog.vichamp.com/2017/05/24/generating-random-password/</id>
     <published>2017-05-23T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.034Z</updated>
+    <updated>2017-06-01T01:35:26.133Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个非常简单的创建复杂随机密码的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.Web</div><div class="line"><span class="variable">$PasswordLength</span> = <span class="number">12</span></div><div class="line"><span class="variable">$SpecialCharCount</span> = <span class="number">3</span></div><div class="line">[System.Web.Security.Membership]::GeneratePassword(<span class="variable">$PasswordLength</span>, <span class="variable">$SpecialCharCount</span>)</div></pre></td></tr></table></figure>
@@ -92,7 +243,7 @@
     <link href="http://blog.vichamp.com/2017/05/23/tostring-masquerade/"/>
     <id>http://blog.vichamp.com/2017/05/23/tostring-masquerade/</id>
     <published>2017-05-22T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.034Z</updated>
+    <updated>2017-06-01T01:35:26.128Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能当中我们解释了 <code>ToString()</code> 描述一个对象的方法是含糊的，而且对象的作者可以决定 <code>ToString()</code> 返回什么。这在 PowerShell 代码中尤为明显。请看要覆盖任意一个对象的 <code>ToString()</code> 方法是多么容易：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$a</span> = <span class="number">1</span></div><div class="line">PS&gt; <span class="variable">$a</span> | <span class="built_in">Add-Member</span> -MemberType ScriptMethod -Name toString -Value &#123; <span class="string">'go away'</span> &#125; -Force</div><div class="line">PS&gt; <span class="variable">$a</span></div><div class="line">go away</div><div class="line">PS&gt; <span class="variable">$a</span>.GetType().FullName</div><div class="line">System.Int32</div><div class="line">PS&gt; <span class="variable">$a</span> <span class="nomarkup">-eq</span> <span class="number">1</span></div><div class="line">True</div></pre></td></tr></table></figure>
@@ -127,7 +278,7 @@
     <link href="http://blog.vichamp.com/2017/05/22/careful-with-tostring/"/>
     <id>http://blog.vichamp.com/2017/05/22/careful-with-tostring/</id>
     <published>2017-05-21T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.019Z</updated>
+    <updated>2017-06-01T01:35:26.126Z</updated>
     
     <content type="html"><![CDATA[<p>任何 .NET 对象都有一个 <code>ToString()</code> 方法，返回的是一段文字描述。这也是当您将一个对象输出为一个字符串时所得到的内容。然而，<code>ToString()</code> 所返回的值可能会改变，所以您永远不要使用它来做一些重要的事情。</p>
 <p>Here is an example – these lines both produce a FileInfo object which represents the exact same file. Only the way how the object was created is different. All object properties are identical. Yet, ToString() differs:<br>以下是一个例子——这两行代码都会创建一个 <code>FileInfo</code> 对象，来代表同一个文件。只是创建对象的方法有所不同。所有的对象属性都相同。然而，<code>ToString()</code> 的结果不同：</p>
@@ -163,7 +314,7 @@
     <link href="http://blog.vichamp.com/2017/05/19/escape-wildcards/"/>
     <id>http://blog.vichamp.com/2017/05/19/escape-wildcards/</id>
     <published>2017-05-18T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.019Z</updated>
+    <updated>2017-06-01T01:35:26.122Z</updated>
     
     <content type="html"><![CDATA[<p>当您使用 <code>-like</code> 操作符时，它支持三种通配符：”<code>*</code>“ 代表所有数字和字母，”<code>?</code>“ 代表任意单个字符，”<code>[a-z]</code>“ 代表字符的列表。另外有一个不太为人所知的，它支持 PowerShell 的转义字符 “```”，可以用它来转义通配符。</p>
 <p>所以当您需要检查一个字符串中的 “<code>*</code>“ 字符，这行代码能够工作但实际上是错的：</p>
@@ -205,7 +356,7 @@
     <link href="http://blog.vichamp.com/2017/05/18/validating-integer-variables/"/>
     <id>http://blog.vichamp.com/2017/05/18/validating-integer-variables/</id>
     <published>2017-05-17T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.019Z</updated>
+    <updated>2017-06-01T01:35:26.116Z</updated>
     
     <content type="html"><![CDATA[<p>您可以在一个变量前简单地加上 <code>[Int]</code> 来确保它只包含数字位。但您是否知道从 PowerShell 4.0 开始，支持正则表达式的验证器呢？</p>
 <p>通过这种方式，您可以定义一个变量只能为 2 位至 6 位的正数，或其它指定的模式：</p>
@@ -241,7 +392,7 @@
     <link href="http://blog.vichamp.com/2017/05/17/creating-random-mac-addresses/"/>
     <id>http://blog.vichamp.com/2017/05/17/creating-random-mac-addresses/</id>
     <published>2017-05-16T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.003Z</updated>
+    <updated>2017-06-01T01:35:26.112Z</updated>
     
     <content type="html"><![CDATA[<p>如果您只是需要一系列随机生成的 MAC 地址，而不关心这些地址是否合法，以下是一行实现代码：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">PS&gt; (<span class="number">0</span>..<span class="number">5</span> | <span class="built_in">ForEach-Object</span> &#123; <span class="string">'&#123;0:x&#125;&#123;1:x&#125;'</span> -f (<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>),(<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>)&#125;)  -join <span class="string">':'</span></div><div class="line"></div><div class="line">a5:<span class="number">66</span>:<span class="number">07</span>:<span class="number">6</span>d:d9:<span class="number">18</span></div><div class="line"></div><div class="line">PS&gt; (<span class="number">0</span>..<span class="number">5</span> | <span class="built_in">ForEach-Object</span> &#123; <span class="string">'&#123;0:x&#125;&#123;1:x&#125;'</span> -f (<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>),(<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>)&#125;)  -join <span class="string">':'</span></div><div class="line"></div><div class="line"><span class="number">3</span>c:c8:<span class="number">4</span>e:e3:<span class="number">75</span>:<span class="number">6</span>c</div></pre></td></tr></table></figure>
@@ -278,7 +429,7 @@
     <link href="http://blog.vichamp.com/2017/05/16/bitwise-shift/"/>
     <id>http://blog.vichamp.com/2017/05/16/bitwise-shift/</id>
     <published>2017-05-15T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:57.003Z</updated>
+    <updated>2017-06-01T01:35:26.108Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 包含许多不太常用的二进制操作符，例如按位移位。<code>-shl</code> 操作符按位左移指定的位数：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="number">1</span> -shl <span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"></div><div class="line">PS&gt; <span class="number">2</span> -shl <span class="number">1</span></div><div class="line"><span class="number">4</span></div><div class="line"></div><div class="line">PS&gt; <span class="number">3</span> -shl <span class="number">1</span></div><div class="line"><span class="number">6</span></div></pre></td></tr></table></figure>
@@ -313,7 +464,7 @@
     <link href="http://blog.vichamp.com/2017/05/15/converting-binary-string-to-integer/"/>
     <id>http://blog.vichamp.com/2017/05/15/converting-binary-string-to-integer/</id>
     <published>2017-05-14T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.965Z</updated>
+    <updated>2017-06-01T01:35:26.072Z</updated>
     
     <content type="html"><![CDATA[<p>以下是将一段二进制文本字符串转为对应的整形值的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$binary</span> = <span class="string">"110110110"</span></div><div class="line"><span class="variable">$int</span> = [Convert]::ToInt32(<span class="variable">$binary</span>,<span class="number">2</span>)</div><div class="line"><span class="variable">$int</span></div></pre></td></tr></table></figure>
@@ -350,7 +501,7 @@
     <link href="http://blog.vichamp.com/2017/05/12/using-clipboard-to-transfer-data-and-results/"/>
     <id>http://blog.vichamp.com/2017/05/12/using-clipboard-to-transfer-data-and-results/</id>
     <published>2017-05-11T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.965Z</updated>
+    <updated>2017-06-01T01:35:26.066Z</updated>
     
     <content type="html"><![CDATA[<p>终于，在 PowerShell 5 中原生支持将结果发送到剪贴板中，以及从剪贴板中接收结果：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="built_in">Get-Command</span> -Noun Clipboard </div><div class="line"></div><div class="line">CommandType Name          Version Source                         </div><div class="line">----------- ----          ------- ------                         </div><div class="line">Cmdlet      Get-Clipboard <span class="number">3.1</span>.<span class="number">0.0</span> Microsoft.PowerShell.Management</div><div class="line">Cmdlet      Set-Clipboard <span class="number">3.1</span>.<span class="number">0.0</span> Microsoft.PowerShell.Management</div><div class="line">```     </div><div class="line"></div><div class="line">例如，您可以打开一个包含一些数据的 Excel 表格，将一列复制到剪贴板中，然后在 PowerShell 中进一步处理数据，例如过滤它：</div><div class="line"></div><div class="line">```powershell     </div><div class="line">PS&gt; <span class="variable">$list</span> = (Get-ClipBoard) <span class="nomarkup">-like</span> <span class="string">'*err*'</span></div></pre></td></tr></table></figure>
@@ -385,7 +536,7 @@
     <link href="http://blog.vichamp.com/2017/05/11/installing-msi-on-remote-system/"/>
     <id>http://blog.vichamp.com/2017/05/11/installing-msi-on-remote-system/</id>
     <published>2017-05-10T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.965Z</updated>
+    <updated>2017-06-01T01:35:26.062Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一些或许对您有用的代码。您需要远程系统的管理员权限。</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ComputerName</span> = <span class="string">'NameOfMachineToInstall'</span></div><div class="line"><span class="variable">$TargetPathMSI</span> = <span class="string">'\\softwareserver\product\package.msi'</span></div><div class="line"></div><div class="line"><span class="variable">$class</span> = [wmiclass]<span class="string">"\\<span class="variable">$ComputerName</span>\ROOT\cimv2:Win32_Product"</span></div><div class="line"><span class="variable">$class</span>.Install(<span class="variable">$TargetPathMSI</span>)</div></pre></td></tr></table></figure>
@@ -421,7 +572,7 @@
     <link href="http://blog.vichamp.com/2017/05/10/how-replace-and-replace-differ/"/>
     <id>http://blog.vichamp.com/2017/05/10/how-replace-and-replace-differ/</id>
     <published>2017-05-09T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.965Z</updated>
+    <updated>2017-06-01T01:35:26.057Z</updated>
     
     <content type="html"><![CDATA[<p>有两种方法可以替换一个字符串中的问本：<code>Replace()</code> 方法，和 <code>-replace</code> 操作符。它们的工作机制是不同的。</p>
 <p><code>Replace()</code> 是大小写敏感的，能够将文本替换为新的文本：</p>
@@ -461,7 +612,7 @@
     <link href="http://blog.vichamp.com/2017/05/09/html-encoding-advanced/"/>
     <id>http://blog.vichamp.com/2017/05/09/html-encoding-advanced/</id>
     <published>2017-05-08T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.965Z</updated>
+    <updated>2017-06-01T01:35:26.053Z</updated>
     
     <content type="html"><![CDATA[<p>.NET 静态方法 <code>HtmlEncode</code> 能够较好地将普通字符进行编码，但是对于许多特殊字符会处理失败。要正确地对所有字符编码，我们编写了一个 <code>ConvertTo-EncodedHtml</code> 函数：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> ConvertTo-EncodedHTML(<span class="variable">$HtmlText</span>)</div><div class="line">&#123;</div><div class="line"></div><div class="line">  <span class="variable">$chars</span> = [Web.HttpUtility]::HtmlEncode(<span class="variable">$HtmlText</span>).ToCharArray()</div><div class="line">  <span class="variable">$txt</span> = <span class="built_in">New-Object</span> System.Text.StringBuilder</div><div class="line">  <span class="literal">$null</span> = . &#123;</div><div class="line">      <span class="keyword">foreach</span>(<span class="variable">$c</span> <span class="keyword">in</span> <span class="variable">$chars</span>)</div><div class="line">      &#123;</div><div class="line">        <span class="keyword">if</span> ([int]<span class="variable">$c</span> <span class="nomarkup">-gt</span> <span class="number">127</span>)</div><div class="line">        &#123;</div><div class="line">          <span class="variable">$txt</span>.Append(<span class="string">"&amp;#"</span> + [int]<span class="variable">$c</span> + <span class="string">";"</span>)</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">          <span class="variable">$txt</span>.Append(<span class="variable">$c</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="variable">$txt</span>.ToString()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -498,7 +649,7 @@
     <link href="http://blog.vichamp.com/2017/05/08/html-encoding/"/>
     <id>http://blog.vichamp.com/2017/05/08/html-encoding/</id>
     <published>2017-05-07T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.950Z</updated>
+    <updated>2017-06-01T01:35:26.047Z</updated>
     
     <content type="html"><![CDATA[<p>有一个 .NET 的静态方法可以对一段文本进行 HTML 编码，例如如果您希望在 HTML 输出中正常显示一段文本：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PS&gt;  [System.Web.HttpUtility]::HtmlEncode(<span class="string">'Österreich heißt so.'</span>)</div><div class="line">&amp;<span class="comment">#214;sterreich hei&amp;#223;t so.</span></div></pre></td></tr></table></figure>
@@ -533,7 +684,7 @@
     <link href="http://blog.vichamp.com/2017/05/05/downloading-videos-from-german-media-databases/"/>
     <id>http://blog.vichamp.com/2017/05/05/downloading-videos-from-german-media-databases/</id>
     <published>2017-05-04T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.950Z</updated>
+    <updated>2017-06-01T01:35:26.044Z</updated>
     
     <content type="html"><![CDATA[<p>在德国，有一些公开的媒体数据库，里面有公共站点发布的电视内容。只需要用一小段 PowerShell 代码就可以解析 JSON 数据，在一个列表中显示电视节目，并使你能够选择某项来下载。</p>
 <p>请注意包含下载链接的 JSON 文件非常大，所以需要过一段时间才能显示出视频列表。</p>
@@ -569,7 +720,7 @@
     <link href="http://blog.vichamp.com/2017/05/05/bulk-printing-word-documents/"/>
     <id>http://blog.vichamp.com/2017/05/05/bulk-printing-word-documents/</id>
     <published>2017-05-04T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.950Z</updated>
+    <updated>2017-06-01T01:35:26.040Z</updated>
     
     <content type="html"><![CDATA[<p>这行代码将在您的配置文件中查找所有 Word 文档：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Get-ChildItem</span> -Path <span class="variable">$home</span> -Filter *.doc* -Recurse</div></pre></td></tr></table></figure>
@@ -582,157 +733,6 @@
     <summary type="html">
     
       PowerTip of the Day - Bulk Printing Word Documents
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 翻译错误记录</title>
-    <link href="http://blog.vichamp.com/2017/05/03/translating-error-records/"/>
-    <id>http://blog.vichamp.com/2017/05/03/translating-error-records/</id>
-    <published>2017-05-02T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.950Z</updated>
-    
-    <content type="html"><![CDATA[<p>Whenever PowerShell records an error, it wraps it in an Error Record object. Here is a function that takes such an error record and extracts the useful information:<br>当 PowerShell 记录一个错误时，它将错误信息包装在一个 Error Record 对象中。以下是一个处理这种错误记录并解析有用信息的函数：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 3.0</span></div><div class="line"><span class="keyword">function</span> Get-ErrorDetail</div><div class="line">&#123;</div><div class="line">  <span class="keyword">param</span></div><div class="line">  (</div><div class="line">    [Parameter(Mandatory,ValueFromPipeline)]</div><div class="line">    <span class="variable">$e</span></div><div class="line">  )</div><div class="line">  <span class="keyword">process</span></div><div class="line">  &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="variable">$e</span> -is [Management.Automation.ErrorRecord])</div><div class="line">    &#123;</div><div class="line">      [PSCustomObject]@&#123;</div><div class="line">        Reason    = <span class="variable">$e</span>.CategoryInfo.Reason</div><div class="line">        Exception = <span class="variable">$e</span>.Exception.Message</div><div class="line">        Target    = <span class="variable">$e</span>.CategoryInfo.TargetName</div><div class="line">        Script    = <span class="variable">$e</span>.InvocationInfo.ScriptName</div><div class="line">        Line      = <span class="variable">$e</span>.InvocationInfo.ScriptLineNumber</div><div class="line">        Column    = <span class="variable">$e</span>.InvocationInfo.OffsetInLine</div><div class="line">        Datum     = <span class="built_in">Get-Date</span></div><div class="line">        User      = <span class="variable">$env:USERNAME</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>如果您想知道最后的错误信息是什么，请试试这个：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">PS C:\&gt; <span class="variable">$error</span> | Get-ErrorDetail | <span class="built_in">Out-GridView</span></div><div class="line"></div><div class="line">PS C:\&gt;</div></pre></td></tr></table></figure>
-<p>或者，您现在可以简单地命令一个 cmdlet 缓存它的错误信息，并在晚些时候处理它们。这个例子递归地在 Windows 文件夹中搜索 PowerShell 脚本。您可以获取结果，以及搜索时发生的所有错误的详细信息：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$files</span> = <span class="built_in">Get-ChildItem</span> -Path c:\Windows -Filter *.ps1 -Recurse -ErrorAction SilentlyContinue -ErrorVariable myErrors</div><div class="line"></div><div class="line"><span class="variable">$myErrors</span>| Get-ErrorDetail | <span class="built_in">Out-GridView</span></div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/translating-error-records" target="_blank" rel="external">Translating Error Records</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Translating Error Records
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 用 Out-GridView 启用 AD 用户</title>
-    <link href="http://blog.vichamp.com/2017/05/02/enable-ad-users-with-out-gridview/"/>
-    <id>http://blog.vichamp.com/2017/05/02/enable-ad-users-with-out-gridview/</id>
-    <published>2017-05-01T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.934Z</updated>
-    
-    <content type="html"><![CDATA[<p>有些时候在 PowerShell 中只需要几行代码就可以创造出很有用的支持工具。以下是一个显示所有禁用的 AD 用户的例子。您可以选择一个（或按住 CTRL 键选择多个），然后点击 OK，这些用户将会被启用：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 3.0 -Modules ActiveDirectory</span></div><div class="line">Search-ADAccount -AccountDisabled |</div><div class="line">  <span class="built_in">Out-GridView</span> -Title <span class="string">'Who should be enabled?'</span> -OutputMode Multiple |</div><div class="line">  <span class="comment"># remove -WhatIf to actually enable accounts</span></div><div class="line">  Enable-ADAccount -WhatIf</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/enable-ad-users-with-out-gridview" target="_blank" rel="external">Enable AD Users with Out-GridView</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Enable AD Users with Out-GridView
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 将 AD 用户转为哈希表</title>
-    <link href="http://blog.vichamp.com/2017/05/01/turning-ad-user-into-a-hash-table/"/>
-    <id>http://blog.vichamp.com/2017/05/01/turning-ad-user-into-a-hash-table/</id>
-    <published>2017-04-30T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.934Z</updated>
-    
-    <content type="html"><![CDATA[<p>有些时候从一个指定的 AD 用户读取所有属性到一个哈希表中十分有用。通过这种方法，您可以编辑他们，并使用 <code>Set-ADUser</code> 和它的 <code>-Add</code> 或 <code>-Replace</code> 参数将他们应用于另一个用户账户。</p>
-<p>以下是将所有 AD 用户属性读到一个哈希表中的方法：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 3.0 -Modules ActiveDirectory</span></div><div class="line"></div><div class="line"><span class="variable">$blacklist</span> = <span class="string">'SID'</span>, <span class="string">'LastLogonDate'</span>, <span class="string">'SAMAccountName'</span></div><div class="line"></div><div class="line"><span class="variable">$user</span> = Get-ADUser -Identity NAMEOFUSER -Properties *</div><div class="line"><span class="variable">$name</span> = <span class="variable">$user</span> | <span class="built_in">Get-Member</span> -MemberType *property | <span class="built_in">Select-Object</span> -ExpandProperty Name</div><div class="line"></div><div class="line"><span class="variable">$hash</span> = [Ordered]@&#123;&#125;</div><div class="line"><span class="variable">$name</span> |</div><div class="line">  <span class="built_in">Sort-Object</span> |</div><div class="line">  <span class="built_in">Where-Object</span> &#123;</div><div class="line">    <span class="variable">$_</span> <span class="nomarkup">-notin</span> <span class="variable">$blacklist</span></div><div class="line">  &#125; |</div><div class="line">  <span class="built_in">ForEach-Object</span> &#123;</div><div class="line">  <span class="variable">$hash</span>[<span class="variable">$_</span>] = <span class="variable">$user</span>.<span class="variable">$_</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>请注意 <code>$blacklist</code> 的使用：这个列表可以包含任何希望排除的属性名。</p>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/turning-ad-user-into-a-hash-table" target="_blank" rel="external">Turning AD User into a Hash Table</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Turning AD User into a Hash Table
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 克隆文件夹结构（含 NTFS 权限） – 第二部分</title>
-    <link href="http://blog.vichamp.com/2017/04/28/cloning-folder-structures-with-ntfs-permissions-part-2/"/>
-    <id>http://blog.vichamp.com/2017/04/28/cloning-folder-structures-with-ntfs-permissions-part-2/</id>
-    <published>2017-04-27T16:00:00.000Z</published>
-    <updated>2017-05-27T16:17:56.934Z</updated>
-    
-    <content type="html"><![CDATA[<p>在前一个技能中我们演示了 <code>Get-FolderStructureWithPermission</code> 如何以结构化的形式记录并创建一个包含所有嵌套文件夹的清单，包含它们各自的 NTFS 安全设置。结果可以保存到一个变量中，或用 <code>Export-Csv</code> 序列化后保存到磁盘中。</p>
-<p>今天我们演示第二部分：当您拥有一个指定文件夹结构的信息之后，可以使用这个 <code>Set-FolderStructureWithPermission</code>。它输入一个要克隆其结构的文件夹路径，加上通过 <code>Get-FolderStructureWithPermission</code> 获得的结构信息：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -RunAsAdministrator</span></div><div class="line"></div><div class="line"><span class="keyword">function</span> Set-FolderStructureWithPermission</div><div class="line">&#123;</div><div class="line">  <span class="keyword">param</span></div><div class="line">  (</div><div class="line">    [String]</div><div class="line">    [Parameter(Mandatory)]</div><div class="line">    <span class="variable">$Path</span>,</div><div class="line"></div><div class="line">    [Object[]]</div><div class="line">    <span class="variable">$folderInfo</span></div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="variable">$folderInfo</span> | <span class="built_in">ForEach-Object</span> &#123;</div><div class="line">    <span class="variable">$relativePath</span> = <span class="variable">$_</span>.Path</div><div class="line">    <span class="variable">$sddl</span> = <span class="variable">$_</span>.SDDL</div><div class="line"></div><div class="line">    <span class="variable">$newPath</span> = <span class="built_in">Join-Path</span> -Path <span class="variable">$Path</span> -ChildPath <span class="variable">$relativePath</span></div><div class="line">    <span class="variable">$exists</span> = <span class="built_in">Test-Path</span> -Path <span class="variable">$newPath</span></div><div class="line">    <span class="keyword">if</span> (<span class="variable">$exists</span> <span class="nomarkup">-eq</span> <span class="literal">$false</span>)</div><div class="line">    &#123;</div><div class="line">      <span class="literal">$null</span>=<span class="built_in">New-Item</span> -Path <span class="variable">$newPath</span> -ItemType Directory -Force</div><div class="line">    &#125;</div><div class="line">    <span class="variable">$sd</span> = <span class="built_in">Get-Acl</span> -Path <span class="variable">$newPath</span></div><div class="line">    <span class="variable">$sd</span>.SetSecurityDescriptorSddlForm(<span class="variable">$sddl</span>)</div><div class="line">    <span class="built_in">Set-Acl</span> -Path <span class="variable">$newPath</span> -AclObject <span class="variable">$sd</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>由于设置 NTFS 权限的需要，这个函数需要管理员特权才能运行。</p>
-<p>免责声明：这里呈现的所有代码仅供学习使用。由于我们没有投入大量精力去测试它，所以没有任何保障，而且它并不是生产准备就绪的代码。您有责任对这段代码进行测试，并决定它是否完美符合您的需要。</p>
-<p>一个典型的用例是克隆一个现有的文件夹结构：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># clone user profile</span></div><div class="line"><span class="variable">$infos</span> = Get-FolderStructureWithPermission -Path <span class="variable">$home</span></div><div class="line">Set-FolderStructureWithPermission -Path c:\CloneHere -folderInfo <span class="variable">$infos</span></div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/cloning-folder-structures-with-ntfs-permissions-part-2" target="_blank" rel="external">Cloning Folder Structures (with NTFS Permissions) – Part 2</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Cloning Folder Structures (with NTFS Permissions) – Part 2
     
     </summary>
     

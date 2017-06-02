@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.vichamp.com/"/>
-  <updated>2017-06-01T01:35:26.155Z</updated>
+  <updated>2017-06-02T02:56:23.600Z</updated>
   <id>http://blog.vichamp.com/</id>
   
   <author>
@@ -16,11 +16,77 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>用 PowerShell 查看安装的 .NET 框架</title>
+    <link href="http://blog.vichamp.com/2017/06/02/Use-Powershell-to-Return-Versions-of-NET-Framework-on-a-Machine/"/>
+    <id>http://blog.vichamp.com/2017/06/02/Use-Powershell-to-Return-Versions-of-NET-Framework-on-a-Machine/</id>
+    <published>2017-06-02T01:24:09.000Z</published>
+    <updated>2017-06-02T02:56:23.600Z</updated>
+    
+    <content type="html"><![CDATA[<p>以下 PowerShell 代码最高支持 .NET 4.7 版本：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Get-ChildItem</span> <span class="string">'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP'</span> -recurse |</div><div class="line"><span class="built_in">Get-ItemProperty</span> -name Version,Release -EA <span class="number">0</span> |</div><div class="line">Where &#123; <span class="variable">$_</span>.PSChildName <span class="nomarkup">-match</span> <span class="string">'^(?!S)\p&#123;L&#125;'</span>&#125; |</div><div class="line">Select PSChildName, Version, Release, @&#123;</div><div class="line">  name=<span class="string">"Product"</span></div><div class="line">  expression=&#123;</div><div class="line">      <span class="keyword">switch</span> -regex (<span class="variable">$_</span>.Release) &#123;</div><div class="line">        <span class="string">"378389"</span> &#123; [Version]<span class="string">"4.5"</span> &#125;</div><div class="line">        <span class="string">"378675|378758"</span> &#123; [Version]<span class="string">"4.5.1"</span> &#125;</div><div class="line">        <span class="string">"379893"</span> &#123; [Version]<span class="string">"4.5.2"</span> &#125;</div><div class="line">        <span class="string">"393295|393297"</span> &#123; [Version]<span class="string">"4.6"</span> &#125;</div><div class="line">        <span class="string">"394254|394271"</span> &#123; [Version]<span class="string">"4.6.1"</span> &#125;</div><div class="line">        <span class="string">"394802|394806"</span> &#123; [Version]<span class="string">"4.6.2"</span> &#125;</div><div class="line">        <span class="string">"460798"</span> &#123; [Version]<span class="string">"4.7"</span> &#125;</div><div class="line">        &#123;<span class="variable">$_</span> <span class="nomarkup">-gt</span> <span class="number">460798</span>&#125; &#123; [Version]<span class="string">"Undocumented 4.7 or higher, please update script"</span> &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>参考：</p>
+<ul>
+<li><a href="https://msdn.microsoft.com/en-us/library/hh925568" target="_blank" rel="external">How to: Determine Which .NET Framework Versions Are Installed</a></li>
+<li><a href="https://stackoverflow.com/questions/3487265/powershell-script-to-return-versions-of-net-framework-on-a-machine" target="_blank" rel="external">PowerShell script to return versions of .NET Framework on a machine? - Stack Overflow</a></li>
+</ul>]]></content>
+    
+    <summary type="html">
+    
+      Use Powershell to Return Versions of .NET Framework on a Machine
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term=".net" scheme="http://blog.vichamp.com/tags/net/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 安全地删除数据</title>
+    <link href="http://blog.vichamp.com/2017/06/01/safely-deleting-data/"/>
+    <id>http://blog.vichamp.com/2017/06/01/safely-deleting-data/</id>
+    <published>2017-05-31T16:00:00.000Z</published>
+    <updated>2017-06-02T02:56:23.595Z</updated>
+    
+    <content type="html"><![CDATA[<p>要安全地删除文件、文件夹，或整个驱动器，PowerShell 可以使用内置的 cipher.exe 工具。这行代码可以安全地删除旧的用户配置文件：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Cipher.exe /w:c:\Users\ObsoleteUser</div></pre></td></tr></table></figure>
+<p>请注意要删除的文件夹路径和参数 /w 之间需要用一个 <code>:</code> 分隔。删除数据需要消耗一定时间：Windows 要多次覆盖整个数据内容，以确保它不可恢复。</p>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/safely-deleting-data" target="_blank" rel="external">Safely Deleting Data</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Safely Deleting Data
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
     <title>PowerShell 技能连载 - 查找 OU</title>
     <link href="http://blog.vichamp.com/2017/05/31/finding-organizational-units/"/>
     <id>http://blog.vichamp.com/2017/05/31/finding-organizational-units/</id>
     <published>2017-05-30T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.155Z</updated>
+    <updated>2017-06-02T02:56:23.590Z</updated>
     
     <content type="html"><![CDATA[<p>（来自 Microsoft 免费的 RSAT 工具的）<code>Get-OrganizationalUnit</code> 可以基于识别名或 GUID 来搜索 OU，或者可以使用 <code>-Filter</code> 参数。</p>
 <p>不幸的是，<code>-Filter</code> 不能方便地自动化。以下代码并不能工作，并不能返回所有名字中包含 “Test” 的 OU：</p>
@@ -60,7 +126,7 @@
     <link href="http://blog.vichamp.com/2017/05/30/testing-organizational-unit/"/>
     <id>http://blog.vichamp.com/2017/05/30/testing-organizational-unit/</id>
     <published>2017-05-29T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.151Z</updated>
+    <updated>2017-06-02T02:56:23.586Z</updated>
     
     <content type="html"><![CDATA[<p>假设您已安装了免费的 Microsoft RSAT 工具，以下是一个简单的方法来检测一个 OU 是否存在：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$OUPath</span> = <span class="string">'OU=TestOU,DC=train,DC=powershell,DC=local'</span></div><div class="line"><span class="variable">$exists</span> = $(<span class="keyword">try</span> &#123; Get-ADOrganizationalUnit -Identity <span class="variable">$OUPath</span> -ErrorAction Ignore &#125; <span class="keyword">catch</span>&#123;&#125;) <span class="nomarkup">-ne</span> <span class="literal">$null</span></div><div class="line"><span class="string">"<span class="variable">$OUPath</span> : <span class="variable">$exists</span>"</span></div></pre></td></tr></table></figure>
@@ -96,7 +162,7 @@
     <link href="http://blog.vichamp.com/2017/05/29/validating-variables/"/>
     <id>http://blog.vichamp.com/2017/05/29/validating-variables/</id>
     <published>2017-05-28T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.146Z</updated>
+    <updated>2017-06-02T02:56:23.584Z</updated>
     
     <content type="html"><![CDATA[<p>变量和函数参数可以通过验证属性自动地验证有效性。以下是一个简单的例子，确保 <code>$test1</code> 只能存储 1-10 之间的值：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[ValidateRange(<span class="number">1</span>,<span class="number">10</span>)]<span class="variable">$test1</span> = <span class="number">10</span></div></pre></td></tr></table></figure>
@@ -136,7 +202,7 @@
     <link href="http://blog.vichamp.com/2017/05/26/cloning-dhcp-server-settings/"/>
     <id>http://blog.vichamp.com/2017/05/26/cloning-dhcp-server-settings/</id>
     <published>2017-05-25T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.142Z</updated>
+    <updated>2017-06-02T02:56:23.579Z</updated>
     
     <content type="html"><![CDATA[<p>从 Windows Server 2012 开市，您可以快速地导出和重新导入 DHCP 设置。克隆或迁移 DHCP 服务器是通过快照的形式。以下的例子从 \ORIGDHCP 导出设置并导入本地的 DHCP 服务器中：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Export-DHCPServer -File <span class="string">"<span class="variable">$env:temp</span>\dhcpsettings.xml"</span> -Computername ORIGDHCP</div><div class="line">Import-DHCPServer -File <span class="string">"<span class="variable">$env:temp</span>\dhcpsettings.xml"</span></div></pre></td></tr></table></figure>
@@ -171,7 +237,7 @@
     <link href="http://blog.vichamp.com/2017/05/25/searching-for-adusers/"/>
     <id>http://blog.vichamp.com/2017/05/25/searching-for-adusers/</id>
     <published>2017-05-24T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.137Z</updated>
+    <updated>2017-06-02T02:56:23.574Z</updated>
     
     <content type="html"><![CDATA[<p>免费的 Microsoft RSAT 工具给我们带来了 “ActiveDirectory” PowerShell module：许多 cmdlet 可以帮助您管理 Active Directory 用户和计算机。</p>
 <p>一个 cmdlet 特别有用。与其使用 <code>Get-ADUser</code> 和复杂得过滤器来查找 AD 用户，我们可以使用更方便的 <code>Search-ADAccount</code>。它注重于某些公共场景的查找用户功能。例如这行代码可以找出所有 120 天未活跃的用户账户：</p>
@@ -207,7 +273,7 @@
     <link href="http://blog.vichamp.com/2017/05/24/generating-random-password/"/>
     <id>http://blog.vichamp.com/2017/05/24/generating-random-password/</id>
     <published>2017-05-23T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.133Z</updated>
+    <updated>2017-06-02T02:56:23.570Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个非常简单的创建复杂随机密码的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Add-Type</span> -AssemblyName System.Web</div><div class="line"><span class="variable">$PasswordLength</span> = <span class="number">12</span></div><div class="line"><span class="variable">$SpecialCharCount</span> = <span class="number">3</span></div><div class="line">[System.Web.Security.Membership]::GeneratePassword(<span class="variable">$PasswordLength</span>, <span class="variable">$SpecialCharCount</span>)</div></pre></td></tr></table></figure>
@@ -243,7 +309,7 @@
     <link href="http://blog.vichamp.com/2017/05/23/tostring-masquerade/"/>
     <id>http://blog.vichamp.com/2017/05/23/tostring-masquerade/</id>
     <published>2017-05-22T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.128Z</updated>
+    <updated>2017-06-02T02:56:23.565Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能当中我们解释了 <code>ToString()</code> 描述一个对象的方法是含糊的，而且对象的作者可以决定 <code>ToString()</code> 返回什么。这在 PowerShell 代码中尤为明显。请看要覆盖任意一个对象的 <code>ToString()</code> 方法是多么容易：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$a</span> = <span class="number">1</span></div><div class="line">PS&gt; <span class="variable">$a</span> | <span class="built_in">Add-Member</span> -MemberType ScriptMethod -Name toString -Value &#123; <span class="string">'go away'</span> &#125; -Force</div><div class="line">PS&gt; <span class="variable">$a</span></div><div class="line">go away</div><div class="line">PS&gt; <span class="variable">$a</span>.GetType().FullName</div><div class="line">System.Int32</div><div class="line">PS&gt; <span class="variable">$a</span> <span class="nomarkup">-eq</span> <span class="number">1</span></div><div class="line">True</div></pre></td></tr></table></figure>
@@ -278,7 +344,7 @@
     <link href="http://blog.vichamp.com/2017/05/22/careful-with-tostring/"/>
     <id>http://blog.vichamp.com/2017/05/22/careful-with-tostring/</id>
     <published>2017-05-21T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.126Z</updated>
+    <updated>2017-06-02T02:56:23.560Z</updated>
     
     <content type="html"><![CDATA[<p>任何 .NET 对象都有一个 <code>ToString()</code> 方法，返回的是一段文字描述。这也是当您将一个对象输出为一个字符串时所得到的内容。然而，<code>ToString()</code> 所返回的值可能会改变，所以您永远不要使用它来做一些重要的事情。</p>
 <p>Here is an example – these lines both produce a FileInfo object which represents the exact same file. Only the way how the object was created is different. All object properties are identical. Yet, ToString() differs:<br>以下是一个例子——这两行代码都会创建一个 <code>FileInfo</code> 对象，来代表同一个文件。只是创建对象的方法有所不同。所有的对象属性都相同。然而，<code>ToString()</code> 的结果不同：</p>
@@ -314,7 +380,7 @@
     <link href="http://blog.vichamp.com/2017/05/19/escape-wildcards/"/>
     <id>http://blog.vichamp.com/2017/05/19/escape-wildcards/</id>
     <published>2017-05-18T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.122Z</updated>
+    <updated>2017-06-02T02:56:23.556Z</updated>
     
     <content type="html"><![CDATA[<p>当您使用 <code>-like</code> 操作符时，它支持三种通配符：”<code>*</code>“ 代表所有数字和字母，”<code>?</code>“ 代表任意单个字符，”<code>[a-z]</code>“ 代表字符的列表。另外有一个不太为人所知的，它支持 PowerShell 的转义字符 “```”，可以用它来转义通配符。</p>
 <p>所以当您需要检查一个字符串中的 “<code>*</code>“ 字符，这行代码能够工作但实际上是错的：</p>
@@ -356,7 +422,7 @@
     <link href="http://blog.vichamp.com/2017/05/18/validating-integer-variables/"/>
     <id>http://blog.vichamp.com/2017/05/18/validating-integer-variables/</id>
     <published>2017-05-17T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.116Z</updated>
+    <updated>2017-06-02T02:56:23.550Z</updated>
     
     <content type="html"><![CDATA[<p>您可以在一个变量前简单地加上 <code>[Int]</code> 来确保它只包含数字位。但您是否知道从 PowerShell 4.0 开始，支持正则表达式的验证器呢？</p>
 <p>通过这种方式，您可以定义一个变量只能为 2 位至 6 位的正数，或其它指定的模式：</p>
@@ -392,7 +458,7 @@
     <link href="http://blog.vichamp.com/2017/05/17/creating-random-mac-addresses/"/>
     <id>http://blog.vichamp.com/2017/05/17/creating-random-mac-addresses/</id>
     <published>2017-05-16T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.112Z</updated>
+    <updated>2017-06-02T02:56:23.546Z</updated>
     
     <content type="html"><![CDATA[<p>如果您只是需要一系列随机生成的 MAC 地址，而不关心这些地址是否合法，以下是一行实现代码：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">PS&gt; (<span class="number">0</span>..<span class="number">5</span> | <span class="built_in">ForEach-Object</span> &#123; <span class="string">'&#123;0:x&#125;&#123;1:x&#125;'</span> -f (<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>),(<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>)&#125;)  -join <span class="string">':'</span></div><div class="line"></div><div class="line">a5:<span class="number">66</span>:<span class="number">07</span>:<span class="number">6</span>d:d9:<span class="number">18</span></div><div class="line"></div><div class="line">PS&gt; (<span class="number">0</span>..<span class="number">5</span> | <span class="built_in">ForEach-Object</span> &#123; <span class="string">'&#123;0:x&#125;&#123;1:x&#125;'</span> -f (<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>),(<span class="built_in">Get-Random</span> -Minimum <span class="number">0</span> -Maximum <span class="number">15</span>)&#125;)  -join <span class="string">':'</span></div><div class="line"></div><div class="line"><span class="number">3</span>c:c8:<span class="number">4</span>e:e3:<span class="number">75</span>:<span class="number">6</span>c</div></pre></td></tr></table></figure>
@@ -429,7 +495,7 @@
     <link href="http://blog.vichamp.com/2017/05/16/bitwise-shift/"/>
     <id>http://blog.vichamp.com/2017/05/16/bitwise-shift/</id>
     <published>2017-05-15T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.108Z</updated>
+    <updated>2017-06-02T02:56:23.542Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 包含许多不太常用的二进制操作符，例如按位移位。<code>-shl</code> 操作符按位左移指定的位数：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="number">1</span> -shl <span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"></div><div class="line">PS&gt; <span class="number">2</span> -shl <span class="number">1</span></div><div class="line"><span class="number">4</span></div><div class="line"></div><div class="line">PS&gt; <span class="number">3</span> -shl <span class="number">1</span></div><div class="line"><span class="number">6</span></div></pre></td></tr></table></figure>
@@ -464,7 +530,7 @@
     <link href="http://blog.vichamp.com/2017/05/15/converting-binary-string-to-integer/"/>
     <id>http://blog.vichamp.com/2017/05/15/converting-binary-string-to-integer/</id>
     <published>2017-05-14T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.072Z</updated>
+    <updated>2017-06-02T02:56:23.505Z</updated>
     
     <content type="html"><![CDATA[<p>以下是将一段二进制文本字符串转为对应的整形值的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$binary</span> = <span class="string">"110110110"</span></div><div class="line"><span class="variable">$int</span> = [Convert]::ToInt32(<span class="variable">$binary</span>,<span class="number">2</span>)</div><div class="line"><span class="variable">$int</span></div></pre></td></tr></table></figure>
@@ -501,7 +567,7 @@
     <link href="http://blog.vichamp.com/2017/05/12/using-clipboard-to-transfer-data-and-results/"/>
     <id>http://blog.vichamp.com/2017/05/12/using-clipboard-to-transfer-data-and-results/</id>
     <published>2017-05-11T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.066Z</updated>
+    <updated>2017-06-02T02:56:23.499Z</updated>
     
     <content type="html"><![CDATA[<p>终于，在 PowerShell 5 中原生支持将结果发送到剪贴板中，以及从剪贴板中接收结果：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="built_in">Get-Command</span> -Noun Clipboard </div><div class="line"></div><div class="line">CommandType Name          Version Source                         </div><div class="line">----------- ----          ------- ------                         </div><div class="line">Cmdlet      Get-Clipboard <span class="number">3.1</span>.<span class="number">0.0</span> Microsoft.PowerShell.Management</div><div class="line">Cmdlet      Set-Clipboard <span class="number">3.1</span>.<span class="number">0.0</span> Microsoft.PowerShell.Management</div><div class="line">```     </div><div class="line"></div><div class="line">例如，您可以打开一个包含一些数据的 Excel 表格，将一列复制到剪贴板中，然后在 PowerShell 中进一步处理数据，例如过滤它：</div><div class="line"></div><div class="line">```powershell     </div><div class="line">PS&gt; <span class="variable">$list</span> = (Get-ClipBoard) <span class="nomarkup">-like</span> <span class="string">'*err*'</span></div></pre></td></tr></table></figure>
@@ -536,7 +602,7 @@
     <link href="http://blog.vichamp.com/2017/05/11/installing-msi-on-remote-system/"/>
     <id>http://blog.vichamp.com/2017/05/11/installing-msi-on-remote-system/</id>
     <published>2017-05-10T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.062Z</updated>
+    <updated>2017-06-02T02:56:23.495Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一些或许对您有用的代码。您需要远程系统的管理员权限。</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ComputerName</span> = <span class="string">'NameOfMachineToInstall'</span></div><div class="line"><span class="variable">$TargetPathMSI</span> = <span class="string">'\\softwareserver\product\package.msi'</span></div><div class="line"></div><div class="line"><span class="variable">$class</span> = [wmiclass]<span class="string">"\\<span class="variable">$ComputerName</span>\ROOT\cimv2:Win32_Product"</span></div><div class="line"><span class="variable">$class</span>.Install(<span class="variable">$TargetPathMSI</span>)</div></pre></td></tr></table></figure>
@@ -572,7 +638,7 @@
     <link href="http://blog.vichamp.com/2017/05/10/how-replace-and-replace-differ/"/>
     <id>http://blog.vichamp.com/2017/05/10/how-replace-and-replace-differ/</id>
     <published>2017-05-09T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.057Z</updated>
+    <updated>2017-06-02T02:56:23.490Z</updated>
     
     <content type="html"><![CDATA[<p>有两种方法可以替换一个字符串中的问本：<code>Replace()</code> 方法，和 <code>-replace</code> 操作符。它们的工作机制是不同的。</p>
 <p><code>Replace()</code> 是大小写敏感的，能够将文本替换为新的文本：</p>
@@ -612,7 +678,7 @@
     <link href="http://blog.vichamp.com/2017/05/09/html-encoding-advanced/"/>
     <id>http://blog.vichamp.com/2017/05/09/html-encoding-advanced/</id>
     <published>2017-05-08T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.053Z</updated>
+    <updated>2017-06-02T02:56:23.484Z</updated>
     
     <content type="html"><![CDATA[<p>.NET 静态方法 <code>HtmlEncode</code> 能够较好地将普通字符进行编码，但是对于许多特殊字符会处理失败。要正确地对所有字符编码，我们编写了一个 <code>ConvertTo-EncodedHtml</code> 函数：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> ConvertTo-EncodedHTML(<span class="variable">$HtmlText</span>)</div><div class="line">&#123;</div><div class="line"></div><div class="line">  <span class="variable">$chars</span> = [Web.HttpUtility]::HtmlEncode(<span class="variable">$HtmlText</span>).ToCharArray()</div><div class="line">  <span class="variable">$txt</span> = <span class="built_in">New-Object</span> System.Text.StringBuilder</div><div class="line">  <span class="literal">$null</span> = . &#123;</div><div class="line">      <span class="keyword">foreach</span>(<span class="variable">$c</span> <span class="keyword">in</span> <span class="variable">$chars</span>)</div><div class="line">      &#123;</div><div class="line">        <span class="keyword">if</span> ([int]<span class="variable">$c</span> <span class="nomarkup">-gt</span> <span class="number">127</span>)</div><div class="line">        &#123;</div><div class="line">          <span class="variable">$txt</span>.Append(<span class="string">"&amp;#"</span> + [int]<span class="variable">$c</span> + <span class="string">";"</span>)</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">          <span class="variable">$txt</span>.Append(<span class="variable">$c</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="variable">$txt</span>.ToString()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -649,7 +715,7 @@
     <link href="http://blog.vichamp.com/2017/05/08/html-encoding/"/>
     <id>http://blog.vichamp.com/2017/05/08/html-encoding/</id>
     <published>2017-05-07T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.047Z</updated>
+    <updated>2017-06-02T02:56:23.477Z</updated>
     
     <content type="html"><![CDATA[<p>有一个 .NET 的静态方法可以对一段文本进行 HTML 编码，例如如果您希望在 HTML 输出中正常显示一段文本：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PS&gt;  [System.Web.HttpUtility]::HtmlEncode(<span class="string">'Österreich heißt so.'</span>)</div><div class="line">&amp;<span class="comment">#214;sterreich hei&amp;#223;t so.</span></div></pre></td></tr></table></figure>
@@ -659,80 +725,6 @@
     <summary type="html">
     
       PowerTip of the Day - HTML Encoding
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 从德国媒体数据库下载视频</title>
-    <link href="http://blog.vichamp.com/2017/05/05/downloading-videos-from-german-media-databases/"/>
-    <id>http://blog.vichamp.com/2017/05/05/downloading-videos-from-german-media-databases/</id>
-    <published>2017-05-04T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.044Z</updated>
-    
-    <content type="html"><![CDATA[<p>在德国，有一些公开的媒体数据库，里面有公共站点发布的电视内容。只需要用一小段 PowerShell 代码就可以解析 JSON 数据，在一个列表中显示电视节目，并使你能够选择某项来下载。</p>
-<p>请注意包含下载链接的 JSON 文件非常大，所以需要过一段时间才能显示出视频列表。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Version 3.0</span></div><div class="line"></div><div class="line"><span class="comment"># here is the list of download URLs - get it and </span></div><div class="line"><span class="comment"># convert the JSON format</span></div><div class="line"><span class="variable">$url</span> = <span class="string">'http://www.mediathekdirekt.de/good.json'</span></div><div class="line"><span class="variable">$web</span> = <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$url</span> -UseBasicParsing </div><div class="line"><span class="variable">$videos</span> = <span class="variable">$web</span>.Content | <span class="built_in">ConvertFrom-Json</span> </div><div class="line"></div><div class="line"><span class="comment"># get all videos, create a nice title to display,</span></div><div class="line"><span class="comment"># and attach the original data to each entry</span></div><div class="line"><span class="variable">$videos</span> |</div><div class="line"><span class="built_in">ForEach-Object</span> &#123;</div><div class="line">  <span class="variable">$title</span> = <span class="string">'&#123;0&#125; - &#123;1&#125;'</span> -f <span class="variable">$_</span>[<span class="number">2</span>], <span class="variable">$_</span>[<span class="number">5</span>]</div><div class="line">  <span class="variable">$title</span> | <span class="built_in">Add-Member</span> -MemberType NoteProperty -Name <span class="keyword">Data</span> -Value <span class="variable">$_</span> -PassThru</div><div class="line">&#125; |</div><div class="line"><span class="built_in">Sort-Object</span> |</div><div class="line"><span class="built_in">Out-GridView</span> -Title <span class="string">'Video'</span> -OutputMode Multiple |</div><div class="line"><span class="built_in">ForEach-Object</span> &#123;</div><div class="line">  <span class="comment"># get the actual download info from the selected videos</span></div><div class="line">  <span class="comment"># and do the download</span></div><div class="line">  <span class="variable">$url</span> = <span class="variable">$_</span>.Data[<span class="number">6</span>]</div><div class="line">  <span class="variable">$filename</span> = <span class="built_in">Split-Path</span> -Path <span class="variable">$url</span> -Leaf</div><div class="line">  <span class="comment"># videos are saved into your TEMP folder unless you</span></div><div class="line">  <span class="comment"># specify a different folder below</span></div><div class="line">  <span class="variable">$filepath</span> = <span class="built_in">Join-Path</span> -Path <span class="variable">$env:temp</span> -ChildPath <span class="variable">$filename</span></div><div class="line">  <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$url</span> -OutFile <span class="variable">$filepath</span> -UseBasicParsing</div><div class="line">  <span class="built_in">Invoke-Item</span> -Path <span class="variable">$filepath</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/downloading-videos-from-german-media-databases" target="_blank" rel="external">Downloading Videos From German Media Databases</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Downloading Videos From German Media Databases
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 批量打印 Word 文档</title>
-    <link href="http://blog.vichamp.com/2017/05/05/bulk-printing-word-documents/"/>
-    <id>http://blog.vichamp.com/2017/05/05/bulk-printing-word-documents/</id>
-    <published>2017-05-04T16:00:00.000Z</published>
-    <updated>2017-06-01T01:35:26.040Z</updated>
-    
-    <content type="html"><![CDATA[<p>这行代码将在您的配置文件中查找所有 Word 文档：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Get-ChildItem</span> -Path <span class="variable">$home</span> -Filter *.doc* -Recurse</div></pre></td></tr></table></figure>
-<p>If you’d like, you can easily print them all. Here is how:<br>如果需要，可以将它们全部打印出来。以下是具体方法：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Get-ChildItem</span> -Path <span class="variable">$home</span> -Filter *.doc* -Recurse |</div><div class="line">  <span class="built_in">ForEach-Object</span> &#123;</div><div class="line">    <span class="built_in">Start-Process</span> -FilePath <span class="variable">$_</span>.FullName -Verb Print -Wait</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>它最重要的部分是 <code>-Wait</code> 参数：如果缺少了它，PowerShell 将会同时启动多个 Word 的实例，并行打印所有文档。这将耗尽您系统的资源。使用 <code>-Wait</code> 参数以后，PowerShell 将等待前一个 Word 打印完之后再启动下一个实例。</p>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/bulk-printing-word-documents" target="_blank" rel="external">Bulk Printing Word Documents</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Bulk Printing Word Documents
     
     </summary>
     

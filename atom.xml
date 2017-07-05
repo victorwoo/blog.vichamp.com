@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.vichamp.com/"/>
-  <updated>2017-07-01T01:13:02.344Z</updated>
+  <updated>2017-07-05T08:07:29.496Z</updated>
   <id>http://blog.vichamp.com/</id>
   
   <author>
@@ -16,11 +16,90 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>PowerShell 技能连载 - 读取注册表键值（临时解决办法）</title>
+    <link href="http://blog.vichamp.com/2017/07/04/reading-registry-values-workaround/"/>
+    <id>http://blog.vichamp.com/2017/07/04/reading-registry-values-workaround/</id>
+    <published>2017-07-03T16:00:00.000Z</published>
+    <updated>2017-07-05T08:07:29.496Z</updated>
+    
+    <content type="html"><![CDATA[<p>在前一个技能中我们演示了 <code>Get-ItemProperty</code> 无法读取数据错误的注册表键值：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$key</span> =  <span class="string">"Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Group  Policy\History\&#123;35378EAC-683F-11D2-A89A-00C04FBBCFA2&#125;\0"</span></div><div class="line"></div><div class="line"></div><div class="line">PS&gt;  <span class="built_in">Get-ItemProperty</span> -Path <span class="variable">$key</span></div><div class="line"><span class="built_in">Get-ItemProperty</span> :  Specified cast is not valid.</div><div class="line">At line:<span class="number">1</span> char:<span class="number">1</span></div><div class="line">+ <span class="built_in">Get-ItemProperty</span>  -Path <span class="variable">$key</span></div><div class="line">+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~</div><div class="line">    + CategoryInfo          : NotSpecified: (:)  [Get-ItemProperty], InvalidCastException</div><div class="line">    + FullyQualifiedErrorId :  System.InvalidCastException,Microsoft.PowerShell.Commands.GetItemPropertyComma</div><div class="line">    nd</div><div class="line"></div><div class="line"></div><div class="line">PS&gt;</div></pre></td></tr></table></figure>
+<p>有一个变通办法，您可以使用 <code>Get-Item</code> 代替，来存取注册表键，这将使用它的 .NET 成员来读取所有值：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$key</span> = <span class="string">"Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Group Policy\History\&#123;35378EAC-683F-11D2-A89A-00C04FBBCFA2&#125;\0"</span></div><div class="line"></div><div class="line"><span class="variable">$key</span> = <span class="built_in">Get-Item</span> -Path <span class="variable">$key</span></div><div class="line"></div><div class="line"><span class="variable">$hash</span> = @&#123;&#125;</div><div class="line"><span class="keyword">foreach</span> (<span class="variable">$prop</span> <span class="keyword">in</span> <span class="variable">$key</span>.Property)</div><div class="line">&#123;</div><div class="line">    <span class="variable">$hash</span>.<span class="variable">$prop</span> = <span class="variable">$key</span>.GetValue(<span class="variable">$prop</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="variable">$hash</span></div></pre></td></tr></table></figure>
+<p>结果看起来如下：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Name                           Value</div><div class="line">----                           -----</div><div class="line">Extensions                     [&#123;<span class="number">35378</span>EAC-<span class="number">683</span>F-<span class="number">11</span>D2-A89A-<span class="number">00</span>C04FBBCFA2&#125;&#123;<span class="number">0</span>F6B957E-<span class="number">509</span>E-<span class="number">11</span>D1-A7CC-<span class="number">0000</span>F87571E3&#125;]</div><div class="line">Link                           Local</div><div class="line">Options                        <span class="number">0</span></div><div class="line">GPOLink                        <span class="number">1</span></div><div class="line">Version                        <span class="number">65537</span></div><div class="line">GPOName                        Guidelines of the local group</div><div class="line">lParam                         <span class="number">0</span></div><div class="line">DSPath                         LocalGPO</div><div class="line">FileSysPath                    C:\WINDOWS\System32\GroupPolicy\Machine</div><div class="line">DisplayName                    Guidelines of the local group</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/reading-registry-values-workaround" target="_blank" rel="external">Reading Registry Values (Workaround)</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Reading Registry Values (Workaround)
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PowerShell 技能连载 - 读取注册表键值失败</title>
+    <link href="http://blog.vichamp.com/2017/07/03/reading-registry-values-fails/"/>
+    <id>http://blog.vichamp.com/2017/07/03/reading-registry-values-fails/</id>
+    <published>2017-07-02T16:00:00.000Z</published>
+    <updated>2017-07-05T08:07:29.489Z</updated>
+    
+    <content type="html"><![CDATA[<p>有些时候，读取注册表键值可能会失败，提示奇怪的错误信息：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$key</span> =  <span class="string">"Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Group  Policy\History\&#123;35378EAC-683F-11D2-A89A-00C04FBBCFA2&#125;\0"</span></div><div class="line"></div><div class="line"></div><div class="line">PS&gt;  <span class="built_in">Get-ItemProperty</span> -Path <span class="variable">$key</span></div><div class="line"><span class="built_in">Get-ItemProperty</span> :  Specified cast is not valid.</div><div class="line">At line:<span class="number">1</span> char:<span class="number">1</span></div><div class="line">+ <span class="built_in">Get-ItemProperty</span>  -Path <span class="variable">$key</span></div><div class="line">+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~</div><div class="line">    + CategoryInfo          : NotSpecified: (:)  [Get-ItemProperty], InvalidCastException</div><div class="line">    + FullyQualifiedErrorId :  System.InvalidCastException,Microsoft.PowerShell.Commands.GetItemPropertyComma</div><div class="line">    nd</div><div class="line"></div><div class="line"></div><div class="line">PS&gt;</div></pre></td></tr></table></figure>
+<p>当发生这种情况时，用 regedit.exe 检查注册表发现一个或多个键值已破坏。在我们的例子中，”lParam” 的值似乎在所有的 Windows 机器中都是错误的。Regedit.exe 报告“(invalid … value)”。</p>
+<p>在这个例子中，<code>Get-ItemProperty</code> 指令并不会读出任何值。您无法也排除该值：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">PS&gt;  <span class="built_in">Get-ItemProperty</span> -Path <span class="variable">$key</span> -Include * -Exclude lParam</div><div class="line"><span class="built_in">Get-ItemProperty</span> :  Specified cast is not valid.</div><div class="line">At line:<span class="number">1</span> char:<span class="number">1</span></div><div class="line">+ <span class="built_in">Get-ItemProperty</span>  -Path <span class="variable">$key</span> -Include * -Exclude lParam</div><div class="line">+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</div><div class="line">    + CategoryInfo          : NotSpecified: (:)  [Get-ItemProperty], InvalidCastException</div><div class="line">    + FullyQualifiedErrorId :  System.InvalidCastException,Microsoft.PowerShell.Commands.GetItemPropertyCommand</div><div class="line"></div><div class="line"></div><div class="line">PS&gt;</div></pre></td></tr></table></figure>
+<p>可以采取的措施是只读取合法的键值：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="built_in">Get-ItemProperty</span> -Path <span class="variable">$key</span> -Name DSPath</div><div class="line"></div><div class="line"></div><div class="line">DSPath       : LocalGPO</div><div class="line">PSPath       : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersi</div><div class="line">                on\Group Policy\History\&#123;<span class="number">35378</span>EAC-<span class="number">683</span>F-<span class="number">11</span>D2-A89A-<span class="number">00</span>C04FBBCFA2&#125;\<span class="number">0</span></div><div class="line">PSParentPath : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersi</div><div class="line">                on\Group Policy\History\&#123;<span class="number">35378</span>EAC-<span class="number">683</span>F-<span class="number">11</span>D2-A89A-<span class="number">00</span>C04FBBCFA2&#125;</div><div class="line">PSChildName  : <span class="number">0</span></div><div class="line">PSProvider   : Microsoft.PowerShell.Core\Registry</div><div class="line"></div><div class="line"></div><div class="line">PS&gt;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/reading-registry-values-fails" target="_blank" rel="external">Reading Registry Values Fails</a></p>]]></content>
+    
+    <summary type="html">
+    
+      PowerTip of the Day - Reading Registry Values Fails
+    
+    </summary>
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
+    
+    
+      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
+    
+      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
+    
+      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
+    
+      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
+    
+      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
+    
+  </entry>
+  
+  <entry>
     <title>PowerShell 技能连载 - 每日问候（带语音）</title>
     <link href="http://blog.vichamp.com/2017/06/30/greetings-of-the-day-with-voice/"/>
     <id>http://blog.vichamp.com/2017/06/30/greetings-of-the-day-with-voice/</id>
     <published>2017-06-29T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.344Z</updated>
+    <updated>2017-07-05T08:07:29.486Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们解释了如何在 PowerShell 配置文件中增加个人问候。这个问候信息也可以朗读出来，假设音量打开的情况下。这对所有的 PowerShell 宿主都有效，包括 VSCode。</p>
 <p>这将把代码增加到您的配置文件脚本中：</p>
@@ -58,7 +137,7 @@
     <link href="http://blog.vichamp.com/2017/06/29/greetings-of-the-day/"/>
     <id>http://blog.vichamp.com/2017/06/29/greetings-of-the-day/</id>
     <published>2017-06-28T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.342Z</updated>
+    <updated>2017-07-05T08:07:29.481Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个在 PowerShell 中接受一个字符串数组并返回一个随机的字符串，可以用作自定义问候语的简单方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$greetings</span> = </div><div class="line"><span class="string">'Hello there!'</span>,</div><div class="line"><span class="string">'Glad to see you!'</span>,</div><div class="line"><span class="string">'Happy coding!'</span>,</div><div class="line"><span class="string">'Have a great day!'</span>,</div><div class="line"><span class="string">'May the PowerShell be with you!'</span></div><div class="line"></div><div class="line"><span class="variable">$greetings</span> | <span class="built_in">Get-Random</span></div></pre></td></tr></table></figure>
@@ -96,7 +175,7 @@
     <link href="http://blog.vichamp.com/2017/06/28/truth-about-linq-in-powershell/"/>
     <id>http://blog.vichamp.com/2017/06/28/truth-about-linq-in-powershell/</id>
     <published>2017-06-27T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.337Z</updated>
+    <updated>2017-07-05T08:07:29.474Z</updated>
     
     <content type="html"><![CDATA[<p>不久前有一些关于 LINQ，一个 .NET 查询语言，在 PowerShell 中用来提升代码速度的报告。</p>
 <p>直到 PowerShell 真正支持 Linq 之前，使用 Linq 是非常冗长的，并且需要使用强类型和没有文档的方法。另外，同样的事可以使用纯 PowerShell 方法来做，速度的提升很少——至少对 IPPro 相关的任务不明显。</p>
@@ -142,7 +221,7 @@
     <link href="http://blog.vichamp.com/2017/06/27/secret-windows-10-transparency-mode/"/>
     <id>http://blog.vichamp.com/2017/06/27/secret-windows-10-transparency-mode/</id>
     <published>2017-06-26T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.331Z</updated>
+    <updated>2017-07-05T08:07:29.468Z</updated>
     
     <content type="html"><![CDATA[<p>When you open a native PowerShell console in Windows 10, you can hold down CTRL+SHIFT, then move your mouse wheel, to adjust console background color transparency, and let other windows shine through. The same works for cmd.exe as well, of course.<br>当您在 Windows 10 中打开一个原生的 PowerShell 控制台，按下 <code>CTRL</code> + <code>SHIFT</code> 键，然后滚动鼠标滚轮，就可以调节控制台背景色的透明度，并且让其它窗口的内容透射出来。当然这对 cmd.exe 也是有效的。</p>
 <a id="more"></a>
@@ -176,7 +255,7 @@
     <link href="http://blog.vichamp.com/2017/06/26/flush-dns-cache/"/>
     <id>http://blog.vichamp.com/2017/06/26/flush-dns-cache/</id>
     <published>2017-06-25T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.292Z</updated>
+    <updated>2017-07-05T08:07:29.463Z</updated>
     
     <content type="html"><![CDATA[<p>Windows 使用了 DNS 缓存技术，如果改变了 DNS 服务器，您需要刷新 DNS 缓存以使新的设置生效。PowerShell 对传统的控制台命令是有好的，所以只需要在 PowerShell 中运行这行代码：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PS&gt; ipconfig /flushdns</div></pre></td></tr></table></figure>
@@ -211,7 +290,7 @@
     <link href="http://blog.vichamp.com/2017/06/23/displaying-folder-tree/"/>
     <id>http://blog.vichamp.com/2017/06/23/displaying-folder-tree/</id>
     <published>2017-06-22T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.283Z</updated>
+    <updated>2017-07-05T08:07:29.426Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 对旧的控制台命令是十分友好的，所以要显示文件夹的树形结构，使用旧的 “tree” 命令是十分简单的。它最好工作在一个原生的 PowerShell 控制台中，因为编辑器往往使用不同的字符集。请试试这个命令：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PS&gt; Tree <span class="variable">$home</span></div></pre></td></tr></table></figure>
@@ -248,7 +327,7 @@
     <link href="http://blog.vichamp.com/2017/06/22/using-cached-port-file/"/>
     <id>http://blog.vichamp.com/2017/06/22/using-cached-port-file/</id>
     <published>2017-06-21T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.279Z</updated>
+    <updated>2017-07-05T08:07:29.419Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们介绍了如何用 PowerShell 通过 IANA 下载端口分配信息。这个过程需要 Internet 连接并且需要一段时间。所以以下代码会查找缓存的 CSV 文件。如果缓存文件存在，端口信息会从离线文件中加载，否则将在线加载数据，并写入缓存文件。请特别注意如何使用 <code>Tee-Object</code> 命令创建缓存文件：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$url</span> = <span class="string">'https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv'</span></div><div class="line"><span class="variable">$CSVFile</span> = <span class="string">"<span class="variable">$env:temp</span>\ports.csv"</span></div><div class="line"><span class="variable">$exists</span> = <span class="built_in">Test-Path</span> -Path <span class="variable">$CSVFile</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> (!<span class="variable">$exists</span>)</div><div class="line">&#123;</div><div class="line">  <span class="built_in">Write-Warning</span> <span class="string">"Retrieving data online..."</span></div><div class="line"></div><div class="line">  <span class="variable">$portinfo</span> = <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$Url</span> -UseBasicParsing | `</div><div class="line">    <span class="built_in">Select-Object</span> -ExpandProperty Content | `</div><div class="line">    <span class="built_in">Tee-Object</span> -FilePath <span class="variable">$CSVFile</span> | <span class="built_in">ConvertFrom-Csv</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">Write-Warning</span> <span class="string">"Loading cached file..."</span></div><div class="line">  <span class="variable">$portinfo</span> = <span class="built_in">Import-Csv</span> -Path <span class="variable">$CSVFile</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="variable">$portinfo</span> | <span class="built_in">Out-GridView</span></div></pre></td></tr></table></figure>
@@ -283,7 +362,7 @@
     <link href="http://blog.vichamp.com/2017/06/21/get-list-of-port-assignments/"/>
     <id>http://blog.vichamp.com/2017/06/21/get-list-of-port-assignments/</id>
     <published>2017-06-20T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.273Z</updated>
+    <updated>2017-07-05T08:07:29.412Z</updated>
     
     <content type="html"><![CDATA[<p>IANA（互联网数字分配机构）维护了一个包含所有已知的端口分配的 CSV 文件。PowerShell 可以为您下载这个列表：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$out</span> = <span class="string">"<span class="variable">$env:temp</span>\portlist.csv"</span></div><div class="line"><span class="variable">$url</span> = <span class="string">'https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv'</span></div><div class="line"><span class="variable">$web</span> = <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$url</span> -UseBasicParsing -OutFile <span class="variable">$out</span></div><div class="line"><span class="built_in">Import-Csv</span> -Path <span class="variable">$out</span> -Encoding UTF8</div></pre></td></tr></table></figure>
@@ -320,7 +399,7 @@
     <link href="http://blog.vichamp.com/2017/06/20/world-time-clock/"/>
     <id>http://blog.vichamp.com/2017/06/20/world-time-clock/</id>
     <published>2017-06-19T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.265Z</updated>
+    <updated>2017-07-05T08:07:29.406Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 提供了 <code>Get-TimeZone</code> 命令，能返回所有定义过的时区和它们的时差。以下是列出世界时钟相关的代码：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$isSummer</span> = (<span class="built_in">Get-Date</span>).IsDaylightSavingTime()</div><div class="line"></div><div class="line"></div><div class="line">Get-TimeZone -ListAvailable | <span class="built_in">ForEach-Object</span> &#123; </div><div class="line">    <span class="variable">$dateTime</span> = [DateTime]::UtcNow + <span class="variable">$_</span>.BaseUtcOffset</div><div class="line">    <span class="variable">$cities</span> = <span class="variable">$_</span>.DisplayName.Split(<span class="string">')'</span>)[-<span class="number">1</span>].Trim()</div><div class="line">    <span class="keyword">if</span> (<span class="variable">$isSummer</span> -and <span class="variable">$_</span>.SupportsDaylightSavingTime)</div><div class="line">    &#123;</div><div class="line">        <span class="variable">$dateTime</span> = <span class="variable">$dateTime</span>.AddHours(<span class="number">1</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="string">'&#123;0,-30&#125;: &#123;1:HH:mm"h"&#125; (&#123;2&#125;)'</span> -f <span class="variable">$_</span>.Id, <span class="variable">$dateTime</span>, <span class="variable">$cities</span></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
@@ -377,7 +456,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/19/check-for-daylight-savings-time/"/>
     <id>http://blog.vichamp.com/2017/06/19/check-for-daylight-savings-time/</id>
     <published>2017-06-18T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.260Z</updated>
+    <updated>2017-07-05T08:07:29.398Z</updated>
     
     <content type="html"><![CDATA[<p>以下用 PowerShell 来查看是否使用了夏时制的方法——进行 GMT 计算时可能需要的细节：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(<span class="built_in">Get-Date</span>).IsDaylightSavingTime()</div></pre></td></tr></table></figure>
@@ -412,7 +491,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/16/setting-time-zone/"/>
     <id>http://blog.vichamp.com/2017/06/16/setting-time-zone/</id>
     <published>2017-06-15T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.255Z</updated>
+    <updated>2017-07-05T08:07:29.396Z</updated>
     
     <content type="html"><![CDATA[<p>只有拥有了管理员特权才可以修改电脑的时间和日期，但任何用户都可以修改时区，例如当您在旅游时。PowerShell 5 提供了一系列非常简单的 cmdlet 来管理时区。首先，检查您的当前设置：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">PS&gt; Get-TimeZone</div><div class="line"></div><div class="line"></div><div class="line">Id                         : W. Europe Standard Time</div><div class="line">DisplayName                : (UTC+<span class="number">01</span>:<span class="number">00</span>) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien</div><div class="line">StandardName               : Mitteleuropäische Zeit</div><div class="line">DaylightName               : Mitteleuropäische Sommerzeit</div><div class="line">BaseUtcOffset              : <span class="number">01</span>:<span class="number">00</span>:<span class="number">00</span></div><div class="line">SupportsDaylightSavingTime : True</div></pre></td></tr></table></figure>
@@ -451,7 +530,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/15/finding-all-variables-in-a-script/"/>
     <id>http://blog.vichamp.com/2017/06/15/finding-all-variables-in-a-script/</id>
     <published>2017-06-14T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.252Z</updated>
+    <updated>2017-07-05T08:07:29.392Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们掩饰了如何分析一段脚本块的内容并且搜索变量或命令。这种技术也适用于基于文本的脚本。以下脚本将会检查自己并且提取出变量和命令：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$filepath</span> = <span class="variable">$PSCommandPath</span></div><div class="line"><span class="variable">$tokens</span> = <span class="variable">$errors</span> = <span class="literal">$null</span></div><div class="line"></div><div class="line"><span class="variable">$ast</span> = [System.Management.Automation.Language.Parser]::ParseFile(<span class="variable">$filepath</span>, [ref]<span class="variable">$tokens</span>, [ref]<span class="variable">$errors</span> )</div><div class="line"></div><div class="line"><span class="comment"># find variables</span></div><div class="line"><span class="variable">$ast</span>.FindAll( &#123; <span class="literal">$true</span> &#125;, <span class="literal">$true</span>) | </div><div class="line">  <span class="built_in">Where-Object</span> &#123; <span class="variable">$_</span>.GetType().Name <span class="nomarkup">-eq</span> <span class="string">'VariableExpressionAst'</span> &#125; |</div><div class="line">  <span class="built_in">Select-Object</span> -Property VariablePath -ExpandProperty Extent |</div><div class="line">  <span class="built_in">Select-Object</span> -Property * -ExcludeProperty *ScriptPosition |</div><div class="line">  <span class="built_in">Out-GridView</span> -Title <span class="string">'Variables'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># find commands</span></div><div class="line"><span class="variable">$ast</span>.FindAll( &#123; <span class="literal">$true</span> &#125;, <span class="literal">$true</span>)  | </div><div class="line">  <span class="built_in">Where-Object</span> &#123; <span class="variable">$_</span>.GetType().Name <span class="nomarkup">-eq</span> <span class="string">'CommandAst'</span> &#125; |</div><div class="line">  <span class="built_in">Select-Object</span> -ExpandProperty Extent  |</div><div class="line">  <span class="built_in">Select-Object</span> -Property * -ExcludeProperty *ScriptPosition |</div><div class="line">  <span class="built_in">Out-GridView</span> -Title <span class="string">'Commands'</span></div></pre></td></tr></table></figure>
@@ -487,7 +566,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/14/finding-all-variables-in-a-script-block/"/>
     <id>http://blog.vichamp.com/2017/06/14/finding-all-variables-in-a-script-block/</id>
     <published>2017-06-13T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.247Z</updated>
+    <updated>2017-07-05T08:07:29.386Z</updated>
     
     <content type="html"><![CDATA[<p>要分析一个脚本快中的内容，您可以简单地检查 AST，并且，例如创建一个包含代码中所有变量的清单：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$code</span> = &#123;</div><div class="line"></div><div class="line">    <span class="variable">$a</span> = <span class="string">"Test"</span></div><div class="line">    <span class="variable">$b</span> = <span class="number">12</span></div><div class="line">    <span class="built_in">Get-Service</span></div><div class="line">    <span class="built_in">Get-Process</span></div><div class="line">    <span class="variable">$berta</span> = <span class="number">100</span></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="variable">$code</span>.Ast.FindAll( &#123; <span class="literal">$true</span> &#125;, <span class="literal">$true</span>) |</div><div class="line">    <span class="built_in">Where-Object</span> &#123; <span class="variable">$_</span>.GetType().Name <span class="nomarkup">-eq</span> <span class="string">'VariableExpressionAst'</span> &#125; |</div><div class="line">    <span class="built_in">Select-Object</span> -Property VariablePath -ExpandProperty Extent |</div><div class="line">    <span class="built_in">Out-GridView</span></div></pre></td></tr></table></figure>
@@ -525,7 +604,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/13/running-powershell-script-as-a-scheduled-task/"/>
     <id>http://blog.vichamp.com/2017/06/13/running-powershell-script-as-a-scheduled-task/</id>
     <published>2017-06-12T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.240Z</updated>
+    <updated>2017-07-05T08:07:29.384Z</updated>
     
     <content type="html"><![CDATA[<p>如果您需要以固定的频率运行一段 PowerShell 脚本，何不以计划任务的方式运行它呢？以下是一段帮您新建一个每天上午 6 点执行一个 PowerShell 脚本的计划任务的代码：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#requires -Modules ScheduledTasks</span></div><div class="line"><span class="comment">#requires -Version 3.0</span></div><div class="line"><span class="comment">#requires -RunAsAdministrator</span></div><div class="line"></div><div class="line"><span class="variable">$TaskName</span> = <span class="string">'RunPSScriptAt6'</span></div><div class="line"><span class="variable">$User</span>= <span class="string">"train\tweltner"</span></div><div class="line"><span class="variable">$scriptPath</span> = <span class="string">"\\Server01\Scripts\find-newaduser.ps1"</span></div><div class="line"></div><div class="line"><span class="variable">$Trigger</span>= New-ScheduledTaskTrigger -At <span class="number">6</span>:<span class="number">00</span>am -Daily </div><div class="line"><span class="variable">$Action</span>= New-ScheduledTaskAction -Execute <span class="string">"PowerShell.exe"</span> -Argument <span class="string">"-executionpolicy bypass -noprofile -file <span class="variable">$scriptPath</span>"</span> </div><div class="line">Register-ScheduledTask -TaskName <span class="variable">$TaskName</span> -Trigger <span class="variable">$Trigger</span> -User <span class="variable">$User</span> -Action <span class="variable">$Action</span> -RunLevel Highest -Force</div></pre></td></tr></table></figure>
@@ -560,7 +639,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/12/spying-on-function-source-code/"/>
     <id>http://blog.vichamp.com/2017/06/12/spying-on-function-source-code/</id>
     <published>2017-06-11T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.230Z</updated>
+    <updated>2017-07-05T08:07:29.371Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一种快速查看 PowerShell 函数源码的方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$&#123;<span class="keyword">function</span>:<span class="built_in">Clear-Host</span>&#125; | clip</div></pre></td></tr></table></figure>
@@ -600,7 +679,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/09/modern-alternative-to-more/"/>
     <id>http://blog.vichamp.com/2017/06/09/modern-alternative-to-more/</id>
     <published>2017-06-08T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.224Z</updated>
+    <updated>2017-07-05T08:07:29.366Z</updated>
     
     <content type="html"><![CDATA[<p>在 PowerShell 控制台中，您仍然可以用 more 管道，就像在 cmd.exe 中一样一页一页查看结果。然而，more 不支持实时管道，所以所有数据需要首先收集好。这将占用很长时间和内存：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dir c:\windows -Recurse -ea <span class="number">0</span>  | more</div></pre></td></tr></table></figure>
@@ -638,7 +717,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/08/creating-smb-shares-remotely/"/>
     <id>http://blog.vichamp.com/2017/06/08/creating-smb-shares-remotely/</id>
     <published>2017-06-07T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.217Z</updated>
+    <updated>2017-07-05T08:07:29.360Z</updated>
     
     <content type="html"><![CDATA[<p>以下几行代码能在远程服务器上创建一个 SMB 共享：</p>
 <figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#requires <span class="params">-Version</span> <span class="number">3.0</span> <span class="params">-Modules</span> CimCmdlets, SmbShare <span class="params">-RunAsAdministrator</span></div><div class="line">$computername = <span class="string">'Server12'</span></div><div class="line">$shareName = <span class="string">'ScriptExchange'</span></div><div class="line">$fullAccess = <span class="string">'domain\groupName'</span></div><div class="line"></div><div class="line">$session = <span class="literal">New</span><span class="params">-CimSession</span> <span class="params">-ComputerName</span> $computername</div><div class="line"><span class="literal">New</span><span class="params">-SMBShare</span> <span class="params">-Name</span> $shareName <span class="params">-Path</span> c:\Scripts <span class="params">-FullAccess</span> $fullAccess <span class="params">-CimSession</span> $session</div><div class="line">Remove<span class="params">-CimSession</span> <span class="params">-CimSession</span> $session</div></pre></td></tr></table></figure>
@@ -675,7 +754,7 @@ Eastern Standard Time          : 02:41h ()
     <link href="http://blog.vichamp.com/2017/06/07/important-powershell-variables/"/>
     <id>http://blog.vichamp.com/2017/06/07/important-powershell-variables/</id>
     <published>2017-06-06T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.212Z</updated>
+    <updated>2017-07-05T08:07:29.352Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个重要的 PowerShell 变量的列表：<code>$pshome</code> 表示 PowerShell 所在的位置。<code>$home</code> 是个人用户配置文件夹的路径。<code>$PSVersionTable</code> 返回 PowerShell 的版本和重要的子组件的版本：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$pshome</span></div><div class="line">C:\Windows\System32\WindowsPowerShell\v1.<span class="number">0</span></div><div class="line"></div><div class="line">PS&gt; <span class="variable">$HOME</span></div><div class="line">C:\Users\tweltner</div><div class="line"></div><div class="line">PS&gt; <span class="variable">$PSVersionTable</span></div><div class="line"></div><div class="line">Name                           Value</div><div class="line">----                           -----</div><div class="line">PSVersion                      <span class="number">5.1</span>.<span class="number">14393.0</span></div><div class="line">PSEdition                      Desktop</div><div class="line">PSCompatibleVersions           &#123;<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>...&#125;</div><div class="line">BuildVersion                   <span class="number">10.0</span>.<span class="number">14393.0</span></div><div class="line">CLRVersion                     <span class="number">4.0</span>.<span class="number">30319.42000</span></div><div class="line">WSManStackVersion              <span class="number">3.0</span></div><div class="line">PSRemotingProtocolVersion      <span class="number">2.3</span></div><div class="line">SerializationVersion           <span class="number">1.1</span>.<span class="number">0.1</span></div></pre></td></tr></table></figure>
@@ -687,79 +766,6 @@ Eastern Standard Time          : 02:41h ()
     <summary type="html">
     
       PowerTip of the Day - Important PowerShell Variables
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - Read-Host 阻塞自动化操作</title>
-    <link href="http://blog.vichamp.com/2017/06/06/read-host-blocks-automation/"/>
-    <id>http://blog.vichamp.com/2017/06/06/read-host-blocks-automation/</id>
-    <published>2017-06-05T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.208Z</updated>
-    
-    <content type="html"><![CDATA[<p>使用 Read-Host 向用户提示输入信息可能会造成问题，因为它影响了脚本的自动化运行。一个更好的方法是将 <code>Read-Host</code> 包装在 <code>param()</code> 代码块中。通过这种方式，该信息可以通过无人值守操作的参数传入，也可以通过交互式提示传入：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">param</span></div><div class="line">(</div><div class="line">    <span class="variable">$Name</span> = $(<span class="built_in">Read-Host</span> -Prompt <span class="string">'Enter your name'</span>),</div><div class="line">    <span class="variable">$Id</span> = $(<span class="built_in">Read-Host</span> -Prompt <span class="string">'Enter your ID'</span>)</div><div class="line">)</div><div class="line"></div><div class="line"></div><div class="line"><span class="string">"You are <span class="variable">$Name</span> and your ID is <span class="variable">$Id</span>"</span></div></pre></td></tr></table></figure>
-<p>当您运行以上脚本时，它像 <code>Read-Host</code> 一模一样地显示提示信息。您也可以通过参数执行该脚本：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PS&gt; C:\myscript.ps1 –Name test –Id <span class="number">12</span></div></pre></td></tr></table></figure>
-<p>If you do not need custom prompting, you can go even simpler, and declare parameters as mandatory by adding [Parameter(Mandatory)] above each parameter variable.<br>如果您不需要自定义提示信息，您还可以更加简单，只需要在每个参数变量上加上 <code>[Parameter(Mandatory)]</code> 使它们变为必需参数。</p>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/read-host-blocks-automation" target="_blank" rel="external">Read-Host Blocks Automation</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Read-Host Blocks Automation
-    
-    </summary>
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/categories/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/categories/powershell/tip/"/>
-    
-    
-      <category term="powershell" scheme="http://blog.vichamp.com/tags/powershell/"/>
-    
-      <category term="tip" scheme="http://blog.vichamp.com/tags/tip/"/>
-    
-      <category term="powertip" scheme="http://blog.vichamp.com/tags/powertip/"/>
-    
-      <category term="series" scheme="http://blog.vichamp.com/tags/series/"/>
-    
-      <category term="translation" scheme="http://blog.vichamp.com/tags/translation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PowerShell 技能连载 - 强制刷新客户端时间</title>
-    <link href="http://blog.vichamp.com/2017/06/05/force-client-time-resync/"/>
-    <id>http://blog.vichamp.com/2017/06/05/force-client-time-resync/</id>
-    <published>2017-06-04T16:00:00.000Z</published>
-    <updated>2017-07-01T01:13:02.198Z</updated>
-    
-    <content type="html"><![CDATA[<p>如果您的客户端没有和您的域控制器正常地同步时间，请使用以下代码。这段代码需要管理员特权：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">w32tm.exe /resync /force</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>本文国际来源：<a href="http://community.idera.com/powershell/powertips/b/tips/posts/force-client-time-resync" target="_blank" rel="external">Force Client Time Resync</a></p>]]></content>
-    
-    <summary type="html">
-    
-      PowerTip of the Day - Force Client Time Resync
     
     </summary>
     

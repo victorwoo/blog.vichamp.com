@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.vichamp.com/"/>
-  <updated>2017-07-18T12:22:00.327Z</updated>
+  <updated>2017-07-19T06:17:32.720Z</updated>
   <id>http://blog.vichamp.com/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="http://blog.vichamp.com/2017/07/17/windows-powershell-and-powershell-core/"/>
     <id>http://blog.vichamp.com/2017/07/17/windows-powershell-and-powershell-core/</id>
     <published>2017-07-16T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.327Z</updated>
+    <updated>2017-07-19T06:17:32.720Z</updated>
     
-    <content type="html"><![CDATA[<p>最近关于 PowerShell 版本有一些混淆。在 GitHub 上有一个名为 “PowerShell 6” 的开源倡议 (<a href="https://github.com/PowerShell/PowerShell)。" target="_blank" rel="external">https://github.com/PowerShell/PowerShell)。</a></p>
+    <content type="html"><![CDATA[<p>最近关于 PowerShell 版本有一些混淆。在 GitHub 上有一个名为 “PowerShell 6” 的<a href="https://github.com/PowerShell/PowerShell" target="_blank" rel="external">开源倡议</a>。</p>
 <p>这是否意味着开源的 PowerShell 6 是 PowerShell 5 的继任者，并且最终和 Windows 一起发布？</p>
 <p>并不是的。现在只有两个不同的 PowerShell，所谓的 “PowerShell Editions”。</p>
 <p>“Windows PowerShell” 就我们所知会持续存在，并且将会随着将来的 Windows 版本发布，对应完整版 .NET Framework。</p>
@@ -61,7 +61,7 @@
     <link href="http://blog.vichamp.com/2017/07/14/setting-powershell-title-text/"/>
     <id>http://blog.vichamp.com/2017/07/14/setting-powershell-title-text/</id>
     <published>2017-07-13T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.322Z</updated>
+    <updated>2017-07-19T06:17:32.714Z</updated>
     
     <content type="html"><![CDATA[<p>您也许知道可以通过类似这样一行代码改变 PowerShell 宿主窗口的标题文本：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$host</span>.UI.RawUI.WindowTitle = <span class="string">"Hello  World!"</span></div></pre></td></tr></table></figure>
@@ -99,7 +99,7 @@
     <link href="http://blog.vichamp.com/2017/07/13/clearing-all-user-variables/"/>
     <id>http://blog.vichamp.com/2017/07/13/clearing-all-user-variables/</id>
     <published>2017-07-12T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.315Z</updated>
+    <updated>2017-07-19T06:17:32.710Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们演示了如何用类似这样的方法来查找内置的 PowerShell 变量：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ps</span> = [PowerShell]::Create()</div><div class="line"><span class="literal">$null</span> = <span class="variable">$ps</span>.AddScript(<span class="string">'$null=$host;Get-Variable'</span>)</div><div class="line"><span class="variable">$ps</span>.Invoke()</div><div class="line"><span class="variable">$ps</span>.Runspace.Close()</div><div class="line"><span class="variable">$ps</span>.Dispose()</div></pre></td></tr></table></figure>
@@ -140,7 +140,7 @@
     <link href="http://blog.vichamp.com/2017/07/12/finding-powershell-default-variables-part-3/"/>
     <id>http://blog.vichamp.com/2017/07/12/finding-powershell-default-variables-part-3/</id>
     <published>2017-07-11T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.309Z</updated>
+    <updated>2017-07-19T06:17:32.703Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们演示了如何用类似如下的方法来查找内置的 PowerShell 变量：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ps</span> = [PowerShell]::Create()</div><div class="line"><span class="literal">$null</span> = <span class="variable">$ps</span>.AddScript(<span class="string">'$null=$host;Get-Variable'</span>)</div><div class="line"><span class="variable">$ps</span>.Invoke()</div><div class="line"><span class="variable">$ps</span>.Runspace.Close()</div><div class="line"><span class="variable">$ps</span>.Dispose()</div></pre></td></tr></table></figure>
@@ -179,7 +179,7 @@
     <link href="http://blog.vichamp.com/2017/07/11/finding-powershell-default-variables-part-2/"/>
     <id>http://blog.vichamp.com/2017/07/11/finding-powershell-default-variables-part-2/</id>
     <published>2017-07-10T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.297Z</updated>
+    <updated>2017-07-19T06:17:32.697Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能里我们解释了如何使用独立全新的 PowerShell 实例来获取所有缺省变量。当您仔细查看这些变量，会发现还是丢失了某些变量。</p>
 <p>以下是一个稍微修改过的版本，名为 <code>Get-BuiltInPSVariable</code>，能返回所有保留的 PowerShell 变量：</p>
@@ -218,7 +218,7 @@
     <link href="http://blog.vichamp.com/2017/07/10/finding-powershell-default-variables-part-1/"/>
     <id>http://blog.vichamp.com/2017/07/10/finding-powershell-default-variables-part-1/</id>
     <published>2017-07-09T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.291Z</updated>
+    <updated>2017-07-19T06:17:32.696Z</updated>
     
     <content type="html"><![CDATA[<p>有些时候识别出 PowerShell 管理的缺省变量十分有用，这样能帮您区分内置的变量和自定义的变量。<code>Get-Variable</code> 总是输出所有的变量。</p>
 <p>以下是一个简单的技巧，使用一个独立、全新的 PowerShell 运行空间来确定内置的 PowerShell 变量：</p>
@@ -255,7 +255,7 @@
     <link href="http://blog.vichamp.com/2017/07/07/finding-powershell-classes/"/>
     <id>http://blog.vichamp.com/2017/07/07/finding-powershell-classes/</id>
     <published>2017-07-06T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.277Z</updated>
+    <updated>2017-07-19T06:17:32.692Z</updated>
     
     <content type="html"><![CDATA[<p>从 PowerShell 5 开始，您可以定义 PowerShell 类。它们是动态定义的，并且存在于内存中。那么要如何知道这些类的名字？</p>
 <p>我们首先定义一个简单的，没有任何内容的类：</p>
@@ -299,7 +299,7 @@
     <link href="http://blog.vichamp.com/2017/07/06/using-powershell-classes-2/"/>
     <id>http://blog.vichamp.com/2017/07/06/using-powershell-classes-2/</id>
     <published>2017-07-05T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.267Z</updated>
+    <updated>2017-07-19T06:17:32.687Z</updated>
     
     <content type="html"><![CDATA[<p>从 PowerShell 5 开始，您可以定义 PowerShell 类。您可以使用类来创建新对象，并通过创建一个或多个构造函数，您可以方便地初始化新创建的对象。</p>
 <p>让我们看看效果：</p>
@@ -338,7 +338,7 @@
     <link href="http://blog.vichamp.com/2017/07/05/using-powershell-classes/"/>
     <id>http://blog.vichamp.com/2017/07/05/using-powershell-classes/</id>
     <published>2017-07-04T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.259Z</updated>
+    <updated>2017-07-19T06:17:32.681Z</updated>
     
     <content type="html"><![CDATA[<p>从 PowerShell 5 开始，您可以定义类。它们有许多应用场景。一个是为有用的工具函数创建一个库来更好地整理它们。要实现这个功能，这个类要定义一些 “static” 方法。以下是一个简单的例子：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">class HelperStuff</div><div class="line">&#123;</div><div class="line">    <span class="comment"># get first character of string and throw exception</span></div><div class="line">    <span class="comment"># when string is empty or multi-line</span></div><div class="line">    static [char] GetFirstCharacter([string]<span class="variable">$Text</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="variable">$Text</span>.Length <span class="nomarkup">-eq</span> <span class="number">0</span>) &#123; <span class="keyword">throw</span> <span class="string">'String is empty'</span> &#125;</div><div class="line">        <span class="keyword">if</span> (<span class="variable">$Text</span>.Contains(<span class="string">"`n"</span>)) &#123; <span class="keyword">throw</span> <span class="string">'String contains multiple lines'</span> &#125;</div><div class="line">        <span class="keyword">return</span> <span class="variable">$Text</span>[<span class="number">0</span>]</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment"># get file extension in lower case</span></div><div class="line">    static [string] GetFileExtension([string]<span class="variable">$Path</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> [Io.Path]::GetExtension(<span class="variable">$Path</span>).ToLower()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -375,7 +375,7 @@
     <link href="http://blog.vichamp.com/2017/07/04/reading-registry-values-workaround/"/>
     <id>http://blog.vichamp.com/2017/07/04/reading-registry-values-workaround/</id>
     <published>2017-07-03T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.248Z</updated>
+    <updated>2017-07-19T06:17:32.677Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们演示了 <code>Get-ItemProperty</code> 无法读取数据错误的注册表键值：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$key</span> =  <span class="string">"Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Group  Policy\History\&#123;35378EAC-683F-11D2-A89A-00C04FBBCFA2&#125;\0"</span></div><div class="line"></div><div class="line"></div><div class="line">PS&gt;  <span class="built_in">Get-ItemProperty</span> -Path <span class="variable">$key</span></div><div class="line"><span class="built_in">Get-ItemProperty</span> :  Specified cast is not valid.</div><div class="line">At line:<span class="number">1</span> char:<span class="number">1</span></div><div class="line">+ <span class="built_in">Get-ItemProperty</span>  -Path <span class="variable">$key</span></div><div class="line">+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~</div><div class="line">    + CategoryInfo          : NotSpecified: (:)  [Get-ItemProperty], InvalidCastException</div><div class="line">    + FullyQualifiedErrorId :  System.InvalidCastException,Microsoft.PowerShell.Commands.GetItemPropertyComma</div><div class="line">    nd</div><div class="line"></div><div class="line"></div><div class="line">PS&gt;</div></pre></td></tr></table></figure>
@@ -414,7 +414,7 @@
     <link href="http://blog.vichamp.com/2017/07/03/reading-registry-values-fails/"/>
     <id>http://blog.vichamp.com/2017/07/03/reading-registry-values-fails/</id>
     <published>2017-07-02T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.240Z</updated>
+    <updated>2017-07-19T06:17:32.673Z</updated>
     
     <content type="html"><![CDATA[<p>有些时候，读取注册表键值可能会失败，提示奇怪的错误信息：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">PS&gt; <span class="variable">$key</span> =  <span class="string">"Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Group  Policy\History\&#123;35378EAC-683F-11D2-A89A-00C04FBBCFA2&#125;\0"</span></div><div class="line"></div><div class="line"></div><div class="line">PS&gt;  <span class="built_in">Get-ItemProperty</span> -Path <span class="variable">$key</span></div><div class="line"><span class="built_in">Get-ItemProperty</span> :  Specified cast is not valid.</div><div class="line">At line:<span class="number">1</span> char:<span class="number">1</span></div><div class="line">+ <span class="built_in">Get-ItemProperty</span>  -Path <span class="variable">$key</span></div><div class="line">+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~</div><div class="line">    + CategoryInfo          : NotSpecified: (:)  [Get-ItemProperty], InvalidCastException</div><div class="line">    + FullyQualifiedErrorId :  System.InvalidCastException,Microsoft.PowerShell.Commands.GetItemPropertyComma</div><div class="line">    nd</div><div class="line"></div><div class="line"></div><div class="line">PS&gt;</div></pre></td></tr></table></figure>
@@ -454,7 +454,7 @@
     <link href="http://blog.vichamp.com/2017/06/30/greetings-of-the-day-with-voice/"/>
     <id>http://blog.vichamp.com/2017/06/30/greetings-of-the-day-with-voice/</id>
     <published>2017-06-29T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.235Z</updated>
+    <updated>2017-07-19T06:17:32.669Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们解释了如何在 PowerShell 配置文件中增加个人问候。这个问候信息也可以朗读出来，假设音量打开的情况下。这对所有的 PowerShell 宿主都有效，包括 VSCode。</p>
 <p>这将把代码增加到您的配置文件脚本中：</p>
@@ -492,7 +492,7 @@
     <link href="http://blog.vichamp.com/2017/06/29/greetings-of-the-day/"/>
     <id>http://blog.vichamp.com/2017/06/29/greetings-of-the-day/</id>
     <published>2017-06-28T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.224Z</updated>
+    <updated>2017-07-19T06:17:32.666Z</updated>
     
     <content type="html"><![CDATA[<p>以下是一个在 PowerShell 中接受一个字符串数组并返回一个随机的字符串，可以用作自定义问候语的简单方法：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$greetings</span> = </div><div class="line"><span class="string">'Hello there!'</span>,</div><div class="line"><span class="string">'Glad to see you!'</span>,</div><div class="line"><span class="string">'Happy coding!'</span>,</div><div class="line"><span class="string">'Have a great day!'</span>,</div><div class="line"><span class="string">'May the PowerShell be with you!'</span></div><div class="line"></div><div class="line"><span class="variable">$greetings</span> | <span class="built_in">Get-Random</span></div></pre></td></tr></table></figure>
@@ -530,7 +530,7 @@
     <link href="http://blog.vichamp.com/2017/06/28/truth-about-linq-in-powershell/"/>
     <id>http://blog.vichamp.com/2017/06/28/truth-about-linq-in-powershell/</id>
     <published>2017-06-27T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.216Z</updated>
+    <updated>2017-07-19T06:17:32.661Z</updated>
     
     <content type="html"><![CDATA[<p>不久前有一些关于 LINQ，一个 .NET 查询语言，在 PowerShell 中用来提升代码速度的报告。</p>
 <p>直到 PowerShell 真正支持 Linq 之前，使用 Linq 是非常冗长的，并且需要使用强类型和没有文档的方法。另外，同样的事可以使用纯 PowerShell 方法来做，速度的提升很少——至少对 IPPro 相关的任务不明显。</p>
@@ -576,7 +576,7 @@
     <link href="http://blog.vichamp.com/2017/06/27/secret-windows-10-transparency-mode/"/>
     <id>http://blog.vichamp.com/2017/06/27/secret-windows-10-transparency-mode/</id>
     <published>2017-06-26T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.209Z</updated>
+    <updated>2017-07-19T06:17:32.657Z</updated>
     
     <content type="html"><![CDATA[<p>When you open a native PowerShell console in Windows 10, you can hold down CTRL+SHIFT, then move your mouse wheel, to adjust console background color transparency, and let other windows shine through. The same works for cmd.exe as well, of course.<br>当您在 Windows 10 中打开一个原生的 PowerShell 控制台，按下 <code>CTRL</code> + <code>SHIFT</code> 键，然后滚动鼠标滚轮，就可以调节控制台背景色的透明度，并且让其它窗口的内容透射出来。当然这对 cmd.exe 也是有效的。</p>
 <a id="more"></a>
@@ -610,7 +610,7 @@
     <link href="http://blog.vichamp.com/2017/06/26/flush-dns-cache/"/>
     <id>http://blog.vichamp.com/2017/06/26/flush-dns-cache/</id>
     <published>2017-06-25T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.201Z</updated>
+    <updated>2017-07-19T06:17:32.653Z</updated>
     
     <content type="html"><![CDATA[<p>Windows 使用了 DNS 缓存技术，如果改变了 DNS 服务器，您需要刷新 DNS 缓存以使新的设置生效。PowerShell 对传统的控制台命令是有好的，所以只需要在 PowerShell 中运行这行代码：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PS&gt; ipconfig /flushdns</div></pre></td></tr></table></figure>
@@ -645,7 +645,7 @@
     <link href="http://blog.vichamp.com/2017/06/23/displaying-folder-tree/"/>
     <id>http://blog.vichamp.com/2017/06/23/displaying-folder-tree/</id>
     <published>2017-06-22T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.194Z</updated>
+    <updated>2017-07-19T06:17:32.647Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 对旧的控制台命令是十分友好的，所以要显示文件夹的树形结构，使用旧的 “tree” 命令是十分简单的。它最好工作在一个原生的 PowerShell 控制台中，因为编辑器往往使用不同的字符集。请试试这个命令：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PS&gt; Tree <span class="variable">$home</span></div></pre></td></tr></table></figure>
@@ -682,7 +682,7 @@
     <link href="http://blog.vichamp.com/2017/06/22/using-cached-port-file/"/>
     <id>http://blog.vichamp.com/2017/06/22/using-cached-port-file/</id>
     <published>2017-06-21T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.184Z</updated>
+    <updated>2017-07-19T06:17:32.646Z</updated>
     
     <content type="html"><![CDATA[<p>在前一个技能中我们介绍了如何用 PowerShell 通过 IANA 下载端口分配信息。这个过程需要 Internet 连接并且需要一段时间。所以以下代码会查找缓存的 CSV 文件。如果缓存文件存在，端口信息会从离线文件中加载，否则将在线加载数据，并写入缓存文件。请特别注意如何使用 <code>Tee-Object</code> 命令创建缓存文件：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$url</span> = <span class="string">'https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv'</span></div><div class="line"><span class="variable">$CSVFile</span> = <span class="string">"<span class="variable">$env:temp</span>\ports.csv"</span></div><div class="line"><span class="variable">$exists</span> = <span class="built_in">Test-Path</span> -Path <span class="variable">$CSVFile</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> (!<span class="variable">$exists</span>)</div><div class="line">&#123;</div><div class="line">  <span class="built_in">Write-Warning</span> <span class="string">"Retrieving data online..."</span></div><div class="line"></div><div class="line">  <span class="variable">$portinfo</span> = <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$Url</span> -UseBasicParsing | `</div><div class="line">    <span class="built_in">Select-Object</span> -ExpandProperty Content | `</div><div class="line">    <span class="built_in">Tee-Object</span> -FilePath <span class="variable">$CSVFile</span> | <span class="built_in">ConvertFrom-Csv</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">Write-Warning</span> <span class="string">"Loading cached file..."</span></div><div class="line">  <span class="variable">$portinfo</span> = <span class="built_in">Import-Csv</span> -Path <span class="variable">$CSVFile</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="variable">$portinfo</span> | <span class="built_in">Out-GridView</span></div></pre></td></tr></table></figure>
@@ -717,7 +717,7 @@
     <link href="http://blog.vichamp.com/2017/06/21/get-list-of-port-assignments/"/>
     <id>http://blog.vichamp.com/2017/06/21/get-list-of-port-assignments/</id>
     <published>2017-06-20T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.174Z</updated>
+    <updated>2017-07-19T06:17:32.641Z</updated>
     
     <content type="html"><![CDATA[<p>IANA（互联网数字分配机构）维护了一个包含所有已知的端口分配的 CSV 文件。PowerShell 可以为您下载这个列表：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$out</span> = <span class="string">"<span class="variable">$env:temp</span>\portlist.csv"</span></div><div class="line"><span class="variable">$url</span> = <span class="string">'https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.csv'</span></div><div class="line"><span class="variable">$web</span> = <span class="built_in">Invoke-WebRequest</span> -Uri <span class="variable">$url</span> -UseBasicParsing -OutFile <span class="variable">$out</span></div><div class="line"><span class="built_in">Import-Csv</span> -Path <span class="variable">$out</span> -Encoding UTF8</div></pre></td></tr></table></figure>
@@ -754,7 +754,7 @@
     <link href="http://blog.vichamp.com/2017/06/20/world-time-clock/"/>
     <id>http://blog.vichamp.com/2017/06/20/world-time-clock/</id>
     <published>2017-06-19T16:00:00.000Z</published>
-    <updated>2017-07-18T12:22:00.163Z</updated>
+    <updated>2017-07-19T06:17:32.637Z</updated>
     
     <content type="html"><![CDATA[<p>PowerShell 提供了 <code>Get-TimeZone</code> 命令，能返回所有定义过的时区和它们的时差。以下是列出世界时钟相关的代码：</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$isSummer</span> = (<span class="built_in">Get-Date</span>).IsDaylightSavingTime()</div><div class="line"></div><div class="line"></div><div class="line">Get-TimeZone -ListAvailable | <span class="built_in">ForEach-Object</span> &#123; </div><div class="line">    <span class="variable">$dateTime</span> = [DateTime]::UtcNow + <span class="variable">$_</span>.BaseUtcOffset</div><div class="line">    <span class="variable">$cities</span> = <span class="variable">$_</span>.DisplayName.Split(<span class="string">')'</span>)[-<span class="number">1</span>].Trim()</div><div class="line">    <span class="keyword">if</span> (<span class="variable">$isSummer</span> -and <span class="variable">$_</span>.SupportsDaylightSavingTime)</div><div class="line">    &#123;</div><div class="line">        <span class="variable">$dateTime</span> = <span class="variable">$dateTime</span>.AddHours(<span class="number">1</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="string">'&#123;0,-30&#125;: &#123;1:HH:mm"h"&#125; (&#123;2&#125;)'</span> -f <span class="variable">$_</span>.Id, <span class="variable">$dateTime</span>, <span class="variable">$cities</span></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
